@@ -1,0 +1,2670 @@
+==================================================
+goal = SG06
+device = cuda
+join_ratio = 0.1
+device_id = 1
+dataset = Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10
+num_classes = 10
+model = ResNet18
+batch_size = 64
+local_learning_rate = 0.1
+learning_rate_decay = False
+learning_rate_decay_gamma = 0.99
+global_rounds = 300
+top_cnt = 100
+local_epochs = 1
+algorithm = FedCLCM
+num_clients = 100
+eval_gap = 10
+save_folder_name = items
+auto_break = False
+batch_num_per_client = 2
+feature_dim = 512
+vocab_size = 32000
+max_len = 200
+client_drop_rate = 0.0
+time_select = False
+time_threthold = 10000
+send_slow_rate = 0.0
+beta = 0.0
+lamda = 1.0
+mu = 0.0
+K = 5
+p_learning_rate = 0.01
+M = 5
+itk = 4000
+alphaK = 1.0
+sigma = 1.0
+alpha = 1.0
+plocal_epochs = 1
+lr_head = 0.1
+tau = 1.0
+fine_tuning_epochs = 10
+dr_learning_rate = 0.0
+L = 1.0
+noise_dim = 512
+generator_learning_rate = 0.005
+hidden_dim = 512
+server_epochs = 1000
+localize_feature_extractor = False
+server_learning_rate = 1.0
+eta = 1.0
+rand_percent = 80
+layer_idx = 2
+mentee_learning_rate = 0.005
+T_start = 0.95
+T_end = 0.98
+momentum = 0.1
+kl_weight = 0.0
+disti_epochs = 1
+protect_id = 1
+adv_eps = 0.0
+adv_num_iter = 0
+defense_epochs = 1
+clean_data = 5000
+sdmk_m = 7
+sdmk_k = 5
+delta = 0.5
+sim_threshold = 0.7
+rt_beta = 0.2
+num_adv_clients = 10
+lambda_cl = 0.3
+aug_strength = 0.1
+mask_tau = 12.0
+mask_alpha = 0.7
+enable_channel_mask = True
+cosine_gate = False
+cosine_gate_threshold = 0.3
+cosine_gate_alpha = 0.5
+trim_high_layers = 
+trim_beta_high = None
+trim_beta_low = None
+attack = none
+ba_target_label = 0
+ba_poison_rate = 0.2
+ba_trigger_gen_steps = 30
+ba_trigger_gen_lr = 0.01
+ba_pgd_eps = 0.0314
+ba_trigger_scale = 8.0
+pfedba_target_label = 0
+pfedba_poison_rate = 0.5
+pfedba_poison_count = -1
+pfedba_poison_before_start = False
+pfedba_attack_start = 30
+pfedba_trigger_opt_steps = 15
+pfedba_trigger_lr = 0.1
+pfedba_init_value = 0.5
+pfedba_patch_size = 8
+pfedba_patch_position = center
+pfedba_img_c = 3
+pfedba_img_h = 32
+pfedba_img_w = 32
+pfedba_align_grad_weight = 1.0
+pfedba_align_loss_weight = 1.0
+pfedba_attack_loss_weight = 1.0
+pfedba_opt_samples_per_class = 100
+pfedba_opt_batch_size = 64
+pfedba_opt_max_batches_per_client = 20
+logit_analysis = False
+logit_reject_thresholds = 0.5,0.6,0.7,0.8
+logit_entropy_thresholds = 1.0,1.5,2.0
+logit_margin_thresholds = 0.1,0.2,0.3
+==================================================
+
+============= Running time: 0th =============
+Creating server and clients ...
+ResNet(
+  (conv1): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (relu): ReLU(inplace=True)
+  (layer1): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer2): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer3): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer4): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
+  (fc): Linear(in_features=512, out_features=10, bias=True)
+)
+
+Join ratio / total clients: 0.1 / 100
+Finished creating server and clients.
+
+-------------Round number: 0-------------
+
+Evaluate personalized models
+Averaged Train Loss: 2.4215
+Averaged Test Accurancy: 0.1065
+Averaged Test AUC: 0.5006
+Std Test Accurancy: 0.1360
+Std Test AUC: 0.1313
+ASR: 0.01592678519351748
+attack_auc: 0.7311552238919076
+------------------------- time cost ------------------------- 13.462139129638672
+ASR: 0.020318477818477818
+attack_auc: 0.8641793416494831
+Layer conv1.weight: 2/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.3329174518585205
+ASR: 0.7768253968253968
+attack_auc: 0.856380475699307
+Layer conv1.weight: 3/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 2/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 16/512 channels masked
+------------------------- time cost ------------------------- 4.892167568206787
+ASR: 0.6988060731538992
+attack_auc: 0.7980385124103013
+Layer conv1.weight: 2/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 12/512 channels masked
+------------------------- time cost ------------------------- 5.558903694152832
+ASR: 0.632421139662599
+attack_auc: 0.7507762657820607
+Layer conv1.weight: 2/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 15/512 channels masked
+------------------------- time cost ------------------------- 4.634612798690796
+ASR: 0.5742890351692048
+attack_auc: 0.7360276858892477
+Layer conv1.weight: 2/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 15/512 channels masked
+------------------------- time cost ------------------------- 5.3839943408966064
+ASR: 0.5083848681346845
+attack_auc: 0.7065939800860725
+Layer conv1.weight: 3/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 22/512 channels masked
+------------------------- time cost ------------------------- 5.200419902801514
+ASR: 0.4278891271974276
+attack_auc: 0.6520757505722965
+Layer conv1.weight: 3/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 22/512 channels masked
+------------------------- time cost ------------------------- 5.363060712814331
+ASR: 0.4077720739040326
+attack_auc: 0.6353570974601198
+Layer conv1.weight: 3/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 31/512 channels masked
+------------------------- time cost ------------------------- 4.9051148891448975
+ASR: 0.3652985162601655
+attack_auc: 0.6211056727780703
+Layer conv1.weight: 3/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 31/512 channels masked
+------------------------- time cost ------------------------- 5.1658408641815186
+
+-------------Round number: 10-------------
+
+Evaluate personalized models
+Averaged Train Loss: 9.7712
+Averaged Test Accurancy: 0.3342
+Averaged Test AUC: 0.7414
+Std Test Accurancy: 0.2203
+Std Test AUC: 0.1829
+ASR: 0.35990574042940005
+attack_auc: 0.6220074297288513
+Layer conv1.weight: 2/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 32/512 channels masked
+------------------------- time cost ------------------------- 13.332895040512085
+ASR: 0.3169982929042315
+attack_auc: 0.5944482193073931
+Layer conv1.weight: 3/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 38/512 channels masked
+------------------------- time cost ------------------------- 5.252731800079346
+ASR: 0.3027876935708137
+attack_auc: 0.5724239081793889
+Layer conv1.weight: 3/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 35/512 channels masked
+------------------------- time cost ------------------------- 5.331414222717285
+ASR: 0.27106796132934174
+attack_auc: 0.5562162745106816
+Layer conv1.weight: 2/64 channels masked
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 36/512 channels masked
+------------------------- time cost ------------------------- 5.258728981018066
+ASR: 0.23810242972085327
+attack_auc: 0.5279519830115474
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 44/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.323509216308594
+ASR: 0.21842842325020712
+attack_auc: 0.5360617431758724
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 36/512 channels masked
+------------------------- time cost ------------------------- 5.277751684188843
+ASR: 0.13628156717233386
+attack_auc: 0.5249137919219681
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 44/512 channels masked
+------------------------- time cost ------------------------- 4.778409957885742
+ASR: 0.060165519874020974
+attack_auc: 0.5185356232299043
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 46/512 channels masked
+------------------------- time cost ------------------------- 5.057132244110107
+ASR: 0.02355402930738312
+attack_auc: 0.49017961698762114
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 44/512 channels masked
+------------------------- time cost ------------------------- 5.348858833312988
+ASR: 0.037049278630728835
+attack_auc: 0.5032002852834638
+Layer layer1.0.conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 45/512 channels masked
+------------------------- time cost ------------------------- 5.126287460327148
+
+-------------Round number: 20-------------
+
+Evaluate personalized models
+Averaged Train Loss: 3.6324
+Averaged Test Accurancy: 0.4287
+Averaged Test AUC: 0.8342
+Std Test Accurancy: 0.1875
+Std Test AUC: 0.1300
+ASR: 0.023726388402158207
+attack_auc: 0.4911049839492327
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 44/512 channels masked
+------------------------- time cost ------------------------- 12.997358083724976
+ASR: 0.03191500787697772
+attack_auc: 0.47848803981985516
+Layer layer1.0.conv1.weight: 1/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 44/512 channels masked
+------------------------- time cost ------------------------- 5.407878637313843
+ASR: 0.024544401223727454
+attack_auc: 0.4352493047203841
+Layer layer1.0.conv1.weight: 1/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 47/512 channels masked
+------------------------- time cost ------------------------- 5.237154483795166
+ASR: 0.029187436523602707
+attack_auc: 0.4273384121895591
+Layer layer1.0.conv1.weight: 1/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 46/512 channels masked
+------------------------- time cost ------------------------- 5.678275108337402
+ASR: 0.027742353202228173
+attack_auc: 0.42707254792278254
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 45/512 channels masked
+------------------------- time cost ------------------------- 5.028129577636719
+ASR: 0.039242482656634776
+attack_auc: 0.4449949374814376
+Layer layer1.0.conv1.weight: 1/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 9/512 channels masked
+Layer layer4.0.downsample.0.weight: 44/512 channels masked
+------------------------- time cost ------------------------- 5.186766147613525
+ASR: 0.022849976435980624
+attack_auc: 0.4231201640992447
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 6/512 channels masked
+Layer layer4.0.downsample.0.weight: 47/512 channels masked
+------------------------- time cost ------------------------- 4.597154378890991
+ASR: 0.0235281712687504
+attack_auc: 0.4121091158097399
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 8/512 channels masked
+Layer layer4.0.downsample.0.weight: 46/512 channels masked
+------------------------- time cost ------------------------- 4.784141778945923
+ASR: 0.027349361434361955
+attack_auc: 0.4119464707592643
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 13/512 channels masked
+Layer layer4.0.downsample.0.weight: 46/512 channels masked
+------------------------- time cost ------------------------- 4.688349723815918
+ASR: 0.031935199957107356
+attack_auc: 0.4350222868320851
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 13/512 channels masked
+Layer layer4.0.downsample.0.weight: 49/512 channels masked
+------------------------- time cost ------------------------- 5.458908319473267
+
+-------------Round number: 30-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.5953
+Averaged Test Accurancy: 0.5238
+Averaged Test AUC: 0.8816
+Std Test Accurancy: 0.1664
+Std Test AUC: 0.0946
+ASR: 0.029561738295195174
+attack_auc: 0.442806489176899
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 11/512 channels masked
+Layer layer4.0.downsample.0.weight: 52/512 channels masked
+------------------------- time cost ------------------------- 13.084375381469727
+ASR: 0.021680248777520946
+attack_auc: 0.4291284288949165
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 14/512 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+------------------------- time cost ------------------------- 5.494388818740845
+ASR: 0.02189598257776549
+attack_auc: 0.44129048247509695
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 2/512 channels masked
+Layer layer4.0.conv2.weight: 13/512 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+------------------------- time cost ------------------------- 5.636354684829712
+ASR: 0.01598413550106264
+attack_auc: 0.4074631713382926
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 2/512 channels masked
+Layer layer4.0.conv2.weight: 14/512 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+------------------------- time cost ------------------------- 5.245861530303955
+ASR: 0.01744665599099993
+attack_auc: 0.4233664486932124
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 2/512 channels masked
+Layer layer4.0.conv2.weight: 13/512 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+------------------------- time cost ------------------------- 5.4107725620269775
+ASR: 0.024782185280111432
+attack_auc: 0.4421876271295071
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 2/512 channels masked
+Layer layer4.0.conv2.weight: 12/512 channels masked
+Layer layer4.0.downsample.0.weight: 51/512 channels masked
+------------------------- time cost ------------------------- 4.687207221984863
+ASR: 0.0287315372699828
+attack_auc: 0.43283921073447906
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 2/512 channels masked
+Layer layer4.0.conv2.weight: 11/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+------------------------- time cost ------------------------- 5.334202289581299
+ASR: 0.021941464237814148
+attack_auc: 0.42651498424875345
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 2/512 channels masked
+Layer layer4.0.conv2.weight: 12/512 channels masked
+Layer layer4.0.downsample.0.weight: 51/512 channels masked
+------------------------- time cost ------------------------- 5.636992692947388
+ASR: 0.02253815504401078
+attack_auc: 0.4329231744263415
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 2/512 channels masked
+Layer layer4.0.conv2.weight: 11/512 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.041819334030151
+ASR: 0.02961272021331143
+attack_auc: 0.45201814971017384
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 2/512 channels masked
+Layer layer4.0.conv2.weight: 12/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+------------------------- time cost ------------------------- 5.486206769943237
+
+-------------Round number: 40-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.0898
+Averaged Test Accurancy: 0.5816
+Averaged Test AUC: 0.9090
+Std Test Accurancy: 0.1489
+Std Test AUC: 0.0532
+ASR: 0.025164367851869467
+attack_auc: 0.42822668968349753
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 2/512 channels masked
+Layer layer4.0.conv2.weight: 11/512 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+------------------------- time cost ------------------------- 12.620803594589233
+ASR: 0.026569971731528478
+attack_auc: 0.42117472907055775
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 10/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+------------------------- time cost ------------------------- 5.852626800537109
+ASR: 0.028450815350420544
+attack_auc: 0.42968733608823434
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 10/512 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+------------------------- time cost ------------------------- 5.252313137054443
+ASR: 0.021804671933187712
+attack_auc: 0.4352196186054559
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 11/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+------------------------- time cost ------------------------- 5.0259108543396
+ASR: 0.02217194574027351
+attack_auc: 0.43088671814923657
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 9/512 channels masked
+Layer layer4.0.downsample.0.weight: 61/512 channels masked
+------------------------- time cost ------------------------- 5.400243043899536
+ASR: 0.022086704669331932
+attack_auc: 0.4420046730707559
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 8/512 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+------------------------- time cost ------------------------- 5.671229839324951
+ASR: 0.02348242603260572
+attack_auc: 0.4472602019893776
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 9/512 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+------------------------- time cost ------------------------- 5.663695573806763
+ASR: 0.01954173959584984
+attack_auc: 0.44308579433810485
+Layer conv1.weight: 2/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 7/512 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+------------------------- time cost ------------------------- 5.1644606590271
+ASR: 0.018164820559890094
+attack_auc: 0.43166742357504917
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 8/512 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+------------------------- time cost ------------------------- 5.523602724075317
+ASR: 0.019351595218528972
+attack_auc: 0.4388403824917196
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 7/512 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+------------------------- time cost ------------------------- 4.998758554458618
+
+-------------Round number: 50-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.0278
+Averaged Test Accurancy: 0.5970
+Averaged Test AUC: 0.9172
+Std Test Accurancy: 0.1321
+Std Test AUC: 0.0445
+ASR: 0.017748658723723037
+attack_auc: 0.45895771300837335
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 7/512 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+------------------------- time cost ------------------------- 12.821869373321533
+ASR: 0.017423320164369267
+attack_auc: 0.4424515034734507
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 7/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+------------------------- time cost ------------------------- 5.587686061859131
+ASR: 0.013214265203383455
+attack_auc: 0.4295413781802178
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 8/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+------------------------- time cost ------------------------- 5.458975791931152
+ASR: 0.016142671594601112
+attack_auc: 0.4442198357586
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 6/512 channels masked
+Layer layer4.0.downsample.0.weight: 57/512 channels masked
+------------------------- time cost ------------------------- 5.1831135749816895
+ASR: 0.014314739448785078
+attack_auc: 0.449268140645804
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+------------------------- time cost ------------------------- 4.988175868988037
+ASR: 0.01061445256562766
+attack_auc: 0.42971299353134157
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+------------------------- time cost ------------------------- 4.95185112953186
+ASR: 0.01100172559275894
+attack_auc: 0.43047768644151624
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+------------------------- time cost ------------------------- 5.655199766159058
+ASR: 0.013310528984348884
+attack_auc: 0.43991176711139046
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 6/512 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+------------------------- time cost ------------------------- 5.010540962219238
+ASR: 0.011485396677562003
+attack_auc: 0.4569294165422157
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 8/512 channels masked
+Layer layer4.0.downsample.0.weight: 53/512 channels masked
+------------------------- time cost ------------------------- 4.9368672370910645
+ASR: 0.008457281534649412
+attack_auc: 0.4437943677088783
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 6/512 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+------------------------- time cost ------------------------- 5.198474884033203
+
+-------------Round number: 60-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.9607
+Averaged Test Accurancy: 0.6241
+Averaged Test AUC: 0.9247
+Std Test Accurancy: 0.1215
+Std Test AUC: 0.0372
+ASR: 0.0066298206365898865
+attack_auc: 0.43323549738581285
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 6/512 channels masked
+Layer layer4.0.downsample.0.weight: 57/512 channels masked
+------------------------- time cost ------------------------- 13.015895366668701
+ASR: 0.005536907611909295
+attack_auc: 0.4372740724650107
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 6/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+------------------------- time cost ------------------------- 5.287163734436035
+ASR: 0.004154564622651028
+attack_auc: 0.4458967615477508
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 57/512 channels masked
+------------------------- time cost ------------------------- 5.413877248764038
+ASR: 0.009010793166511662
+attack_auc: 0.4745264622799548
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+------------------------- time cost ------------------------- 5.170571327209473
+ASR: 0.006648919487669593
+attack_auc: 0.4585236501642713
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+------------------------- time cost ------------------------- 4.857363700866699
+ASR: 0.011381029961013976
+attack_auc: 0.48671856502146793
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 6/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+------------------------- time cost ------------------------- 4.888372182846069
+ASR: 0.011539969067170813
+attack_auc: 0.47145910648278555
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 6/512 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+------------------------- time cost ------------------------- 5.086845636367798
+ASR: 0.009673778945292505
+attack_auc: 0.46970957183173434
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 2/512 channels masked
+Layer layer4.0.conv2.weight: 7/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+------------------------- time cost ------------------------- 5.31139349937439
+ASR: 0.011861479417695057
+attack_auc: 0.45991867505005796
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 7/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+------------------------- time cost ------------------------- 5.352114915847778
+ASR: 0.008721888572830263
+attack_auc: 0.4839973065981949
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 6/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.27211332321167
+
+-------------Round number: 70-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.8843
+Averaged Test Accurancy: 0.6484
+Averaged Test AUC: 0.9294
+Std Test Accurancy: 0.1174
+Std Test AUC: 0.0340
+ASR: 0.008470165385938202
+attack_auc: 0.47609807015636296
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 9/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 12.979423761367798
+ASR: 0.008489901364834674
+attack_auc: 0.46618030728419896
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 8/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 4.3359785079956055
+ASR: 0.013294967608289566
+attack_auc: 0.4675855896561545
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 7/512 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.033590793609619
+ASR: 0.012436924183036324
+attack_auc: 0.4777972534564628
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 6/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.393564939498901
+ASR: 0.008815393403924147
+attack_auc: 0.42956080411819336
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 7/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.019252061843872
+ASR: 0.011768289653520893
+attack_auc: 0.48153561443586335
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 6/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 4.402709722518921
+ASR: 0.006631084041984008
+attack_auc: 0.48217081864476896
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 59/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 4.729556083679199
+ASR: 0.011662229364358147
+attack_auc: 0.47463676387022047
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 4.466240167617798
+ASR: 0.008523536836474263
+attack_auc: 0.49419629451521463
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 59/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.195790529251099
+ASR: 0.011308296159411388
+attack_auc: 0.5202760162667366
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.289292573928833
+
+-------------Round number: 80-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.8088
+Averaged Test Accurancy: 0.6677
+Averaged Test AUC: 0.9363
+Std Test Accurancy: 0.1170
+Std Test AUC: 0.0322
+ASR: 0.030127049418536497
+attack_auc: 0.5427764497150793
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 12.871331930160522
+ASR: 0.028988850657848675
+attack_auc: 0.5803955009040316
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 49/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 4.492633581161499
+ASR: 0.023287634585673473
+attack_auc: 0.5871723745861224
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 51/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.199678659439087
+ASR: 0.01776678284415461
+attack_auc: 0.5762580123072981
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 52/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.308294296264648
+ASR: 0.02102618877225113
+attack_auc: 0.5894793841305354
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.823953628540039
+ASR: 0.023313259006014293
+attack_auc: 0.5846349644631037
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.355102300643921
+ASR: 0.01855737821750617
+attack_auc: 0.5810487941016569
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.859442472457886
+ASR: 0.0199825992951733
+attack_auc: 0.584037933261354
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.829000949859619
+ASR: 0.024707754213877692
+attack_auc: 0.5789219865212663
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 51/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.208334922790527
+ASR: 0.028235956400482203
+attack_auc: 0.5930136739002196
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 53/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.647520303726196
+
+-------------Round number: 90-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.7949
+Averaged Test Accurancy: 0.6761
+Averaged Test AUC: 0.9383
+Std Test Accurancy: 0.1171
+Std Test AUC: 0.0312
+ASR: 0.03190464707796833
+attack_auc: 0.6051438680177209
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 53/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 13.358154058456421
+ASR: 0.025104188265234022
+attack_auc: 0.605489397601147
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.184528112411499
+ASR: 0.0234107245609829
+attack_auc: 0.6083507350740842
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 57/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.447490692138672
+ASR: 0.03133593646859021
+attack_auc: 0.6073140281901114
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 3.885369300842285
+ASR: 0.02842026249504107
+attack_auc: 0.609181794852048
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.480693578720093
+ASR: 0.034800753539923186
+attack_auc: 0.6092285692945915
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.691192626953125
+ASR: 0.033577867401679375
+attack_auc: 0.6174251083275537
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 57/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.203826665878296
+ASR: 0.04421763677844936
+attack_auc: 0.6244004705232429
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.153741121292114
+ASR: 0.027365905422760826
+attack_auc: 0.6085293757770888
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.035235643386841
+ASR: 0.021712175155287047
+attack_auc: 0.6100472623771565
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.349858999252319
+
+-------------Round number: 100-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.7267
+Averaged Test Accurancy: 0.6890
+Averaged Test AUC: 0.9416
+Std Test Accurancy: 0.1145
+Std Test AUC: 0.0296
+ASR: 0.03327522419325862
+attack_auc: 0.6260196010014202
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 13.507481336593628
+ASR: 0.03770298136607878
+attack_auc: 0.6283986005440165
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.03207540512085
+ASR: 0.04828327968964446
+attack_auc: 0.6218053298582574
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.836495637893677
+ASR: 0.03854211567922427
+attack_auc: 0.6118311881593402
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 53/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.0371479988098145
+ASR: 0.03922094594607831
+attack_auc: 0.6117758422502244
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.318315029144287
+ASR: 0.027513910678187387
+attack_auc: 0.5920403137511308
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.074034214019775
+ASR: 0.02866957725365376
+attack_auc: 0.6007673554689651
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.4975292682647705
+ASR: 0.027518235785800718
+attack_auc: 0.5869643909130298
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.484206438064575
+ASR: 0.02111810893486986
+attack_auc: 0.5879911009033858
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.028621196746826
+ASR: 0.03076913089882954
+attack_auc: 0.5971383362816669
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.023197412490845
+
+-------------Round number: 110-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6902
+Averaged Test Accurancy: 0.6970
+Averaged Test AUC: 0.9438
+Std Test Accurancy: 0.0994
+Std Test AUC: 0.0253
+ASR: 0.027158894643234812
+attack_auc: 0.5944411741501503
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 56/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 13.51874303817749
+ASR: 0.03715031621074542
+attack_auc: 0.6003357395872017
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.504928350448608
+ASR: 0.04370712019376228
+attack_auc: 0.61275505431632
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.846791982650757
+ASR: 0.021183113985684378
+attack_auc: 0.5966581306943199
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 52/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.22263503074646
+ASR: 0.019686894114115214
+attack_auc: 0.5738735270350206
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 53/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.7931294441223145
+ASR: 0.021985767530061182
+attack_auc: 0.600043792495267
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 53/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.530321359634399
+ASR: 0.03297520911671632
+attack_auc: 0.618385164257754
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 52/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.330005407333374
+ASR: 0.027792209242636135
+attack_auc: 0.5925111739768679
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 51/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.032422304153442
+ASR: 0.020790680938179533
+attack_auc: 0.5855301175598631
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 51/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.037456035614014
+ASR: 0.027133623622325412
+attack_auc: 0.6097963379683422
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 51/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.127668619155884
+
+-------------Round number: 120-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6711
+Averaged Test Accurancy: 0.7038
+Averaged Test AUC: 0.9452
+Std Test Accurancy: 0.1071
+Std Test AUC: 0.0259
+ASR: 0.030887356306068724
+attack_auc: 0.6204127851314366
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 51/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 13.009196758270264
+ASR: 0.03218006097125074
+attack_auc: 0.6219717244223866
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 52/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.626523017883301
+ASR: 0.051823537427657336
+attack_auc: 0.636764962066276
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 52/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.852837324142456
+ASR: 0.05862282464318961
+attack_auc: 0.671651091039729
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 53/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.360446929931641
+ASR: 0.04884303818120342
+attack_auc: 0.6560730795303974
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 52/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.370864391326904
+ASR: 0.0790574580885387
+attack_auc: 0.6881915202378857
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 52/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.332859516143799
+ASR: 0.053702990434625265
+attack_auc: 0.6675895606849874
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 49/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.213080644607544
+ASR: 0.05594575970649237
+attack_auc: 0.6607022405348563
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 46/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.125229120254517
+ASR: 0.05908422878832981
+attack_auc: 0.6703348146527468
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 48/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.444547653198242
+ASR: 0.042787641792079306
+attack_auc: 0.6506595231803386
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 46/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.363156318664551
+
+-------------Round number: 130-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6139
+Averaged Test Accurancy: 0.7212
+Averaged Test AUC: 0.9488
+Std Test Accurancy: 0.0969
+Std Test AUC: 0.0231
+ASR: 0.057133926698188
+attack_auc: 0.6705504766960252
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 48/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 13.136494636535645
+ASR: 0.03796546128546355
+attack_auc: 0.6575430272419257
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 50/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.488896131515503
+ASR: 0.04515555584643797
+attack_auc: 0.6416727883781109
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 50/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.296976804733276
+ASR: 0.030769725527699698
+attack_auc: 0.6388879587171717
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 49/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.322509288787842
+ASR: 0.038286439212521874
+attack_auc: 0.638035392507793
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 51/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.6050403118133545
+ASR: 0.061378661300042534
+attack_auc: 0.6733292545711097
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 51/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.312186241149902
+ASR: 0.05816887810410518
+attack_auc: 0.6520342118686927
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 51/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.913334608078003
+ASR: 0.050482807352977895
+attack_auc: 0.6424212675467358
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 50/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.499635696411133
+ASR: 0.043468738159074455
+attack_auc: 0.6318838627572181
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 51/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.2609968185424805
+ASR: 0.06048465761483426
+attack_auc: 0.6540007941917612
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 52/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.479313135147095
+
+-------------Round number: 140-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.5817
+Averaged Test Accurancy: 0.7216
+Averaged Test AUC: 0.9498
+Std Test Accurancy: 0.0963
+Std Test AUC: 0.0228
+ASR: 0.0436559388668423
+attack_auc: 0.6556418181635195
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 52/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 12.738567590713501
+ASR: 0.04043685515487688
+attack_auc: 0.6440801781245283
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 53/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.419494867324829
+ASR: 0.05639182435394528
+attack_auc: 0.6627791795299663
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 53/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.864220857620239
+ASR: 0.06652456525299281
+attack_auc: 0.6807061002918813
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 54/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.191990852355957
+ASR: 0.10511566430568518
+attack_auc: 0.7112214197564808
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 55/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.623204231262207
+ASR: 0.09419076761094974
+attack_auc: 0.6941463564049276
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 57/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.488792657852173
+ASR: 0.08750926471432378
+attack_auc: 0.6672023328275626
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 57/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.011909484863281
+ASR: 0.10203561585953372
+attack_auc: 0.6901660910819455
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 57/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.727396011352539
+ASR: 0.09874510377485059
+attack_auc: 0.6772354715344532
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 57/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.100640535354614
+ASR: 0.12643951951471818
+attack_auc: 0.702532483329609
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 59/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.737435340881348
+
+-------------Round number: 150-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.5174
+Averaged Test Accurancy: 0.7371
+Averaged Test AUC: 0.9538
+Std Test Accurancy: 0.0908
+Std Test AUC: 0.0209
+ASR: 0.11208843267473766
+attack_auc: 0.7047852742253305
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 13.740121603012085
+ASR: 0.09574202407039621
+attack_auc: 0.6833776373617041
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 58/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.950414180755615
+ASR: 0.10563961578872652
+attack_auc: 0.6980996680272263
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.112150192260742
+ASR: 0.10752327181932275
+attack_auc: 0.7026694545840694
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.582920789718628
+ASR: 0.12579526856191553
+attack_auc: 0.7283371268225513
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.567511558532715
+ASR: 0.09586051480558185
+attack_auc: 0.7039445888034069
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 62/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.0617382526397705
+ASR: 0.06596078234502886
+attack_auc: 0.6847101826142219
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 62/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 6.000669002532959
+ASR: 0.06115942677010668
+attack_auc: 0.6740175882206364
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 61/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 3.9671459197998047
+ASR: 0.06571904349522119
+attack_auc: 0.6559791053606613
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 61/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.749802112579346
+ASR: 0.0727956670362733
+attack_auc: 0.6714684627132315
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 62/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.494713068008423
+
+-------------Round number: 160-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.5553
+Averaged Test Accurancy: 0.7269
+Averaged Test AUC: 0.9522
+Std Test Accurancy: 0.0997
+Std Test AUC: 0.0235
+ASR: 0.058235340367908145
+attack_auc: 0.6569731024661842
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 62/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 12.912228345870972
+ASR: 0.08052739368815522
+attack_auc: 0.6758625662599139
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 62/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.290488004684448
+ASR: 0.06623908192851785
+attack_auc: 0.6826636908167876
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 62/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.408570051193237
+ASR: 0.07446719570384809
+attack_auc: 0.6593310224210671
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 61/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.023731231689453
+ASR: 0.11580564372195391
+attack_auc: 0.7076576902357754
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 61/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.765418767929077
+ASR: 0.11029802205918693
+attack_auc: 0.6728539327656315
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 61/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.905833721160889
+ASR: 0.15807122200744725
+attack_auc: 0.7369506977542049
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 62/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.716581106185913
+ASR: 0.14801505044045016
+attack_auc: 0.7261542971303472
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 63/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.2871153354644775
+ASR: 0.13228612665638043
+attack_auc: 0.7151986873310975
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 61/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.291292905807495
+ASR: 0.1146486428920196
+attack_auc: 0.7025478058478245
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 61/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.044289588928223
+
+-------------Round number: 170-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4767
+Averaged Test Accurancy: 0.7457
+Averaged Test AUC: 0.9543
+Std Test Accurancy: 0.0948
+Std Test AUC: 0.0221
+ASR: 0.1157324173374269
+attack_auc: 0.703061423716357
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 61/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 13.351659536361694
+ASR: 0.13624195551420393
+attack_auc: 0.7342022054563725
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 61/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.124582290649414
+ASR: 0.19388281773306448
+attack_auc: 0.7632932573632014
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.228198528289795
+ASR: 0.18378520632496406
+attack_auc: 0.7633566166184956
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.813781976699829
+ASR: 0.17246828921051371
+attack_auc: 0.7329665850607097
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.305014610290527
+ASR: 0.17844142068621002
+attack_auc: 0.7393347113050524
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 61/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.836938381195068
+ASR: 0.14191063660561887
+attack_auc: 0.7012354943893697
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 60/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.311739683151245
+ASR: 0.11745271774480816
+attack_auc: 0.6884840704130132
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 62/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.92931604385376
+ASR: 0.1415327504639474
+attack_auc: 0.7060506962668256
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 62/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.393437147140503
+ASR: 0.167168474653047
+attack_auc: 0.7266296846008471
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 62/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.335092306137085
+
+-------------Round number: 180-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4249
+Averaged Test Accurancy: 0.7552
+Averaged Test AUC: 0.9568
+Std Test Accurancy: 0.0860
+Std Test AUC: 0.0200
+ASR: 0.17806411523823995
+attack_auc: 0.7323735450637888
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 64/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 13.226137399673462
+ASR: 0.16055173087308658
+attack_auc: 0.7321069992302713
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 65/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.66692328453064
+ASR: 0.15561335554290845
+attack_auc: 0.7334683794076479
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 65/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.398703098297119
+ASR: 0.12006352744944929
+attack_auc: 0.7055402731372841
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 65/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.8296544551849365
+ASR: 0.16211808006067716
+attack_auc: 0.7348958741867347
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 65/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.508103370666504
+ASR: 0.12075949806940173
+attack_auc: 0.717691367768102
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 66/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.162865400314331
+ASR: 0.15000271391328676
+attack_auc: 0.7247555056600792
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 66/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.094074726104736
+ASR: 0.20569498405703335
+attack_auc: 0.753995124133293
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 67/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.217012882232666
+ASR: 0.16084693500525862
+attack_auc: 0.7267129396562583
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 66/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.393492221832275
+ASR: 0.11377240283281206
+attack_auc: 0.7106650484586676
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 64/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.572765827178955
+
+-------------Round number: 190-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4417
+Averaged Test Accurancy: 0.7466
+Averaged Test AUC: 0.9555
+Std Test Accurancy: 0.0924
+Std Test AUC: 0.0201
+ASR: 0.12781959360430264
+attack_auc: 0.7179384327874606
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 62/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 13.31373929977417
+ASR: 0.1291792062124656
+attack_auc: 0.7126008388791193
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 63/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.013555526733398
+ASR: 0.15709336655285178
+attack_auc: 0.7401160100356898
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 63/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 4.874955177307129
+ASR: 0.15144059698738527
+attack_auc: 0.7320825540678432
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 64/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.069282293319702
+ASR: 0.1902853124697375
+attack_auc: 0.760980342439554
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 64/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 4.947412729263306
+ASR: 0.2092556808215204
+attack_auc: 0.7642882650630612
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 64/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 4.691227912902832
+ASR: 0.2201025058538482
+attack_auc: 0.7746982366516056
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 65/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 4.749112844467163
+ASR: 0.16824346371414808
+attack_auc: 0.7389837043427602
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 64/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 4.956202983856201
+ASR: 0.15871146137534242
+attack_auc: 0.7317269242757986
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 64/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 4.962952375411987
+ASR: 0.1544522408583186
+attack_auc: 0.7308684137702296
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 65/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.6566455364227295
+
+-------------Round number: 200-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3808
+Averaged Test Accurancy: 0.7535
+Averaged Test AUC: 0.9572
+Std Test Accurancy: 0.0867
+Std Test AUC: 0.0198
+ASR: 0.14776471624518925
+attack_auc: 0.7306444192148652
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 65/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 13.612529754638672
+ASR: 0.12236640726791494
+attack_auc: 0.7029246198302987
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 65/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.351452112197876
+ASR: 0.1306384604285731
+attack_auc: 0.7122985687330432
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 65/512 channels masked
+Layer layer4.1.conv2.weight: 1/512 channels masked
+------------------------- time cost ------------------------- 5.0560033321380615
+ASR: 0.139939023297676
+attack_auc: 0.7265885353568037
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 65/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 6.078533172607422
+ASR: 0.15989424350672485
+attack_auc: 0.7451434534523885
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 66/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.816383600234985
+ASR: 0.15717873257891946
+attack_auc: 0.741475542264989
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 66/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.095594882965088
+ASR: 0.16977815284737657
+attack_auc: 0.7411819888956973
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 66/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.930917024612427
+ASR: 0.15498235715521402
+attack_auc: 0.7385688463466452
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 66/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.381449460983276
+ASR: 0.1753209876016527
+attack_auc: 0.7474001614406863
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 67/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.218870162963867
+ASR: 0.14992074210896286
+attack_auc: 0.7237144701764985
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 67/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.028537034988403
+
+-------------Round number: 210-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3612
+Averaged Test Accurancy: 0.7505
+Averaged Test AUC: 0.9579
+Std Test Accurancy: 0.0877
+Std Test AUC: 0.0195
+ASR: 0.17509359011178327
+attack_auc: 0.7425786908295633
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 67/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 13.96813702583313
+ASR: 0.14032428313671783
+attack_auc: 0.7273938353999467
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 68/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.422466993331909
+ASR: 0.16932916641952456
+attack_auc: 0.7437255713699179
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 67/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.400852203369141
+ASR: 0.154420115297277
+attack_auc: 0.7233199737729301
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 68/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.392269611358643
+ASR: 0.1431489395477981
+attack_auc: 0.7269158258753905
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 70/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.065314769744873
+ASR: 0.16433450952696346
+attack_auc: 0.7496653013023582
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 70/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.472532272338867
+ASR: 0.16856739027418535
+attack_auc: 0.7560743274310211
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.082513093948364
+ASR: 0.17013473472321777
+attack_auc: 0.7441503325610076
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 70/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.744656085968018
+ASR: 0.1367702209123039
+attack_auc: 0.7382647542842035
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.186486005783081
+ASR: 0.16192503217292223
+attack_auc: 0.7470601161684063
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.312344789505005
+
+-------------Round number: 220-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3504
+Averaged Test Accurancy: 0.7460
+Averaged Test AUC: 0.9558
+Std Test Accurancy: 0.0906
+Std Test AUC: 0.0198
+ASR: 0.15313236191903085
+attack_auc: 0.748581977129353
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 13.141778945922852
+ASR: 0.1324177232853371
+attack_auc: 0.7367635687689527
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.4442384243011475
+ASR: 0.13005604647505337
+attack_auc: 0.7441409888710839
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.475665092468262
+ASR: 0.17606933146878048
+attack_auc: 0.7704295149873462
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.438378095626831
+ASR: 0.15759040054585743
+attack_auc: 0.7624863270881986
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 6.214050054550171
+ASR: 0.1437944625778095
+attack_auc: 0.7472927227409575
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.1938769817352295
+ASR: 0.16110437951540763
+attack_auc: 0.7552995412162777
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.82134485244751
+ASR: 0.19240427880212393
+attack_auc: 0.7707838766709394
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.67087984085083
+ASR: 0.15392507787132648
+attack_auc: 0.7434064990247077
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.4401562213897705
+ASR: 0.14532759934130887
+attack_auc: 0.7206294906067987
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.754794597625732
+
+-------------Round number: 230-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3107
+Averaged Test Accurancy: 0.7490
+Averaged Test AUC: 0.9572
+Std Test Accurancy: 0.0899
+Std Test AUC: 0.0208
+ASR: 0.2016430818620528
+attack_auc: 0.7689280399660287
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 12.740599155426025
+ASR: 0.17714225871263276
+attack_auc: 0.7424824971713546
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 71/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.706365585327148
+ASR: 0.15593881477117671
+attack_auc: 0.7277563514487817
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 72/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.39947772026062
+ASR: 0.16748367269404202
+attack_auc: 0.7482334112368494
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 72/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.217064380645752
+ASR: 0.17350892295892273
+attack_auc: 0.7457160409129906
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 78/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.4146153926849365
+ASR: 0.1860085697646295
+attack_auc: 0.7511539691338591
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 77/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.394946575164795
+ASR: 0.17296079885387367
+attack_auc: 0.7436789985696204
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 77/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.504875421524048
+ASR: 0.14060661974091118
+attack_auc: 0.7223603880419243
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 79/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.358604192733765
+ASR: 0.12654199090890728
+attack_auc: 0.7073823941155989
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 1/512 channels masked
+Layer layer4.0.downsample.0.weight: 80/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.120595932006836
+ASR: 0.1377830705753829
+attack_auc: 0.7241796214337911
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 80/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.372709274291992
+
+-------------Round number: 240-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3049
+Averaged Test Accurancy: 0.7495
+Averaged Test AUC: 0.9559
+Std Test Accurancy: 0.1011
+Std Test AUC: 0.0256
+ASR: 0.1846171754915558
+attack_auc: 0.7549865649231462
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 80/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 12.968709945678711
+ASR: 0.21159243438968045
+attack_auc: 0.7698458077202645
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 80/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 6.051985740661621
+ASR: 0.16205677614379893
+attack_auc: 0.7476357118843783
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 81/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 4.966212511062622
+ASR: 0.21687583168351143
+attack_auc: 0.7781774011550421
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 81/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.2932984828948975
+ASR: 0.17607614418390594
+attack_auc: 0.7466112373222471
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 81/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.268066644668579
+ASR: 0.14936914378332328
+attack_auc: 0.7219506555035337
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 81/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.392180919647217
+ASR: 0.16826135286175722
+attack_auc: 0.738766888440395
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 81/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.665652275085449
+ASR: 0.13510728637457275
+attack_auc: 0.7153014462125807
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 81/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.664244174957275
+ASR: 0.15734572330416455
+attack_auc: 0.7463285704356944
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 81/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.516126394271851
+ASR: 0.1691989476367397
+attack_auc: 0.7559043628667845
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 81/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.020102500915527
+
+-------------Round number: 250-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2791
+Averaged Test Accurancy: 0.7521
+Averaged Test AUC: 0.9553
+Std Test Accurancy: 0.0938
+Std Test AUC: 0.0225
+ASR: 0.18925710095469678
+attack_auc: 0.7721781468180399
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 81/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 13.056564092636108
+ASR: 0.18750526185725838
+attack_auc: 0.7606886688673122
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 81/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.6187756061553955
+ASR: 0.24010719316255075
+attack_auc: 0.7814419594522496
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 81/512 channels masked
+Layer layer4.1.conv2.weight: 3/512 channels masked
+------------------------- time cost ------------------------- 5.342010736465454
+ASR: 0.296398359514838
+attack_auc: 0.8066781252466491
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 81/512 channels masked
+Layer layer4.1.conv2.weight: 3/512 channels masked
+------------------------- time cost ------------------------- 5.397665023803711
+ASR: 0.27788521029590824
+attack_auc: 0.7985768524282971
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 82/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.0820698738098145
+ASR: 0.22543131888692503
+attack_auc: 0.7701737244910731
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 82/512 channels masked
+Layer layer4.1.conv2.weight: 3/512 channels masked
+------------------------- time cost ------------------------- 5.380736351013184
+ASR: 0.24318561103738234
+attack_auc: 0.7884309988960938
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 83/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.157642364501953
+ASR: 0.20712159592130674
+attack_auc: 0.7681608813746722
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 84/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.1127026081085205
+ASR: 0.18948114983789863
+attack_auc: 0.7517354964748839
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 83/512 channels masked
+Layer layer4.1.conv2.weight: 2/512 channels masked
+------------------------- time cost ------------------------- 5.427927255630493
+ASR: 0.2128998108940089
+attack_auc: 0.7612547272326673
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 83/512 channels masked
+Layer layer4.1.conv2.weight: 3/512 channels masked
+------------------------- time cost ------------------------- 5.28035569190979
+
+-------------Round number: 260-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2705
+Averaged Test Accurancy: 0.7521
+Averaged Test AUC: 0.9560
+Std Test Accurancy: 0.1013
+Std Test AUC: 0.0254
+ASR: 0.1952309020398994
+attack_auc: 0.7403587715668982
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 83/512 channels masked
+Layer layer4.1.conv2.weight: 3/512 channels masked
+------------------------- time cost ------------------------- 13.171702861785889
+ASR: 0.1733784777381091
+attack_auc: 0.7376262023921267
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 2/512 channels masked
+Layer layer4.0.downsample.0.weight: 83/512 channels masked
+Layer layer4.1.conv2.weight: 3/512 channels masked
+------------------------- time cost ------------------------- 5.362512826919556
+ASR: 0.1945834362267452
+attack_auc: 0.7480494131747627
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 83/512 channels masked
+Layer layer4.1.conv2.weight: 3/512 channels masked
+------------------------- time cost ------------------------- 5.138258218765259
+ASR: 0.21527705291111027
+attack_auc: 0.7592291659227389
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 84/512 channels masked
+Layer layer4.1.conv2.weight: 3/512 channels masked
+------------------------- time cost ------------------------- 4.914507150650024
+ASR: 0.2347866270859373
+attack_auc: 0.7714478311574662
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 83/512 channels masked
+Layer layer4.1.conv2.weight: 3/512 channels masked
+------------------------- time cost ------------------------- 5.397665500640869
+ASR: 0.14212339507937652
+attack_auc: 0.7164109169000477
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 83/512 channels masked
+Layer layer4.1.conv2.weight: 4/512 channels masked
+------------------------- time cost ------------------------- 5.247288703918457
+ASR: 0.12612021693205788
+attack_auc: 0.7059940829181598
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 84/512 channels masked
+Layer layer4.1.conv2.weight: 3/512 channels masked
+------------------------- time cost ------------------------- 5.230462074279785
+ASR: 0.1811774793762941
+attack_auc: 0.7327789294677461
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 85/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.689229249954224
+ASR: 0.15125052071171294
+attack_auc: 0.7212042490086343
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 84/512 channels masked
+Layer layer4.1.conv2.weight: 3/512 channels masked
+------------------------- time cost ------------------------- 5.536145210266113
+ASR: 0.17866355427649375
+attack_auc: 0.7370255250708136
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 6/512 channels masked
+Layer layer4.0.downsample.0.weight: 85/512 channels masked
+Layer layer4.1.conv2.weight: 4/512 channels masked
+------------------------- time cost ------------------------- 5.854802370071411
+
+-------------Round number: 270-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2416
+Averaged Test Accurancy: 0.7504
+Averaged Test AUC: 0.9577
+Std Test Accurancy: 0.1026
+Std Test AUC: 0.0213
+ASR: 0.2164388530145702
+attack_auc: 0.7608426782208606
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 85/512 channels masked
+Layer layer4.1.conv2.weight: 4/512 channels masked
+------------------------- time cost ------------------------- 12.808452367782593
+ASR: 0.17565114321560418
+attack_auc: 0.7498918199173812
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 87/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.609811544418335
+ASR: 0.18128676767245758
+attack_auc: 0.7478675365208932
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 87/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.340150356292725
+ASR: 0.13300882788953716
+attack_auc: 0.7264464249045589
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 88/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 4.903341054916382
+ASR: 0.1738207525759752
+attack_auc: 0.7589534565724534
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 89/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 6.003608465194702
+ASR: 0.18016996670867141
+attack_auc: 0.7589755346391082
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 89/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.781826496124268
+ASR: 0.15003158332917116
+attack_auc: 0.7408580562641013
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 89/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.499591112136841
+ASR: 0.14545330084412125
+attack_auc: 0.7370597639721381
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 88/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 6.210561990737915
+ASR: 0.16670855264109283
+attack_auc: 0.7369134673234604
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 89/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 4.810723781585693
+ASR: 0.18785042809890626
+attack_auc: 0.7539432607093173
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 89/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.920642375946045
+
+-------------Round number: 280-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2125
+Averaged Test Accurancy: 0.7593
+Averaged Test AUC: 0.9582
+Std Test Accurancy: 0.0928
+Std Test AUC: 0.0208
+ASR: 0.15065721401845153
+attack_auc: 0.7223505192721015
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 89/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 13.480885028839111
+ASR: 0.18190531377750066
+attack_auc: 0.7502054974382301
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.061952352523804
+ASR: 0.20287613311431446
+attack_auc: 0.7604219524809557
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 89/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.203466892242432
+ASR: 0.16280429596617235
+attack_auc: 0.7491811169215693
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 89/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.441254138946533
+ASR: 0.13648352082404108
+attack_auc: 0.7436722445343183
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 89/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 4.636072635650635
+ASR: 0.14400580045202005
+attack_auc: 0.7442103491132542
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.571264266967773
+ASR: 0.18599461382712137
+attack_auc: 0.7659792669683403
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.648183107376099
+ASR: 0.20861206146501207
+attack_auc: 0.778125443299341
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 4.959066867828369
+ASR: 0.21948575555257155
+attack_auc: 0.7787555124662375
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.089239120483398
+ASR: 0.2504072988254701
+attack_auc: 0.8001805518453001
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 91/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.646493911743164
+
+-------------Round number: 290-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1922
+Averaged Test Accurancy: 0.7596
+Averaged Test AUC: 0.9595
+Std Test Accurancy: 0.0871
+Std Test AUC: 0.0185
+ASR: 0.24580146089410215
+attack_auc: 0.7967990529395779
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 3/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 13.4262113571167
+ASR: 0.23785159839521508
+attack_auc: 0.790743021776521
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.633057355880737
+ASR: 0.21259795892096234
+attack_auc: 0.7843232078755095
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.050265312194824
+ASR: 0.19676445316546942
+attack_auc: 0.7751291586418729
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.418629169464111
+ASR: 0.18870847264216956
+attack_auc: 0.7736978227102088
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.312998294830322
+ASR: 0.2129906165249563
+attack_auc: 0.7789369098842477
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 91/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.1777684688568115
+ASR: 0.2784953377848868
+attack_auc: 0.80663742033804
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 4.876254558563232
+ASR: 0.249927880664399
+attack_auc: 0.8030504140077045
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.219158887863159
+ASR: 0.22620940963769343
+attack_auc: 0.7818216925637814
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 4/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.6831042766571045
+ASR: 0.11135248739965399
+attack_auc: 0.72035159771212
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 5/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 5.051345348358154
+
+-------------Round number: 300-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1963
+Averaged Test Accurancy: 0.7628
+Averaged Test AUC: 0.9601
+Std Test Accurancy: 0.0864
+Std Test AUC: 0.0191
+ASR: 0.13258830333116092
+attack_auc: 0.7394857986606941
+Layer layer2.0.downsample.0.weight: 1/128 channels masked
+Layer layer4.0.conv2.weight: 7/512 channels masked
+Layer layer4.0.downsample.0.weight: 90/512 channels masked
+Layer layer4.1.conv2.weight: 5/512 channels masked
+------------------------- time cost ------------------------- 13.080636501312256
+
+Best accuracy.
+0.7628300946686597
+
+Average time cost per round.
+6.017375741004944
+File path: ./results/Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10_FedCLCM_SG06_0.h5
+
+Average time cost: 1823.43s.
+Length:  31
+std for best accurancy: 0.0
+mean for best accurancy: 0.7628300946686597
+All done!

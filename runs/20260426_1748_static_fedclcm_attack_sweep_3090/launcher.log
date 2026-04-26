@@ -1,0 +1,35 @@
+[RUN] BL00 attack=blend gpu=0
+[RUN] BL01 attack=blend gpu=1
+[RUN] BL02 attack=blend gpu=2
+Batch running: BL00 BL01 BL02 BL03
+[RUN] BL03 attack=blend gpu=3
+Batch finished: BL00 BL01 BL02 BL03
+[RUN] BL04 attack=blend gpu=0
+[RUN] BL05 attack=blend gpu=1
+[RUN] BL06 attack=blend gpu=2
+Batch running: BL04 BL05 BL06 BL07
+[RUN] BL07 attack=blend gpu=3
+Batch finished: BL04 BL05 BL06 BL07
+[RUN] BL08 attack=blend gpu=0
+[RUN] BL09 attack=blend gpu=1
+[RUN] BL10 attack=blend gpu=2
+Batch running: BL08 BL09 BL10 SG00
+[RUN] SG00 attack=sig gpu=3
+Batch finished: BL08 BL09 BL10 SG00
+[RUN] SG01 attack=sig gpu=0
+[RUN] SG02 attack=sig gpu=1
+[RUN] SG03 attack=sig gpu=2
+Batch running: SG01 SG02 SG03 SG04
+[RUN] SG04 attack=sig gpu=3
+Batch finished: SG01 SG02 SG03 SG04
+[RUN] SG05 attack=sig gpu=0
+[RUN] SG06 attack=sig gpu=1
+[RUN] SG07 attack=sig gpu=2
+Batch running: SG05 SG06 SG07 SG08
+[RUN] SG08 attack=sig gpu=3
+Batch finished: SG05 SG06 SG07 SG08
+[RUN] SG09 attack=sig gpu=0
+Batch running: SG09 SG10
+[RUN] SG10 attack=sig gpu=1
+Batch finished: SG09 SG10
+[READY] summary=/home/huangtu/PFL_clean_workspace/root_static/runs/20260426_1748_static_fedclcm_attack_sweep_3090/summary.csv
