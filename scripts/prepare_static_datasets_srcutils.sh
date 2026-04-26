@@ -8,7 +8,7 @@ source "${SCRIPT_DIR}/lib/common.sh"
 SRC_ROOT="${PROJECT_DIR}/src"
 DATASET_ROOT="${SRC_ROOT}/dataset"
 RAWDATA_ROOT="${DATASET_ROOT}/rawdata"
-GEN_DIR="${SRC_ROOT}/utils"
+GEN_DIR="${DATASET_ROOT}/utils"
 WRAPPER="${PROJECT_DIR}/scripts/generate_dataset_via_existing.py"
 
 RUN_TS="${RUN_TS:-$(timestamp)}"
@@ -37,8 +37,9 @@ ensure_dir "${DATASET_ROOT}"
 ensure_dir "${RAWDATA_ROOT}"
 ensure_dir "${LOG_DIR}"
 
-if [[ ! -e "${DATASET_ROOT}/utils" ]]; then
-  ln -s ../utils "${DATASET_ROOT}/utils"
+if [[ ! -d "${GEN_DIR}" ]]; then
+  echo "[FATAL] missing generator directory: ${GEN_DIR}" >&2
+  exit 1
 fi
 
 echo -e "dataset_name\tgenerator\tstatus\tlog_file" > "${MANIFEST}"

@@ -29,7 +29,6 @@ from User.serverCLCM import FedCLCM
 
 
 from model.models import *
-from model.resnet import *
 from model.Resnet import ResNet18
 
 from utils.result_utils import average_data
