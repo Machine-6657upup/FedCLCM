@@ -1,0 +1,4 @@
+gpu0 PID=704698 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_212739/gpu0.launcher.log
+gpu1 PID=704701 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_212739/gpu1.launcher.log
+gpu2 PID=704704 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_212739/gpu2.launcher.log
+gpu3 PID=704709 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_212739/gpu3.launcher.log

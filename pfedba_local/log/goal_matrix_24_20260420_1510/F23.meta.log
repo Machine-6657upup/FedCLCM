@@ -1,0 +1,17 @@
+==================================================
+[START] F23
+TIME=2026-04-21 18:59:06
+GPU=2
+ALGORITHM=PFLALP
+LOCAL_EPOCHS=1
+NUM_GLOBAL_ITERS=100
+LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_20260420_1510/F23.log
+CMD=/home/huangtu/miniconda3/envs/torch/bin/python CMD=-u CMD=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/main.py CMD=--dataset CMD=Cifar10 CMD=--model CMD=resnet CMD=--resnet_pretrained CMD=0 CMD=--learning_rate CMD=0.1 CMD=--lr_head CMD=0.1 CMD=--plocal_epochs CMD=1 CMD=--numusers CMD=10 CMD=--batch_size CMD=64 CMD=--attack_start CMD=30 CMD=--attack_method CMD=attackall CMD=--poisoning_per_batch CMD=1 CMD=--defense CMD=none CMD=--per_epoch CMD=1 CMD=--malclient CMD=10 CMD=--times CMD=1 CMD=--algorithm CMD=PFLALP CMD=--local_epochs CMD=1 CMD=--num_global_iters CMD=100 CMD=--attack_start CMD=0 CMD=--selection_strategy CMD=fixed_malicious_mix CMD=--fixed_malicious_per_round CMD=3 CMD=--malclient_id_mode CMD=seeded_pool CMD=--malclient CMD=30 CMD=--purify_beta CMD=1500 CMD=--purify_rounds CMD=1 CMD=--cluster_max_k CMD=4 CMD=--mal_local_epoch CMD=6 CMD=--mal_learning_rate CMD=0.05 
+==================================================
+[GPU_CHECK]
+cuda_available=True
+device_count=1
+device0=NVIDIA GeForce RTX 3090
+==================================================
+[END] F23 RC=1 TIME=2026-04-21 19:57:21
+==================================================

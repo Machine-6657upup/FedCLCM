@@ -1,0 +1,9 @@
+==================================================
+[START] E04
+GPU=3
+ALGORITHM=FedRT
+LOCAL_EPOCHS=1
+VARIANT=baseline
+TIME=2026-04-18 16:11:21
+LOG=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/localepoch22_20260418_161121/E04.log
+==================================================

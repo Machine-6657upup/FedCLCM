@@ -1,0 +1,323 @@
+==================================================
+goal = formal_static_badnet_fedclcm
+device = cuda
+join_ratio = 0.1
+device_id = 0
+dataset = Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10
+num_classes = 10
+model = ResNet18
+batch_size = 64
+local_learning_rate = 0.1
+learning_rate_decay = False
+learning_rate_decay_gamma = 0.99
+global_rounds = 600
+top_cnt = 100
+local_epochs = 1
+algorithm = FedCLCM
+num_clients = 100
+eval_gap = 1
+save_folder_name = items
+auto_break = False
+batch_num_per_client = 2
+feature_dim = 512
+vocab_size = 32000
+max_len = 200
+client_drop_rate = 0.0
+time_select = False
+time_threthold = 10000
+send_slow_rate = 0.0
+beta = 0.0
+lamda = 1.0
+mu = 0.0
+K = 5
+p_learning_rate = 0.01
+M = 5
+itk = 4000
+alphaK = 1.0
+sigma = 1.0
+alpha = 1.0
+plocal_epochs = 1
+lr_head = 0.005
+tau = 1.0
+fine_tuning_epochs = 10
+dr_learning_rate = 0.0
+L = 1.0
+noise_dim = 512
+generator_learning_rate = 0.005
+hidden_dim = 512
+server_epochs = 1000
+localize_feature_extractor = False
+server_learning_rate = 1.0
+eta = 1.0
+rand_percent = 80
+layer_idx = 2
+mentee_learning_rate = 0.005
+T_start = 0.95
+T_end = 0.98
+momentum = 0.1
+kl_weight = 0.0
+disti_epochs = 1
+protect_id = 1
+adv_eps = 0.1
+adv_num_iter = 5
+defense_epochs = 1
+clean_data = 5000
+sdmk_m = 7
+sdmk_k = 5
+delta = 0.5
+sim_threshold = 0.7
+rt_beta = 0.2
+num_adv_clients = 10
+lambda_cl = 0.5
+aug_strength = 0.1
+mask_tau = 2.0
+mask_alpha = 0.3
+enable_channel_mask = True
+cosine_gate = False
+cosine_gate_threshold = 0.3
+cosine_gate_alpha = 0.5
+trim_high_layers = 
+trim_beta_high = None
+trim_beta_low = None
+attack = none
+ba_target_label = 0
+ba_poison_rate = 0.2
+ba_trigger_gen_steps = 30
+ba_trigger_gen_lr = 0.01
+ba_pgd_eps = 0.0314
+ba_trigger_scale = 8.0
+pfedba_target_label = 0
+pfedba_poison_rate = 0.5
+pfedba_poison_count = -1
+pfedba_poison_before_start = False
+pfedba_attack_start = 30
+pfedba_trigger_opt_steps = 15
+pfedba_trigger_lr = 0.1
+pfedba_init_value = 0.5
+pfedba_patch_size = 8
+pfedba_patch_position = center
+pfedba_img_c = 3
+pfedba_img_h = 32
+pfedba_img_w = 32
+pfedba_align_grad_weight = 1.0
+pfedba_align_loss_weight = 1.0
+pfedba_attack_loss_weight = 1.0
+pfedba_opt_samples_per_class = 100
+pfedba_opt_batch_size = 64
+pfedba_opt_max_batches_per_client = 20
+logit_analysis = False
+logit_reject_thresholds = 0.5,0.6,0.7,0.8
+logit_entropy_thresholds = 1.0,1.5,2.0
+logit_margin_thresholds = 0.1,0.2,0.3
+==================================================
+
+============= Running time: 0th =============
+Creating server and clients ...
+ResNet(
+  (conv1): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (relu): ReLU(inplace=True)
+  (layer1): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer2): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer3): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer4): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
+  (fc): Linear(in_features=512, out_features=10, bias=True)
+)
+
+Join ratio / total clients: 0.1 / 100
+Finished creating server and clients.
+
+-------------Round number: 0-------------
+
+Evaluate personalized models
+Averaged Train Loss: 2.4217
+Averaged Test Accurancy: 0.1065
+Averaged Test AUC: 0.5006
+Std Test Accurancy: 0.1360
+Std Test AUC: 0.1313
+ASR: 0.005343834688346883
+attack_auc: 0.734058445888782
+------------------------- time cost ------------------------- 28.16921305656433
+
+-------------Round number: 1-------------
+
+Evaluate personalized models
+Averaged Train Loss: 2.3483
+Averaged Test Accurancy: 0.1370
+Averaged Test AUC: 0.5420
+Std Test Accurancy: 0.1707
+Std Test AUC: 0.1583
+ASR: 0.014839598793925667
+attack_auc: 0.8399053314338915
+Layer conv1.weight: 15/64 channels masked
+Layer layer1.0.conv1.weight: 7/64 channels masked
+Layer layer1.1.conv1.weight: 1/64 channels masked
+Layer layer2.0.conv1.weight: 1/128 channels masked
+Layer layer2.0.downsample.0.weight: 5/128 channels masked
+Layer layer3.0.downsample.0.weight: 1/256 channels masked
+Layer layer4.0.conv2.weight: 9/512 channels masked
+Layer layer4.0.downsample.0.weight: 10/512 channels masked
+Layer layer4.1.conv1.weight: 19/512 channels masked
+Layer layer4.1.conv2.weight: 13/512 channels masked
+------------------------- time cost ------------------------- 28.163919687271118
+
+-------------Round number: 2-------------
+
+Evaluate personalized models
+Averaged Train Loss: 2.2560
+Averaged Test Accurancy: 0.1735
+Averaged Test AUC: 0.5719
+Std Test Accurancy: 0.1932
+Std Test AUC: 0.1827
+ASR: 0.02108891040410492
+attack_auc: 0.7783442502056263
+Layer conv1.weight: 17/64 channels masked
+Layer layer1.0.conv1.weight: 10/64 channels masked
+Layer layer1.1.conv1.weight: 1/64 channels masked
+Layer layer1.1.conv2.weight: 1/64 channels masked
+Layer layer2.0.conv1.weight: 2/128 channels masked
+Layer layer2.0.downsample.0.weight: 5/128 channels masked
+Layer layer3.0.downsample.0.weight: 2/256 channels masked
+Layer layer4.0.conv1.weight: 1/512 channels masked
+Layer layer4.0.conv2.weight: 12/512 channels masked
+Layer layer4.0.downsample.0.weight: 18/512 channels masked
+Layer layer4.1.conv1.weight: 20/512 channels masked
+Layer layer4.1.conv2.weight: 19/512 channels masked
+------------------------- time cost ------------------------- 30.254031896591187
+
+-------------Round number: 3-------------
+
+Evaluate personalized models
+Averaged Train Loss: 2.1465
+Averaged Test Accurancy: 0.2133
+Averaged Test AUC: 0.6061
+Std Test Accurancy: 0.2114
+Std Test AUC: 0.1927
+ASR: 0.020282879862630613
+attack_auc: 0.7468000281849674
+Layer conv1.weight: 22/64 channels masked
+Layer layer1.0.conv1.weight: 10/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer1.1.conv1.weight: 1/64 channels masked
+Layer layer1.1.conv2.weight: 1/64 channels masked
+Layer layer2.0.conv1.weight: 2/128 channels masked
+Layer layer2.0.conv2.weight: 1/128 channels masked
+Layer layer2.0.downsample.0.weight: 5/128 channels masked
+Layer layer2.1.conv1.weight: 1/128 channels masked
+Layer layer3.0.downsample.0.weight: 2/256 channels masked
+Layer layer4.0.conv1.weight: 2/512 channels masked
+Layer layer4.0.conv2.weight: 14/512 channels masked
+Layer layer4.0.downsample.0.weight: 20/512 channels masked
+Layer layer4.1.conv1.weight: 22/512 channels masked
+Layer layer4.1.conv2.weight: 23/512 channels masked
+------------------------- time cost ------------------------- 31.438735246658325
+
+-------------Round number: 4-------------
+
+Evaluate personalized models
+Averaged Train Loss: 2.0909
+Averaged Test Accurancy: 0.2236
+Averaged Test AUC: 0.6235
+Std Test Accurancy: 0.2082
+Std Test AUC: 0.1917
+ASR: 0.026062320573257906
+attack_auc: 0.7444767421688586
+Layer conv1.weight: 26/64 channels masked
+Layer layer1.0.conv1.weight: 12/64 channels masked
+Layer layer1.0.conv2.weight: 1/64 channels masked
+Layer layer1.1.conv1.weight: 1/64 channels masked
+Layer layer1.1.conv2.weight: 1/64 channels masked
+Layer layer2.0.conv1.weight: 2/128 channels masked
+Layer layer2.0.conv2.weight: 2/128 channels masked
+Layer layer2.0.downsample.0.weight: 7/128 channels masked
+Layer layer2.1.conv1.weight: 1/128 channels masked
+Layer layer3.0.downsample.0.weight: 2/256 channels masked
+Layer layer4.0.conv1.weight: 4/512 channels masked
+Layer layer4.0.conv2.weight: 22/512 channels masked
+Layer layer4.0.downsample.0.weight: 28/512 channels masked
+Layer layer4.1.conv1.weight: 26/512 channels masked
+Layer layer4.1.conv2.weight: 29/512 channels masked
+Traceback (most recent call last):
+  File "/home/huangtu/PFL_clean_workspace/root_static/src/main.py", line 522, in <module>
+    run(args)
+  File "/home/huangtu/PFL_clean_workspace/root_static/src/main.py", line 272, in run
+    server.train()
+  File "/home/huangtu/PFL_clean_workspace/root_static/src/User/serverCLCM.py", line 86, in train
+    self.aggregate_parameters()
+  File "/home/huangtu/PFL_clean_workspace/root_static/src/User/serverCLCM.py", line 299, in aggregate_parameters
+    stacked_params = stacked_params * mask_expanded
+                     ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 90.00 MiB. GPU 0 has a total capacity of 23.68 GiB of which 58.31 MiB is free. Process 781280 has 6.19 GiB memory in use. Process 783369 has 9.71 GiB memory in use. Including non-PyTorch memory, this process has 7.71 GiB memory in use. Of the allocated memory 6.31 GiB is allocated by PyTorch, and 1.08 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

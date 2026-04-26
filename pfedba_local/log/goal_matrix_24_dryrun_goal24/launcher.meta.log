@@ -1,0 +1,11 @@
+RUN_TS=dryrun_goal24
+LOGDIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_dryrun_goal24
+STATUS_DIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_dryrun_goal24/status
+SCRIPT=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/scripts/run_goal_matrix_24_4gpu.sh
+START_TIME=2026-04-20 15:01:32
+STALE_RUNNING_CLEANUP=0
+FORCE_TAGS=
+gpu0 SCREEN=g24_dryrun_goal24_gpu0 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_dryrun_goal24/gpu0.launcher.log
+gpu1 SCREEN=g24_dryrun_goal24_gpu1 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_dryrun_goal24/gpu1.launcher.log
+gpu2 SCREEN=g24_dryrun_goal24_gpu2 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_dryrun_goal24/gpu2.launcher.log
+gpu3 SCREEN=g24_dryrun_goal24_gpu3 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_dryrun_goal24/gpu3.launcher.log

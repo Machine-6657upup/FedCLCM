@@ -1,0 +1,9 @@
+tag	gpu	algorithm	note	metric_kind
+X01	0	FedRep	baseline	legacy_personal
+X02	1	FedRPD	fedrep_plus_purify_only	legacy_personal
+X03	2	FedRPD	fedrep_plus_distill_only	legacy_personal
+X04	3	FedRPD	fedrep_plus_purify_distill	legacy_personal
+X05	0	PFLALP	full_default	saved_benign
+X06	1	PFLALP	full_pr2	saved_benign
+X07	2	BDPFL	full_default	saved_benign
+X08	3	BDPFL	full_gamma2	saved_benign

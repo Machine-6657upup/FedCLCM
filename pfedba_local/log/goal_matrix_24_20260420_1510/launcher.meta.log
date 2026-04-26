@@ -1,0 +1,16 @@
+RUN_TS=20260420_1510
+LOGDIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_20260420_1510
+STATUS_DIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_20260420_1510/status
+SCRIPT=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/scripts/run_goal_matrix_24_4gpu.sh
+START_TIME=2026-04-20 15:09:10
+STALE_RUNNING_CLEANUP=0
+FORCE_TAGS=
+SKIP_TAGS=E01
+[LAUNCHER_GPU_CHECK]
+cuda_available=True
+device_count=4
+==================================================
+gpu0 SCREEN=g24_20260420_1510_gpu0 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_20260420_1510/gpu0.launcher.log
+gpu1 SCREEN=g24_20260420_1510_gpu1 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_20260420_1510/gpu1.launcher.log
+gpu2 SCREEN=g24_20260420_1510_gpu2 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_20260420_1510/gpu2.launcher.log
+gpu3 SCREEN=g24_20260420_1510_gpu3 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/goal_matrix_24_20260420_1510/gpu3.launcher.log

@@ -1,0 +1,7 @@
+nohup: ignoring input
+PFEDBA_ROOT=/home/huangtu/PFL_Backdoor_Defense/PFedBA
+RUN_TS=20260418_025933
+LOGDIR=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/fedrt_nohup12_20260418_025933
+STATUS_DIR=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/fedrt_nohup12_20260418_025933/status
+PYTHON_BIN=/home/huangtu/miniconda3/envs/torch/bin/python
+MAIN_PY=/home/huangtu/PFL_Backdoor_Defense/PFedBA/main.py

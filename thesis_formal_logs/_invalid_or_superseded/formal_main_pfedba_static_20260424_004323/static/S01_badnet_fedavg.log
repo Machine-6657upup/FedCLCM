@@ -1,0 +1,443 @@
+==================================================
+goal = formal_static_badnet_fedavg
+device = cuda
+join_ratio = 0.1
+device_id = 0
+dataset = Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10
+num_classes = 10
+model = ResNet18
+batch_size = 64
+local_learning_rate = 0.1
+learning_rate_decay = False
+learning_rate_decay_gamma = 0.99
+global_rounds = 600
+top_cnt = 100
+local_epochs = 1
+algorithm = FedAvg
+num_clients = 100
+eval_gap = 1
+save_folder_name = items
+auto_break = False
+batch_num_per_client = 2
+feature_dim = 512
+vocab_size = 32000
+max_len = 200
+client_drop_rate = 0.0
+time_select = False
+time_threthold = 10000
+send_slow_rate = 0.0
+beta = 0.0
+lamda = 1.0
+mu = 0.0
+K = 5
+p_learning_rate = 0.01
+M = 5
+itk = 4000
+alphaK = 1.0
+sigma = 1.0
+alpha = 1.0
+plocal_epochs = 1
+lr_head = 0.005
+tau = 1.0
+fine_tuning_epochs = 10
+dr_learning_rate = 0.0
+L = 1.0
+noise_dim = 512
+generator_learning_rate = 0.005
+hidden_dim = 512
+server_epochs = 1000
+localize_feature_extractor = False
+server_learning_rate = 1.0
+eta = 1.0
+rand_percent = 80
+layer_idx = 2
+mentee_learning_rate = 0.005
+T_start = 0.95
+T_end = 0.98
+momentum = 0.1
+kl_weight = 0.0
+disti_epochs = 1
+protect_id = 1
+adv_eps = 0.1
+adv_num_iter = 5
+defense_epochs = 1
+clean_data = 5000
+sdmk_m = 7
+sdmk_k = 5
+delta = 0.5
+sim_threshold = 0.7
+rt_beta = 0.2
+num_adv_clients = 10
+lambda_cl = 0.5
+aug_strength = 0.1
+mask_tau = 2.0
+mask_alpha = 0.3
+enable_channel_mask = True
+cosine_gate = False
+cosine_gate_threshold = 0.3
+cosine_gate_alpha = 0.5
+trim_high_layers = 
+trim_beta_high = None
+trim_beta_low = None
+attack = none
+ba_target_label = 0
+ba_poison_rate = 0.2
+ba_trigger_gen_steps = 30
+ba_trigger_gen_lr = 0.01
+ba_pgd_eps = 0.0314
+ba_trigger_scale = 8.0
+pfedba_target_label = 0
+pfedba_poison_rate = 0.5
+pfedba_poison_count = -1
+pfedba_poison_before_start = False
+pfedba_attack_start = 30
+pfedba_trigger_opt_steps = 15
+pfedba_trigger_lr = 0.1
+pfedba_init_value = 0.5
+pfedba_patch_size = 8
+pfedba_patch_position = center
+pfedba_img_c = 3
+pfedba_img_h = 32
+pfedba_img_w = 32
+pfedba_align_grad_weight = 1.0
+pfedba_align_loss_weight = 1.0
+pfedba_attack_loss_weight = 1.0
+pfedba_opt_samples_per_class = 100
+pfedba_opt_batch_size = 64
+pfedba_opt_max_batches_per_client = 20
+logit_analysis = False
+logit_reject_thresholds = 0.5,0.6,0.7,0.8
+logit_entropy_thresholds = 1.0,1.5,2.0
+logit_margin_thresholds = 0.1,0.2,0.3
+==================================================
+
+============= Running time: 0th =============
+Creating server and clients ...
+ResNet(
+  (conv1): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (relu): ReLU(inplace=True)
+  (layer1): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer2): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer3): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer4): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
+  (fc): Linear(in_features=512, out_features=10, bias=True)
+)
+
+Join ratio / total clients: 0.1 / 100
+Finished creating server and clients.
+
+-------------Round number: 0-------------
+
+Evaluate global model
+Averaged Train Loss: 2.4217
+Averaged Test Accurancy: 0.1065
+Averaged Test AUC: 0.5006
+Std Test Accurancy: 0.1360
+Std Test AUC: 0.1313
+ASR : 0.02463978015448604
+attack_auc : 0.7324649148752262
+------------------------- time cost ------------------------- 15.870022773742676
+
+-------------Round number: 1-------------
+
+Evaluate global model
+Averaged Train Loss: 17.8028
+Averaged Test Accurancy: 0.1087
+Averaged Test AUC: 0.5005
+Std Test Accurancy: 0.1415
+Std Test AUC: 0.1422
+ASR : 0.011566287166892645
+attack_auc : 0.8738609987732676
+------------------------- time cost ------------------------- 15.349452495574951
+
+-------------Round number: 2-------------
+
+Evaluate global model
+Averaged Train Loss: 23.1863
+Averaged Test Accurancy: 0.1091
+Averaged Test AUC: 0.5002
+Std Test Accurancy: 0.1373
+Std Test AUC: 0.1441
+ASR : 0.7640565983109925
+attack_auc : 0.8472813776781671
+------------------------- time cost ------------------------- 15.38578987121582
+
+-------------Round number: 3-------------
+
+Evaluate global model
+Averaged Train Loss: 17.3285
+Averaged Test Accurancy: 0.1084
+Averaged Test AUC: 0.5171
+Std Test Accurancy: 0.1435
+Std Test AUC: 0.1496
+ASR : 0.011187275985663082
+attack_auc : 0.3696003497860916
+------------------------- time cost ------------------------- 15.33946681022644
+
+-------------Round number: 4-------------
+
+Evaluate global model
+Averaged Train Loss: 16.9172
+Averaged Test Accurancy: 0.1350
+Averaged Test AUC: 0.5356
+Std Test Accurancy: 0.1513
+Std Test AUC: 0.1567
+ASR : 0.6914498740748948
+attack_auc : 0.8466198896735944
+------------------------- time cost ------------------------- 15.221086502075195
+
+-------------Round number: 5-------------
+
+Evaluate global model
+Averaged Train Loss: 8.3784
+Averaged Test Accurancy: 0.1463
+Averaged Test AUC: 0.5463
+Std Test Accurancy: 0.1283
+Std Test AUC: 0.1540
+ASR : 0.010223983006241071
+attack_auc : 0.2823936568946042
+------------------------- time cost ------------------------- 15.80034613609314
+
+-------------Round number: 6-------------
+
+Evaluate global model
+Averaged Train Loss: 5.5897
+Averaged Test Accurancy: 0.1424
+Averaged Test AUC: 0.5609
+Std Test Accurancy: 0.1428
+Std Test AUC: 0.1553
+ASR : 0.5459770839687539
+attack_auc : 0.7173473399069296
+------------------------- time cost ------------------------- 17.781189680099487
+
+-------------Round number: 7-------------
+
+Evaluate global model
+Averaged Train Loss: 8.3753
+Averaged Test Accurancy: 0.1604
+Averaged Test AUC: 0.5502
+Std Test Accurancy: 0.1588
+Std Test AUC: 0.1663
+ASR : 0.5009185806677127
+attack_auc : 0.7082255012681601
+------------------------- time cost ------------------------- 16.507807731628418
+
+-------------Round number: 8-------------
+
+Evaluate global model
+Averaged Train Loss: 3.6733
+Averaged Test Accurancy: 0.1447
+Averaged Test AUC: 0.5639
+Std Test Accurancy: 0.1285
+Std Test AUC: 0.1477
+ASR : 0.4184530865699827
+attack_auc : 0.6130698142517501
+------------------------- time cost ------------------------- 16.281245470046997
+
+-------------Round number: 9-------------
+
+Evaluate global model
+Averaged Train Loss: 5.7813
+Averaged Test Accurancy: 0.1716
+Averaged Test AUC: 0.5797
+Std Test Accurancy: 0.1494
+Std Test AUC: 0.1466
+ASR : 0.4319407835185982
+attack_auc : 0.6668914950244059
+------------------------- time cost ------------------------- 16.198294639587402
+
+-------------Round number: 10-------------
+
+Evaluate global model
+Averaged Train Loss: 3.7835
+Averaged Test Accurancy: 0.1566
+Averaged Test AUC: 0.6026
+Std Test Accurancy: 0.1406
+Std Test AUC: 0.1480
+ASR : 0.41989498066528663
+attack_auc : 0.6438508198308349
+------------------------- time cost ------------------------- 20.906227827072144
+
+-------------Round number: 11-------------
+
+Evaluate global model
+Averaged Train Loss: 3.0856
+Averaged Test Accurancy: 0.1809
+Averaged Test AUC: 0.6006
+Std Test Accurancy: 0.1482
+Std Test AUC: 0.1416
+ASR : 0.018066124486796505
+attack_auc : 0.4597281677135259
+------------------------- time cost ------------------------- 17.174600839614868
+
+-------------Round number: 12-------------
+
+Evaluate global model
+Averaged Train Loss: 3.3639
+Averaged Test Accurancy: 0.1538
+Averaged Test AUC: 0.5860
+Std Test Accurancy: 0.1268
+Std Test AUC: 0.1431
+ASR : 0.33700218244683977
+attack_auc : 0.6098978592684925
+------------------------- time cost ------------------------- 16.504451513290405
+
+-------------Round number: 13-------------
+
+Evaluate global model
+Averaged Train Loss: 3.6074
+Averaged Test Accurancy: 0.1929
+Averaged Test AUC: 0.6062
+Std Test Accurancy: 0.1377
+Std Test AUC: 0.1541
+ASR : 0.3228529601622697
+attack_auc : 0.6320646754348542
+------------------------- time cost ------------------------- 16.521090984344482
+
+-------------Round number: 14-------------
+
+Evaluate global model
+Averaged Train Loss: 3.9130
+Averaged Test Accurancy: 0.1652
+Averaged Test AUC: 0.6148
+Std Test Accurancy: 0.1440
+Std Test AUC: 0.1519
+ASR : 0.3889678682240428
+attack_auc : 0.7046532854408583
+------------------------- time cost ------------------------- 16.786457538604736
+
+-------------Round number: 15-------------
+
+Evaluate global model
+Averaged Train Loss: 3.2859
+Averaged Test Accurancy: 0.1789
+Averaged Test AUC: 0.5967
+Std Test Accurancy: 0.1231
+Std Test AUC: 0.1475
+Traceback (most recent call last):
+  File "/home/huangtu/PFL_clean_workspace/root_static/src/main.py", line 522, in <module>
+    run(args)
+  File "/home/huangtu/PFL_clean_workspace/root_static/src/main.py", line 272, in run
+    server.train()
+  File "/home/huangtu/PFL_clean_workspace/root_static/src/User/serveravg.py", line 42, in train
+    client.train()
+  File "/home/huangtu/PFL_clean_workspace/root_static/src/User/clientavg.py", line 28, in train
+    output = self.model(x)
+             ^^^^^^^^^^^^^
+  File "/home/huangtu/miniconda3/envs/torch/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/huangtu/miniconda3/envs/torch/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/huangtu/PFL_clean_workspace/root_static/src/model/Resnet.py", line 200, in forward
+    return self._forward_impl(x)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/huangtu/PFL_clean_workspace/root_static/src/model/Resnet.py", line 188, in _forward_impl
+    x = self.layer1(x)
+        ^^^^^^^^^^^^^^
+  File "/home/huangtu/miniconda3/envs/torch/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/huangtu/miniconda3/envs/torch/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/huangtu/miniconda3/envs/torch/lib/python3.12/site-packages/torch/nn/modules/container.py", line 219, in forward
+    input = module(input)
+            ^^^^^^^^^^^^^
+  File "/home/huangtu/miniconda3/envs/torch/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/huangtu/miniconda3/envs/torch/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/huangtu/PFL_clean_workspace/root_static/src/model/Resnet.py", line 40, in forward
+    out = self.bn1(out)
+          ^^^^^^^^^^^^^
+  File "/home/huangtu/miniconda3/envs/torch/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/huangtu/miniconda3/envs/torch/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/huangtu/miniconda3/envs/torch/lib/python3.12/site-packages/torch/nn/modules/batchnorm.py", line 176, in forward
+    return F.batch_norm(
+           ^^^^^^^^^^^^^
+  File "/home/huangtu/miniconda3/envs/torch/lib/python3.12/site-packages/torch/nn/functional.py", line 2512, in batch_norm
+    return torch.batch_norm(
+           ^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 16.00 MiB. GPU 0 has a total capacity of 23.68 GiB of which 12.31 MiB is free. Process 788726 has 8.89 GiB memory in use. Including non-PyTorch memory, this process has 8.60 GiB memory in use. Process 788871 has 6.16 GiB memory in use. Of the allocated memory 7.77 GiB is allocated by PyTorch, and 522.90 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

@@ -1,0 +1,807 @@
+================================================================================
+Summary of training process:
+Algorithm: FedRep
+Attack method:attackall
+Defense method:none
+Attack goal:attackall
+Start attack iteration:30
+Batch size: 64
+Learing rate       : 0.1
+Average Moving       : 1.0
+Subset of users      : 10
+Number of global rounds       : 150
+Number of local rounds       : 20
+Dataset       : Cifar10
+Local Model       : cnn
+Per_local epoch:1
+one shot:0
+scale rate:0
+================================================================================
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+---------------Running time:------------ 0
+Files already downloaded and verified
+Files already downloaded and verified
+  0%|          | 0/10 [00:00<?, ?it/s] 70%|███████   | 7/10 [00:00<00:00, 65.17it/s]100%|██████████| 10/10 [00:00<00:00, 58.59it/s]
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:00<00:04,  2.19it/s] 20%|██        | 2/10 [00:00<00:02,  2.87it/s] 30%|███       | 3/10 [00:01<00:03,  2.17it/s] 40%|████      | 4/10 [00:01<00:02,  2.62it/s] 50%|█████     | 5/10 [00:02<00:02,  2.13it/s] 60%|██████    | 6/10 [00:02<00:01,  2.54it/s] 70%|███████   | 7/10 [00:02<00:01,  2.96it/s] 80%|████████  | 8/10 [00:03<00:00,  2.47it/s] 90%|█████████ | 9/10 [00:03<00:00,  2.77it/s]100%|██████████| 10/10 [00:03<00:00,  2.62it/s]100%|██████████| 10/10 [00:03<00:00,  2.55it/s]
+Number of users / total users: 10  /  10
+Finished creating FedAvg server.
+Files already downloaded and verified
+Files already downloaded and verified
+  0%|          | 0/10 [00:00<?, ?it/s] 60%|██████    | 6/10 [00:00<00:00, 53.26it/s]100%|██████████| 10/10 [00:00<00:00, 51.81it/s]
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:00<00:03,  2.56it/s] 20%|██        | 2/10 [00:00<00:02,  3.04it/s] 30%|███       | 3/10 [00:01<00:03,  2.29it/s] 40%|████      | 4/10 [00:01<00:02,  2.74it/s] 50%|█████     | 5/10 [00:02<00:02,  2.19it/s] 60%|██████    | 6/10 [00:02<00:01,  2.58it/s] 70%|███████   | 7/10 [00:02<00:00,  3.04it/s] 80%|████████  | 8/10 [00:03<00:00,  2.48it/s] 90%|█████████ | 9/10 [00:03<00:00,  2.80it/s]100%|██████████| 10/10 [00:03<00:00,  2.60it/s]100%|██████████| 10/10 [00:03<00:00,  2.60it/s]
+Finished creating FedRep server.
+-------------Round number:  0  -------------
+Evaluate global model
+Average Global Accurancy:  0.07059874888293119
+Average Global Trainning Accurancy:  0.07254259176476431
+
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.18240205523442518, 0.10819672131147541, 0.07971938775510204, 0.09915966386554621, 0.021831412977562158, 0.030927835051546393, 0.03568075117370892, 0.02145110410094637, 0.02225886232481451, 0.09695973705834018]; mean acc:0.06985875308534674
+Average Global ATTACK ALL ASR:  0.0
+Average Global ATTACK ALL train ASR:  0.0
+global benign client asr list is empty; mean set to 0.0
+global benign client asr list:[]; mean asr:0.0
+global malicious client asr list:[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; mean asr:0.0
+
+Evaluate global model with a few step updates, which is personalized model
+Average Personal Accurancy (k local SGD):  0.2167113494191242
+Average Personal Trainning Accurancy (k local SGD):  0.22189936919485423
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.26204238921001927, 0.17049180327868851, 0.36033163265306123, 0.16050420168067228, 0.2504548211036992, 0.12714776632302405, 0.19061032863849764, 0.2416403785488959, 0.17230008244023085, 0.1495480690221857]; mean acc:0.20850714728989747
+Average Personal ATTACK ALL ASR (k local SGD):  0.0
+Average Personal ATTACK ALL Trainning ASR (k local SGD):  0.0
+person benign client asr list is empty; mean set to 0.0
+person benign client asr list:[]; mean asr:0.0
+person malicious client asr list:[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; mean asr:0.0
+All users are selected
+================================================================================
+0
+client is malicious client!
+ACC :0.2010276172125883
+ASR :1.0
+================================================================================
+1
+client is malicious client!
+ACC :0.21065573770491802
+ASR :0.0
+================================================================================
+2
+client is malicious client!
+ACC :0.36033163265306123
+ASR :0.0
+================================================================================
+3
+client is malicious client!
+ACC :0.1722689075630252
+ASR :0.0
+================================================================================
+4
+client is malicious client!
+ACC :0.2504548211036992
+ASR :0.0
+================================================================================
+5
+client is malicious client!
+ACC :0.15979381443298968
+ASR :0.0
+================================================================================
+6
+client is malicious client!
+ACC :0.18591549295774648
+ASR :1.0
+================================================================================
+7
+client is malicious client!
+ACC :0.19936908517350158
+ASR :1.0
+================================================================================
+8
+client is malicious client!
+ACC :0.18961253091508656
+ASR :0.4896949711459192
+================================================================================
+9
+client is malicious client!
+ACC :0.1791290057518488
+ASR :0.0
+-------------Round number:  1  -------------
+Evaluate global model
+Average Global Accurancy:  0.1388888888888889
+Average Global Trainning Accurancy:  0.1358962896736701
+
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.046885035324341684, 0.15327868852459017, 0.10586734693877552, 0.20840336134453782, 0.25773195876288657, 0.17353951890034364, 0.19530516431924883, 0.10725552050473186, 0.10634789777411377, 0.04683648315529992]; mean acc:0.14014509755488697
+Average Global ATTACK ALL ASR:  0.0
+Average Global ATTACK ALL train ASR:  0.0
+global benign client asr list is empty; mean set to 0.0
+global benign client asr list:[]; mean asr:0.0
+global malicious client asr list:[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; mean asr:0.0
+
+Evaluate global model with a few step updates, which is personalized model
+Average Personal Accurancy (k local SGD):  0.1443997616919869
+Average Personal Trainning Accurancy (k local SGD):  0.1428500471862117
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.11368015414258188, 0.17049180327868851, 0.03380102040816327, 0.15546218487394958, 0.20133414190418436, 0.15034364261168384, 0.18309859154929578, 0.12492113564668769, 0.17477328936521022, 0.1676253081347576]; mean acc:0.14755312719152028
+Average Personal ATTACK ALL ASR (k local SGD):  0.016458147155198093
+Average Personal ATTACK ALL Trainning ASR (k local SGD):  0.015472110465405057
+person benign client asr list is empty; mean set to 0.0
+person benign client asr list:[]; mean asr:0.0
+person malicious client asr list:[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.18219291014014838, 0.0]; mean asr:0.018219291014014836
+All users are selected
+================================================================================
+0
+client is malicious client!
+ACC :0.3436095054592164
+ASR :0.22992935131663456
+================================================================================
+1
+client is malicious client!
+ACC :0.1540983606557377
+ASR :0.0
+================================================================================
+2
+client is malicious client!
+ACC :0.11607142857142858
+ASR :0.0
+================================================================================
+3
+client is malicious client!
+ACC :0.18487394957983194
+ASR :0.0
+================================================================================
+4
+client is malicious client!
+ACC :0.24620982413583992
+ASR :0.0
+================================================================================
+5
+client is malicious client!
+ACC :0.20189003436426117
+ASR :0.0
+================================================================================
+6
+client is malicious client!
+ACC :0.27981220657276995
+ASR :0.0
+================================================================================
+7
+client is malicious client!
+ACC :0.29589905362776026
+ASR :0.2113564668769716
+================================================================================
+8
+client is malicious client!
+ACC :0.23660346248969497
+ASR :0.0
+================================================================================
+9
+client is malicious client!
+ACC :0.2456861133935908
+ASR :0.09860312243221035
+-------------Round number:  2  -------------
+Evaluate global model
+Average Global Accurancy:  0.20822162645218945
+Average Global Trainning Accurancy:  0.2073709829632941
+
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.26204238921001927, 0.15245901639344261, 0.36033163265306123, 0.15546218487394958, 0.20133414190418436, 0.15979381443298968, 0.19061032863849764, 0.19810725552050473, 0.1755976916735367, 0.1676253081347576]; mean acc:0.20233637634349436
+Average Global ATTACK ALL ASR:  0.11803693774203157
+Average Global ATTACK ALL train ASR:  0.11801519892713455
+global benign client asr list is empty; mean set to 0.0
+global benign client asr list:[]; mean asr:0.0
+global malicious client asr list:[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0]; mean asr:0.1
+
+Evaluate global model with a few step updates, which is personalized model
+Average Personal Accurancy (k local SGD):  0.22110515341078343
+Average Personal Trainning Accurancy (k local SGD):  0.22142750707793174
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.30764290301862557, 0.17049180327868851, 0.36033163265306123, 0.15546218487394958, 0.21406913280776227, 0.15979381443298968, 0.22535211267605634, 0.2416403785488959, 0.1508656224237428, 0.15365653245686114]; mean acc:0.21393061171706332
+Average Personal ATTACK ALL ASR (k local SGD):  0.08095025320226393
+Average Personal ATTACK ALL Trainning ASR (k local SGD):  0.08138379774499578
+person benign client asr list is empty; mean set to 0.0
+person benign client asr list:[]; mean asr:0.0
+person malicious client asr list:[0.6981374438021837, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; mean asr:0.06981374438021837
+All users are selected
+================================================================================
+0
+client is malicious client!
+ACC :0.3500321130378934
+ASR :0.31727681438664096
+================================================================================
+1
+client is malicious client!
+ACC :0.22295081967213115
+ASR :0.0
+================================================================================
+2
+client is malicious client!
+ACC :0.36033163265306123
+ASR :0.0
+================================================================================
+3
+client is malicious client!
+ACC :0.2092436974789916
+ASR :0.0
+================================================================================
+4
+client is malicious client!
+ACC :0.30442692540933897
+ASR :0.0
+================================================================================
+5
+client is malicious client!
+ACC :0.2766323024054983
+ASR :0.0
+================================================================================
+6
+client is malicious client!
+ACC :0.18028169014084508
+ASR :0.0
+================================================================================
+7
+client is malicious client!
+ACC :0.3028391167192429
+ASR :0.11735015772870662
+================================================================================
+8
+client is malicious client!
+ACC :0.25721352019785654
+ASR :0.18054410552349548
+================================================================================
+9
+client is malicious client!
+ACC :0.2514379622021364
+ASR :0.1437962202136401
+-------------Round number:  3  -------------
+Evaluate global model
+Average Global Accurancy:  0.24932975871313673
+Average Global Trainning Accurancy:  0.2550787264689813
+
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.35324341682723187, 0.16557377049180327, 0.36033163265306123, 0.1453781512605042, 0.2504548211036992, 0.22938144329896906, 0.26854460093896715, 0.26813880126182965, 0.19208573784006594, 0.1922760887428102]; mean acc:0.2425408464418942
+Average Global ATTACK ALL ASR:  0.21484956806672625
+Average Global ATTACK ALL train ASR:  0.2173794268117022
+global benign client asr list is empty; mean set to 0.0
+global benign client asr list:[]; mean asr:0.0
+global malicious client asr list:[0.44572896596017986, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.7205047318611988, 0.0, 0.8619556285949055]; mean asr:0.2028189326416284
+
+Evaluate global model with a few step updates, which is personalized model
+Average Personal Accurancy (k local SGD):  0.23726541554959785
+Average Personal Trainning Accurancy (k local SGD):  0.2389857447970993
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.24983943481053308, 0.15245901639344261, 0.36862244897959184, 0.17142857142857143, 0.32504548211036993, 0.21477663230240548, 0.26854460093896715, 0.20378548895899054, 0.18961253091508656, 0.1676253081347576]; mean acc:0.23117395149727163
+Average Personal ATTACK ALL ASR (k local SGD):  0.07908847184986595
+Average Personal ATTACK ALL Trainning ASR (k local SGD):  0.08061391744896439
+person benign client asr list is empty; mean set to 0.0
+person benign client asr list:[]; mean asr:0.0
+person malicious client asr list:[0.30828516377649323, 0.0, 0.008928571428571428, 0.0, 0.008489993935718617, 0.0, 0.0, 0.3173501577287066, 0.04204451772464963, 0.0]; mean asr:0.06850984045941395
+All users are selected
+================================================================================
+0
+client is malicious client!
+ACC :0.35645472061657035
+ASR :0.5061014771997431
+================================================================================
+1
+client is malicious client!
+ACC :0.22049180327868853
+ASR :0.0
+================================================================================
+2
+client is malicious client!
+ACC :0.36607142857142855
+ASR :0.0
+================================================================================
+3
+client is malicious client!
+ACC :0.18571428571428572
+ASR :0.0
+================================================================================
+4
+client is malicious client!
+ACC :0.27471194663432386
+ASR :0.0
+================================================================================
+5
+client is malicious client!
+ACC :0.2697594501718213
+ASR :0.0
+================================================================================
+6
+client is malicious client!
+ACC :0.26572769953051645
+ASR :0.0
+================================================================================
+7
+client is malicious client!
+ACC :0.35394321766561515
+ASR :0.36908517350157727
+================================================================================
+8
+client is malicious client!
+ACC :0.22753503709810388
+ASR :0.7535037098103875
+================================================================================
+9
+client is malicious client!
+ACC :0.27198027937551356
+ASR :0.3073130649137223
+-------------Round number:  4  -------------
+Evaluate global model
+Average Global Accurancy:  0.18960381292820971
+Average Global Trainning Accurancy:  0.1927929270352158
+
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.2113037893384714, 0.16967213114754098, 0.15433673469387754, 0.21596638655462186, 0.19648271679805943, 0.20790378006872853, 0.17089201877934274, 0.17981072555205047, 0.21929101401483925, 0.1741988496302383]; mean acc:0.18998581465777703
+Average Global ATTACK ALL ASR:  0.08742925230860887
+Average Global ATTACK ALL train ASR:  0.08692196890676998
+global benign client asr list is empty; mean set to 0.0
+global benign client asr list:[]; mean asr:0.0
+global malicious client asr list:[0.05330764290301863, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.021434460016488046, 0.0]; mean asr:0.10747421029195067
+
+Evaluate global model with a few step updates, which is personalized model
+Average Personal Accurancy (k local SGD):  0.22929699136133452
+Average Personal Trainning Accurancy (k local SGD):  0.23076541002334475
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.12010276172125883, 0.15245901639344261, 0.3647959183673469, 0.15546218487394958, 0.35172832019405703, 0.22250859106529208, 0.26854460093896715, 0.24290220820189273, 0.1508656224237428, 0.21035332785538208]; mean acc:0.22397225520353317
+Average Personal ATTACK ALL ASR (k local SGD):  0.0006702412868632708
+Average Personal ATTACK ALL Trainning ASR (k local SGD):  0.0003228530273680028
+person benign client asr list is empty; mean set to 0.0
+person benign client asr list:[]; mean asr:0.0
+person malicious client asr list:[0.0, 0.0, 0.005739795918367347, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; mean asr:0.0005739795918367347
+All users are selected
+================================================================================
+0
+client is malicious client!
+ACC :0.37508028259473347
+ASR :0.26204238921001927
+================================================================================
+1
+client is malicious client!
+ACC :0.24262295081967214
+ASR :0.0
+================================================================================
+2
+client is malicious client!
+ACC :0.3647959183673469
+ASR :0.0
+================================================================================
+3
+client is malicious client!
+ACC :0.23949579831932774
+ASR :0.058823529411764705
+================================================================================
+4
+client is malicious client!
+ACC :0.32080048514251064
+ASR :0.0
+================================================================================
+5
+client is malicious client!
+ACC :0.27835051546391754
+ASR :0.0
+================================================================================
+6
+client is malicious client!
+ACC :0.2187793427230047
+ASR :0.0
+================================================================================
+7
+client is malicious client!
+ACC :0.26561514195583596
+ASR :0.762776025236593
+================================================================================
+8
+client is malicious client!
+ACC :0.2605111294311624
+ASR :0.517724649629019
+================================================================================
+9
+client is malicious client!
+ACC :0.2908792111750205
+ASR :0.20049301561216104
+-------------Round number:  5  -------------
+Evaluate global model
+Average Global Accurancy:  0.24106344950848974
+Average Global Trainning Accurancy:  0.24064967963045747
+
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.38792549775208734, 0.21885245901639344, 0.3647959183673469, 0.17394957983193277, 0.15949060036385687, 0.19673539518900343, 0.29671361502347415, 0.2473186119873817, 0.1508656224237428, 0.1676253081347576]; mean acc:0.23642726080899773
+Average Global ATTACK ALL ASR:  0.12980339588918677
+Average Global ATTACK ALL train ASR:  0.1318730442556996
+global benign client asr list is empty; mean set to 0.0
+global benign client asr list:[]; mean asr:0.0
+global malicious client asr list:[0.31213872832369943, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.7930599369085174, 0.0, 0.0]; mean asr:0.11051986652322168
+
+Evaluate global model with a few step updates, which is personalized model
+Average Personal Accurancy (k local SGD):  0.22981829014000596
+Average Personal Trainning Accurancy (k local SGD):  0.2265931555158198
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.16634553628773283, 0.16967213114754098, 0.3711734693877551, 0.16974789915966387, 0.21285627653123104, 0.25945017182130586, 0.29671361502347415, 0.2, 0.2563891178895301, 0.19638455217748563]; mean acc:0.22987327694257198
+Average Personal ATTACK ALL ASR (k local SGD):  0.03380994935954722
+Average Personal ATTACK ALL Trainning ASR (k local SGD):  0.0328068345502409
+person benign client asr list is empty; mean set to 0.0
+person benign client asr list:[]; mean asr:0.0
+person malicious client asr list:[0.0, 0.0, 0.07653061224489796, 0.0, 0.0, 0.0, 0.0, 0.0, 0.27535037098103876, 0.0]; mean asr:0.035188098322593675
+All users are selected
+================================================================================
+0
+client is malicious client!
+ACC :0.3872832369942196
+ASR :0.27360308285163776
+================================================================================
+1
+client is malicious client!
+ACC :0.23524590163934425
+ASR :0.0
+================================================================================
+2
+client is malicious client!
+ACC :0.375
+ASR :0.029336734693877552
+================================================================================
+3
+client is malicious client!
+ACC :0.23949579831932774
+ASR :0.02857142857142857
+================================================================================
+4
+client is malicious client!
+ACC :0.34627046694966646
+ASR :0.0
+================================================================================
+5
+client is malicious client!
+ACC :0.3084192439862543
+ASR :0.0
+================================================================================
+6
+client is malicious client!
+ACC :0.26103286384976526
+ASR :0.5267605633802817
+================================================================================
+7
+client is malicious client!
+ACC :0.23722397476340695
+ASR :0.19621451104100945
+================================================================================
+8
+client is malicious client!
+ACC :0.23577906018136852
+ASR :0.15004122011541632
+================================================================================
+9
+client is malicious client!
+ACC :0.21774856203779785
+ASR :0.07723911257189811
+-------------Round number:  6  -------------
+Evaluate global model
+Average Global Accurancy:  0.255510872803098
+Average Global Trainning Accurancy:  0.25803407341181145
+
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.29736673089274246, 0.17049180327868851, 0.36607142857142855, 0.1588235294117647, 0.33596118859915103, 0.25687285223367695, 0.2, 0.24416403785488958, 0.2159934047815334, 0.23171733771569433]; mean acc:0.24774623133395696
+Average Global ATTACK ALL ASR:  0.07521596663687817
+Average Global ATTACK ALL train ASR:  0.07547310385933542
+global benign client asr list is empty; mean set to 0.0
+global benign client asr list:[]; mean asr:0.0
+global malicious client asr list:[0.19910083493898523, 0.0, 0.0, 0.01764705882352941, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5579293344289236]; mean asr:0.07746772281914382
+
+Evaluate global model with a few step updates, which is personalized model
+Average Personal Accurancy (k local SGD):  0.23145665773011617
+Average Personal Trainning Accurancy (k local SGD):  0.2377936720806636
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.3827874116891458, 0.17049180327868851, 0.1447704081632653, 0.16218487394957984, 0.343844754396604, 0.25859106529209624, 0.24882629107981222, 0.14889589905362777, 0.21764220939818632, 0.20624486442070666]; mean acc:0.22842795807217126
+Average Personal ATTACK ALL ASR (k local SGD):  0.056151325588322906
+Average Personal ATTACK ALL Trainning ASR (k local SGD):  0.05870958128445835
+person benign client asr list is empty; mean set to 0.0
+person benign client asr list:[]; mean asr:0.0
+person malicious client asr list:[0.3384714193962749, 0.0, 0.00510204081632653, 0.0, 0.0, 0.0, 0.2056338028169014, 0.0, 0.0, 0.0]; mean asr:0.054920726302950286
+All users are selected
+================================================================================
+0
+client is malicious client!
+ACC :0.37315350032113037
+ASR :0.4187540141297367
+================================================================================
+1
+client is malicious client!
+ACC :0.19098360655737706
+ASR :0.0
+================================================================================
+2
+client is malicious client!
+ACC :0.367984693877551
+ASR :0.1364795918367347
+================================================================================
+3
+client is malicious client!
+ACC :0.2
+ASR :0.004201680672268907
+================================================================================
+4
+client is malicious client!
+ACC :0.3856882959369315
+ASR :0.0
+================================================================================
+5
+client is malicious client!
+ACC :0.3161512027491409
+ASR :0.0
+================================================================================
+6
+client is malicious client!
+ACC :0.28262910798122065
+ASR :0.6150234741784038
+================================================================================
+7
+client is malicious client!
+ACC :0.32618296529968455
+ASR :0.24037854889589905
+================================================================================
+8
+client is malicious client!
+ACC :0.2877164056059357
+ASR :0.18796372629843364
+================================================================================
+9
+client is malicious client!
+ACC :0.30484798685291703
+ASR :0.2645850451930978
+-------------Round number:  7  -------------
+Evaluate global model
+Average Global Accurancy:  0.250893655049151
+Average Global Trainning Accurancy:  0.25423434162817266
+
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.3551701991008349, 0.2180327868852459, 0.350765306122449, 0.15966386554621848, 0.32625833838690116, 0.14261168384879724, 0.231924882629108, 0.20946372239747635, 0.23742786479802144, 0.19638455217748563]; mean acc:0.2427703201892538
+Average Global ATTACK ALL ASR:  0.17061364313375038
+Average Global ATTACK ALL train ASR:  0.16887696816172454
+global benign client asr list is empty; mean set to 0.0
+global benign client asr list:[]; mean asr:0.0
+global malicious client asr list:[0.1567116249197174, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.9697160883280758, 0.42044517724649627, 0.0]; mean asr:0.15468728904942894
+
+Evaluate global model with a few step updates, which is personalized model
+Average Personal Accurancy (k local SGD):  0.2534256776884123
+Average Personal Trainning Accurancy (k local SGD):  0.2555009188893856
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.2761721258831085, 0.17459016393442622, 0.37563775510204084, 0.18907563025210083, 0.32019405700424497, 0.27319587628865977, 0.26854460093896715, 0.14952681388012617, 0.2588623248145095, 0.2161051766639277]; mean acc:0.2501904524762112
+Average Personal ATTACK ALL ASR (k local SGD):  0.09346142389037831
+Average Personal ATTACK ALL Trainning ASR (k local SGD):  0.09010082948393185
+person benign client asr list is empty; mean set to 0.0
+person benign client asr list:[]; mean asr:0.0
+person malicious client asr list:[0.29030186255619783, 0.0, 0.08482142857142858, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5523495465787304, 0.0]; mean asr:0.09274728377063568
+All users are selected
+================================================================================
+0
+client is malicious client!
+ACC :0.37572254335260113
+ASR :0.3583815028901734
+================================================================================
+1
+client is malicious client!
+ACC :0.23934426229508196
+ASR :0.10655737704918032
+================================================================================
+2
+client is malicious client!
+ACC :0.16262755102040816
+ASR :0.0
+================================================================================
+3
+client is malicious client!
+ACC :0.20672268907563024
+ASR :0.0
+================================================================================
+4
+client is malicious client!
+ACC :0.41358399029714976
+ASR :0.0
+================================================================================
+5
+client is malicious client!
+ACC :0.34536082474226804
+ASR :0.0
+================================================================================
+6
+client is malicious client!
+ACC :0.23568075117370893
+ASR :0.09014084507042254
+================================================================================
+7
+client is malicious client!
+ACC :0.30914826498422715
+ASR :0.03722397476340694
+================================================================================
+8
+client is malicious client!
+ACC :0.27122835943940643
+ASR :0.005770816158285243
+================================================================================
+9
+client is malicious client!
+ACC :0.31470829909613807
+ASR :0.13968775677896467
+-------------Round number:  8  -------------
+Evaluate global model
+Average Global Accurancy:  0.27532022639261244
+Average Global Trainning Accurancy:  0.2760145035513833
+
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.2575465639049454, 0.1762295081967213, 0.3718112244897959, 0.226890756302521, 0.39721043056397815, 0.2697594501718213, 0.27417840375586855, 0.2630914826498423, 0.2267106347897774, 0.22596548890714874]; mean acc:0.268939394373242
+Average Global ATTACK ALL ASR:  0.13687816502829908
+Average Global ATTACK ALL train ASR:  0.13696418814881042
+global benign client asr list is empty; mean set to 0.0
+global benign client asr list:[]; mean asr:0.0
+global malicious client asr list:[0.5138086062941555, 0.09180327868852459, 0.06505102040816327, 0.009243697478991597, 0.0, 0.0, 0.4272300469483568, 0.0, 0.0, 0.2941659819227609]; mean asr:0.14013026317409527
+
+Evaluate global model with a few step updates, which is personalized model
+Average Personal Accurancy (k local SGD):  0.2602025618111409
+Average Personal Trainning Accurancy (k local SGD):  0.26250434609844536
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.2774566473988439, 0.17131147540983607, 0.37436224489795916, 0.1773109243697479, 0.35354760460885387, 0.2963917525773196, 0.2300469483568075, 0.1974763406940063, 0.24649629018961253, 0.2218570254724733]; mean acc:0.254625725397546
+Average Personal ATTACK ALL ASR (k local SGD):  0.08236520703008639
+Average Personal ATTACK ALL Trainning ASR (k local SGD):  0.08029106442159638
+person benign client asr list is empty; mean set to 0.0
+person benign client asr list:[]; mean asr:0.0
+person malicious client asr list:[0.1894669235709698, 0.0, 0.07142857142857142, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5762572135201979, 0.0]; mean asr:0.08371527085197392
+All users are selected
+================================================================================
+0
+client is malicious client!
+ACC :0.39755940912010274
+ASR :0.287732819524727
+================================================================================
+1
+client is malicious client!
+ACC :0.28032786885245903
+ASR :0.0
+================================================================================
+2
+client is malicious client!
+ACC :0.38137755102040816
+ASR :0.0012755102040816326
+================================================================================
+3
+client is malicious client!
+ACC :0.23445378151260504
+ASR :0.1
+================================================================================
+4
+client is malicious client!
+ACC :0.4105518496058217
+ASR :0.0
+================================================================================
+5
+client is malicious client!
+ACC :0.33505154639175255
+ASR :0.0
+================================================================================
+6
+client is malicious client!
+ACC :0.3727699530516432
+ASR :0.03004694835680751
+================================================================================
+7
+client is malicious client!
+ACC :0.2561514195583596
+ASR :0.04227129337539432
+================================================================================
+8
+client is malicious client!
+ACC :0.31162407254740315
+ASR :0.12695795548227534
+================================================================================
+9
+client is malicious client!
+ACC :0.3656532456861134
+ASR :0.19802793755135578
+-------------Round number:  9  -------------
+Evaluate global model
+Average Global Accurancy:  0.24560619600834077
+Average Global Trainning Accurancy:  0.24857199622510306
+
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.3468208092485549, 0.21065573770491802, 0.13966836734693877, 0.18403361344537816, 0.35657974530018194, 0.23625429553264604, 0.25258215962441316, 0.22839116719242902, 0.2201154163231657, 0.24815119145439607]; mean acc:0.24232525031730218
+Average Global ATTACK ALL ASR:  0.07171581769436998
+Average Global ATTACK ALL train ASR:  0.0740823523568271
+global benign client asr list is empty; mean set to 0.0
+global benign client asr list:[]; mean asr:0.0
+global malicious client asr list:[0.12138728323699421, 0.0, 0.013392857142857142, 0.0067226890756302525, 0.0, 0.2654639175257732, 0.30704225352112674, 0.0, 0.020610057708161583, 0.06902218570254724]; mean asr:0.08036412439130904
+
+Evaluate global model with a few step updates, which is personalized model
+Average Personal Accurancy (k local SGD):  0.22103068215668753
+Average Personal Trainning Accurancy (k local SGD):  0.21663438136392987
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.15285806037251123, 0.0860655737704918, 0.375, 0.15546218487394958, 0.2031534263189812, 0.18556701030927836, 0.2563380281690141, 0.3280757097791798, 0.2448474855729596, 0.17337715694330322]; mean acc:0.21607446361096688
+Average Personal ATTACK ALL ASR (k local SGD):  0.02770330652368186
+Average Personal ATTACK ALL Trainning ASR (k local SGD):  0.03009983609000149
+person benign client asr list is empty; mean set to 0.0
+person benign client asr list:[]; mean asr:0.0
+person malicious client asr list:[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.23470031545741324, 0.0, 0.0]; mean asr:0.023470031545741322
+All users are selected
+================================================================================
+0
+client is malicious client!
+ACC :0.294155427103404
+ASR :0.26396917148362237
+================================================================================
+1
+client is malicious client!
+ACC :0.19672131147540983
+ASR :0.0
+================================================================================
+2
+client is malicious client!
+ACC :0.3596938775510204
+ASR :0.0
+================================================================================
+3
+client is malicious client!
+ACC :0.2915966386554622
+ASR :0.010084033613445379
+================================================================================
+4
+client is malicious client!
+ACC :0.40933899332929047
+ASR :0.0
+================================================================================
+5
+client is malicious client!
+ACC :0.3797250859106529
+ASR :0.0
+================================================================================
+6
+client is malicious client!
+ACC :0.38591549295774646
+ASR :0.10328638497652583
+================================================================================
+7
+client is malicious client!
+ACC :0.35646687697160884
+ASR :0.26876971608832806
+================================================================================
+8
+client is malicious client!
+ACC :0.27699917559769166
+ASR :0.048639736191261336
+================================================================================
+9
+client is malicious client!
+ACC :0.3451109285127362
+ASR :0.1322925225965489
+-------------Round number:  10  -------------
+Evaluate global model
+Average Global Accurancy:  0.2536490914507
+Average Global Trainning Accurancy:  0.2570655143297074
+
+global benign client acc list is empty; mean set to 0.0
+global benign client acc list:[]; mean acc:0.0
+global malicious client acc list:[0.1907514450867052, 0.1819672131147541, 0.36607142857142855, 0.21512605042016808, 0.3862947240751971, 0.218213058419244, 0.15586854460093896, 0.2637223974763407, 0.20362737015663643, 0.2752670501232539]; mean acc:0.24569092820446672
+Average Global ATTACK ALL ASR:  0.11297289246350908
+Average Global ATTACK ALL train ASR:  0.1144886504743456
+global benign client asr list is empty; mean set to 0.0
+global benign client asr list:[]; mean asr:0.0
+global malicious client asr list:[0.0340398201669878, 0.0, 0.0006377551020408163, 0.0008403361344537816, 0.0, 0.0, 0.2131455399061033, 0.7791798107255521, 0.0, 0.0]; mean asr:0.10278432620351378
+
+Evaluate global model with a few step updates, which is personalized model

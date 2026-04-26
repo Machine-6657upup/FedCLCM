@@ -1,0 +1,20 @@
+First read `docs/thesis_rescue/00_MASTER_INDEX.md` through `docs/thesis_rescue/09_REMOTE_STARTUP_PROMPT.md`.
+
+After reading them, do not propose broad new methods yet. First output:
+1. the current overall thesis rescue goal
+2. the historical facts that are already locked
+3. the current top 3 next actions
+
+Then continue in this order:
+1. check whether the stage3 static runs fully finished
+2. extract best_acc / best_round / final_acc / final_asr for every stage3 task
+3. judge convergence versus collapse from the logs and curves
+4. produce a clean static comparison table for FedAvg / FedRep / FedCLCM under BadNet / Blend / SIG
+5. write the conclusions back into docs instead of leaving them only in chat output
+
+Important constraints:
+- use `/home/huangtu/PFL_clean_workspace/root_static` as the main workspace
+- use `/home/huangtu/PFL_Backdoor_Defense` only for historical comparison
+- do not treat low ASR as a defense win if clean accuracy also collapses
+- do not pivot back to PFedBA until the static line is fully stabilized
+- use the papers in `docs/papers/` only when they directly help the current static rescue or later PFedBA interpretation

@@ -1,0 +1,8 @@
+PFEDBA_ROOT=/home/huangtu/PFL_Backdoor_Defense/PFedBA
+RUN_TS=20260418_024101
+LOG_ROOT=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/fedrt_pfedba16_dual_20260418_024101
+GPUS=0,1,2,3
+BATCH_SIZE=64
+WORKER_DIR=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/fedrt_pfedba16_dual_20260418_024101/workers
+PID_DIR=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/fedrt_pfedba16_dual_20260418_024101/pids
+STATUS_DIR=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/fedrt_pfedba16_dual_20260418_024101/status

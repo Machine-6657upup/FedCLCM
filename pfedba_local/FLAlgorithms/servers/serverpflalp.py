@@ -1,0 +1,230 @@
+"""
+Paper-aligned PFL-ALP full-model server.
+"""
+import copy
+
+import numpy as np
+import torch
+
+from FLAlgorithms.servers.serveravg import FedAvg
+from FLAlgorithms.servers.serverbase import Server
+from FLAlgorithms.users.userpflalp import UserPFLALP
+from utils.model_utils import read_data, read_user_data
+
+
+class ServerPFLALP(FedAvg):
+    def __init__(
+        self,
+        device,
+        dataset,
+        algorithm,
+        model,
+        batch_size,
+        learning_rate,
+        beta,
+        lamda,
+        num_glob_iters,
+        local_epochs,
+        optimizer,
+        num_users,
+        times,
+        fo,
+        current_time,
+        malnum,
+        malclient,
+        poisonratio,
+        poison_label,
+        attack_method,
+        per_epoch,
+        defense,
+        lr_head=None,
+        plocal_epochs=1,
+        purify_beta=1500.0,
+        purify_rounds=1,
+        cluster_max_k=4,
+        lr_decay=1.0,
+        lr_decay_step=0,
+        mal_local_epochs=None,
+        mal_learning_rate=None,
+    ):
+        Server.__init__(
+            self,
+            device,
+            dataset,
+            algorithm,
+            model,
+            batch_size,
+            learning_rate,
+            beta,
+            lamda,
+            num_glob_iters,
+            local_epochs,
+            optimizer,
+            num_users,
+            times,
+            fo,
+            current_time,
+            malnum,
+            malclient,
+            poisonratio,
+            poison_label,
+            attack_method,
+            per_epoch,
+            defense,
+        )
+        data = read_data(dataset)
+        total_users = len(data[0])
+        mal_set = set(malclient) if malclient is not None else set()
+        for i in range(total_users):
+            uid, train, test = read_user_data(i, data, dataset)
+            user = UserPFLALP(
+                device,
+                uid,
+                train,
+                test,
+                model,
+                dataset,
+                batch_size,
+                learning_rate,
+                beta,
+                lamda,
+                local_epochs,
+                malclient_ids=mal_set,
+                purify_beta=purify_beta,
+                purify_rounds=purify_rounds,
+                mal_local_epochs=mal_local_epochs,
+                mal_learning_rate=mal_learning_rate,
+            )
+            self.users.append(user)
+            self.total_train_samples += user.train_samples
+
+        self.cluster_max_k = max(int(cluster_max_k), 2)
+        self.prev_global_model = None
+        self.lr_decay = float(lr_decay)
+        self.lr_decay_step = int(lr_decay_step)
+        print("Number of users / total users:", num_users, " / ", total_users)
+        print("Finished creating paper-aligned PFL-ALP full server.")
+
+    def pre_one_step_eval_hook(self):
+        # Repo-wide k-step personalization metric is defined as fine-tuning from
+        # the current global model, not from saved personalized state.
+        return
+
+    def pre_client_train_hook(self, glob_iter):
+        if self.lr_decay_step <= 0 or self.lr_decay == 1.0:
+            return
+        current_lr = self.learning_rate * (self.lr_decay ** (glob_iter // self.lr_decay_step))
+        for user in self.users:
+            if hasattr(user, "set_learning_rate"):
+                user.set_learning_rate(current_lr)
+
+    def pre_aggregate_hook(self, glob_iter):
+        self.prev_global_model = copy.deepcopy(self.model)
+
+    def _flatten_model_update(self, user):
+        flat = []
+        for prev_param, user_param in zip(self.prev_global_model.parameters(), user.model.parameters()):
+            flat.append((user_param.data - prev_param.data).reshape(-1).detach().cpu())
+        return torch.cat(flat).numpy()
+
+    def _build_score_matrix(self, selected_users):
+        updates = [self._flatten_model_update(user) for user in selected_users]
+        score = np.zeros((len(updates), len(updates)), dtype=np.float64)
+        for i in range(len(updates)):
+            for j in range(i + 1, len(updates)):
+                a = updates[i]
+                b = updates[j]
+                denom = (np.linalg.norm(a) * np.linalg.norm(b)) + 1e-12
+                dist = 1.0 - float(np.dot(a, b) / denom)
+                score[i, j] = dist
+                score[j, i] = dist
+        return score
+
+    def _kmeans(self, data, k, max_iter=30):
+        n = data.shape[0]
+        centers = data[:k].copy()
+        labels = np.zeros(n, dtype=np.int64)
+        for _ in range(max_iter):
+            dists = np.linalg.norm(data[:, None, :] - centers[None, :, :], axis=2)
+            new_labels = np.argmin(dists, axis=1)
+            if np.array_equal(new_labels, labels):
+                break
+            labels = new_labels
+            for idx in range(k):
+                mask = labels == idx
+                if np.any(mask):
+                    centers[idx] = data[mask].mean(axis=0)
+        return labels
+
+    def _silhouette_score(self, data, labels):
+        n = data.shape[0]
+        unique = np.unique(labels)
+        if len(unique) <= 1 or len(unique) >= n:
+            return -1.0
+        pairwise = np.linalg.norm(data[:, None, :] - data[None, :, :], axis=2)
+        scores = []
+        for i in range(n):
+            own = labels[i]
+            own_mask = labels == own
+            own_count = int(np.sum(own_mask))
+            if own_count <= 1:
+                scores.append(0.0)
+                continue
+            a = pairwise[i, own_mask].sum() / (own_count - 1)
+            b = None
+            for other in unique:
+                if other == own:
+                    continue
+                other_mask = labels == other
+                dist = pairwise[i, other_mask].mean()
+                if b is None or dist < b:
+                    b = dist
+            scores.append(0.0 if b is None else (b - a) / max(a, b, 1e-12))
+        return float(np.mean(scores))
+
+    def _dynamic_cluster(self, selected_users):
+        n = len(selected_users)
+        if n <= 2:
+            return np.zeros(n, dtype=np.int64)
+        data = self._build_score_matrix(selected_users)
+        best_labels = np.zeros(n, dtype=np.int64)
+        best_score = -1.0
+        max_k = min(self.cluster_max_k, n - 1)
+        for k in range(2, max_k + 1):
+            labels = self._kmeans(data, k)
+            if len(np.unique(labels)) < 2:
+                continue
+            score = self._silhouette_score(data, labels)
+            if score > best_score:
+                best_score = score
+                best_labels = labels.copy()
+        if best_score <= 0:
+            return np.zeros(n, dtype=np.int64)
+        return best_labels
+
+    def _build_representative_model(self, cluster_users):
+        rep_model = copy.deepcopy(self.model)
+        total = float(sum(user.train_samples for user in cluster_users))
+        rep_state = rep_model.state_dict()
+        user_states = [user.model.state_dict() for user in cluster_users]
+        for key in rep_state.keys():
+            mixed = None
+            for user, state in zip(cluster_users, user_states):
+                weight = user.train_samples / total if total > 0 else (1.0 / len(cluster_users))
+                tensor = state[key].detach().clone() * weight
+                mixed = tensor if mixed is None else mixed + tensor
+            rep_state[key].copy_(mixed)
+        rep_model.load_state_dict(rep_state)
+        return rep_model
+
+    def post_aggregate_hook(self, glob_iter):
+        if self.prev_global_model is None or len(self.selected_users) == 0:
+            return
+        labels = self._dynamic_cluster(self.selected_users)
+        representatives = {}
+        for cluster_id in np.unique(labels):
+            cluster_users = [user for user, label in zip(self.selected_users, labels) if label == cluster_id]
+            representatives[int(cluster_id)] = self._build_representative_model(cluster_users)
+        print("[PFL-ALP-full] cluster labels:", labels.tolist())
+        for user, cluster_id in zip(self.selected_users, labels):
+            user.personalize_from_representative(representatives[int(cluster_id)])

@@ -1,0 +1,9 @@
+RUN_TS=20260424_002902
+RUN_NAME=formal_main_pfedba_static_20260424_002902
+LOGDIR=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/formal_main_pfedba_static_20260424_002902
+STATUS_DIR=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/formal_main_pfedba_static_20260424_002902/status
+SCRIPT=/home/huangtu/PFL_clean_workspace/root_static/scripts/run_formal_pfedba_static_main_4gpu.sh
+START_TIME=2026-04-24 00:29:02
+LAUNCH_MODE=nohup
+DRY_RUN=0
+[LAUNCHER_GPU_CHECK]

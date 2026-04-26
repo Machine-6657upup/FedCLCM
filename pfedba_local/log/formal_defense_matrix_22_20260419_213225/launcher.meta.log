@@ -1,0 +1,15 @@
+RUN_TS=20260420_115727
+LOGDIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_213225
+STATUS_DIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_213225/status
+SCRIPT=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/scripts/run_formal_defense_matrix_22_4gpu.sh
+START_TIME=2026-04-20 11:57:27
+STALE_RUNNING_CLEANUP=4
+FORCE_TAGS=E01,E02,E03,E04,E05,E06,E07,E08,E09,E10,E11,E12,E13,E14,E15,E16,E17,E18,E19,E20,E21,E22
+[LAUNCHER_GPU_CHECK]
+cuda_available=True
+device_count=4
+==================================================
+gpu0 SCREEN=fdm22_20260420_115727_gpu0 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_213225/gpu0.launcher.log
+gpu1 SCREEN=fdm22_20260420_115727_gpu1 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_213225/gpu1.launcher.log
+gpu2 SCREEN=fdm22_20260420_115727_gpu2 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_213225/gpu2.launcher.log
+gpu3 SCREEN=fdm22_20260420_115727_gpu3 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_213225/gpu3.launcher.log

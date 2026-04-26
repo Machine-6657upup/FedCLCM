@@ -1,0 +1,1072 @@
+IEEE TRANSACTIONS ON INFORMATION FORENSICS AND SECURITY, VOL. 20, 2025                                                                                      12995
+
+
+
+
+PFL-ALP: Personalized Federated Learning Against
+     Backdoor Attacks via Attention-Based
+               Local Purification
+                    Yifeng Jiang, Xiaochen Yuan , Senior Member, IEEE, Weiwen Zhang , Wei Ke ,
+                    Chan-Tong Lam , Senior Member, IEEE, and Sio-Kei Im , Senior Member, IEEE
+
+
+   Abstract—Federated learning (FL) enables collaborative model
+training with local data privacy preserving, but is vulnerable
+to backdoor attacks from malicious clients. These attacks can
+manipulate the global model to produce malicious output when
+encountering specific triggers. Existing defenses, categorized as
+server-side and client-side approaches, have limitations such as
+reliance on auxiliary data availability, susceptibility to inference
+attacks, and instability under non-independent and identically
+distributed (Non-IID) data. In response to these challenges, we
+propose a Personalized Federated Learning via Attention-based
+Local Purification (PFL-ALP) algorithm, a hybrid defense mech-
+anism integrating server-side dynamic clustering and client-side
+purification enhanced with personalized model knowledge. This
+approach effectively mitigates bias introduced by Non-IID data
+on the server side and further purifies the backdoored model on
+the client side. Specifically, we employ neural attention distillation
+(NAD) for model purification and enhance it with personalized
+model knowledge, extending the effectiveness of NAD in Non-IID                              Fig. 1. A general framework of backdoor attack in FL.
+FL settings. This design makes PFL-ALP compatible with privacy
+protocols to mitigate inference attacks. Moreover, we establish a
+convergence guarantee for PFL-ALP and experimentally validate
+its superior performance in defending against various backdoor                   data privacy by eliminating the requirement for raw data
+attacks compared to multiple state-of-the-art (SOTA) defenses                    sharing. However, this distributed training paradigm exposes
+across three datasets. The results show that even with malicious                 it to various security threats [2], [3], particularly vulnerable
+rates ranging from 30% to 90%, PFL-ALP can reduce the                            to backdoor attacks and inference attacks, which have become
+attack success rate by more than 69.4 percentage points, with                    increasingly sophisticated and difficult to detect [4].
+the reduction in main task accuracy less than 12.4 percentage
+points.                                                                             As one of the most concerning threats in FL, backdoor
+                                                                                 attacks represent a particularly insidious threat that malicious
+   Index Terms—Personalized federated learning, backdoor                         participants inject specially crafted patterns (triggers) into their
+attacks, attention maps, dynamic clustering.
+                                                                                 local data, training their models to behave normally on most
+                                                                                 inputs but produce malicious outputs when triggers are present
+                          I. I NTRODUCTION                                       [5]. These triggers can take various forms, including pixel
+                                                                                 patterns, watermarks, or more subtle feature manipulations that
+F    EDERATED learning (FL) [1] has emerged as a powerful
+     paradigm for collaborative model training, preserving                       are difficult to detect [6]. By embedding triggers into local data
+                                                                                 or directly into the training model, the attacker can implant a
+   Received 9 May 2025; revised 4 November 2025; accepted 25 Novem-              backdoor into the global model during the model aggregation
+ber 2025. Date of publication 3 December 2025; date of current version           process on the server. A general framework for such an
+12 December 2025. This work was supported in part by the Science and Tech-
+nology Development Fund of Macao (FDCT) under Grant 0033/2023/RIA1,              attack is shown in Fig. 1. More sophisticated attacks involve
+and in part by Macao Polytechnic University under Project RP/FCA-04/2024.        distributed trigger mechanisms [7], where multiple attackers
+The associate editor coordinating the review of this article and approving it    collaboratively embed different components of a global trigger
+for publication was Prof. Libing Wu. (Corresponding author: Xiaochen Yuan.)
+   Yifeng Jiang, Xiaochen Yuan, Wei Ke, and Chan-Tong Lam are                    across their local training data, making the attack more stealthy
+with the Faculty of Applied Sciences, Macao Polytechnic University,              and difficult to detect.
+Macau SAR, China (e-mail: p2417763@mpu.edu.mo; xcyuan@mpu.edu.mo;                   Inference attacks [8] represent another critical security chal-
+wke@mpu.edu.mo; ctlam@mpu.edu.mo).
+   Weiwen Zhang is with the School of Computer Science and Technology,           lenge in FL, aiming to reconstruct sensitive information about
+Guangdong University of Technology, Guangzhou 510006, China (e-mail:             the training data of participants by analyzing model updates.
+zhangww@gdut.edu.cn).                                                            Among them, gradient inversion attacks [9] attempt to infer
+   Sio-Kei Im is with Macao Polytechnic University, Macau SAR, China
+(e-mail: marcusim@mpu.edu.mo).                                                   training samples from gradient information, whereas mem-
+   Digital Object Identifier 10.1109/TIFS.2025.3639936                           bership inference attacks [10] focus on identifying whether
+             1556-6021 © 2025 IEEE. All rights reserved, including rights for text and data mining, and training of artificial intelligence and
+                       similar technologies. Personal use is permitted, but republication/redistribution requires IEEE permission.
+                                     See https://www.ieee.org/publications/rights/index.html for more information.
+      Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+12996                                                                       IEEE TRANSACTIONS ON INFORMATION FORENSICS AND SECURITY, VOL. 20, 2025
+
+
+
+a given sample was used in training. The distributed nature                        contains updates from malicious clients. This enables each
+of FL creates natural vulnerabilities to these attacks, as the                     benign client to receive a clean representative model derived
+shared model updates may contain implicit information about                        from its corresponding group. However, due to the Non-
+the local data of participants.                                                    IID property and sophisticated attacks designed by attackers,
+   Current defense mechanisms can be broadly categorized into                      this ideal scenario may not always hold true. In a more
+server-side and client-side approaches. Server-side defenses                       realistic scenario, there would be multiple clusters of model
+rely on the trusted federated server and typically employ                          updates, where updates within each cluster originate from both
+statistics-based methods that leverage specific aggregation                        benign and malicious clients with similar data distributions.
+rules to remove outliers [11], [12], [13], [14]. These include                     Therefore, unlike prior works that employ clustering approach
+techniques such as median aggregation, trimmed mean, and                           for malicious detection, we adopt it exclusively as a hetero-
+geometric median, which aim to filter out malicious updates                        geneity mitigation tool in backdoor defense. Consequently, the
+based on their deviation from the distribution of benign                           representative model that each client obtained aligns with its
+updates.                                                                           local data distribution, but may contain malicious information.
+   However, current server-side defense mechanisms in FL                           We address it in the second step on the client side.
+have some significant limitations. Specifically, statistics-based                     For the design of backdoor purification, neural attention
+methods rely heavily on statistics, which become ineffective                       distillation (NAD) [24] has shown its effectiveness in individ-
+when faced with aggressive adversaries who control a large                         ual machine settings, and its application has been extended to
+number of clients. In such cases, the detection mechanisms                         client-side defense within FL settings [20], [21]. Nevertheless,
+can easily be overwhelmed by malicious updates. More-                              its effectiveness is limited in IID data scenario due to its
+over, distinguishing between benign and malicious updates                          reliance on local historical model knowledge, which may be
+becomes challenging when attackers create updates that                             skewed from global insight. When confronted with Non-IID
+closely resemble legitimate ones. Clipping-based approaches,                       conditions, its efficacy drops significantly [20]. To address this
+in turn, are ineffective against small-magnitude malicious                         limitation, we equip each benign client with a personalized
+updates that remain within the clipping threshold. Addition-                       model that encodes more generalized knowledge. This design
+ally, since both statistics- and clipping-based methods require                    improves the effectiveness of NAD-based backdoor purifica-
+access to plaintext model updates, they are vulnerable to                          tion under Non-IID conditions and remains compatible with
+server-side inference attacks [9]. Therefore, most server-side                     secure two-party computation (STPC) [25] to mitigate server-
+strategies assume the presence of a trusted server, although                       side inference risks.
+this assumption may not always hold in practice. Further-                             The key contributions of our work are:
+more, many server-side methods require access to clean                                1) We propose PFL-ALP, a novel backdoor-robust FL
+labeled or unlabeled data for centralized validation [15], [16],                          algorithm that composes both server-side and client-side
+which limits their applicability in the real world due to data                            efforts. The server-side approach focuses on addressing
+accessibility.                                                                            the bias introduced by Non-IID data, and enabling
+   Client-side defenses offer a more reliable approach by                                 benign clients to cleanse the backdoor impact with more
+operating directly on the client side, eliminating the require-                           generalized knowledge.
+ment for a trusted server or auxiliary data. These methods                            2) We extend the effectiveness of NAD into Non-IID sce-
+involve techniques such as perturbing the parameter space                                 narios and make it robust regardless of the number of
+during local training [17], using knowledge extraction [18] and                           malicious clients.
+knowledge distillation [19] to mitigate the backdoor impact                           3) Under standard assumptions, we conduct a theoretical
+[20], [21]. Unlike server-side approaches, client-side defenses                           analysis to establish convergence guarantee for PFL-
+inherently address privacy concerns by sharing no additional                              ALP.
+information or plaintext updates with the central server. How-                        4) Through extensive experiments, we show that PFL-ALP
+ever, the local operation involved in client-side defenses,                               achieves superior performance against various backdoor
+such as adding perturbations for defense, often results in                                attacks compared with multiple SOTA defense methods.
+performance degradation. Furthermore, our robustness analysis
+in Sec. V-C indicates that both server-side and client-side
+                                                                                                             II. R ELATED W ORK
+defenses are hindered by non-independent and identically
+distributed (Non-IID) data, where data across clients exhibit                      A. Backdoor Attacks in Federated Learning
+varying statistical properties. Similar observations are made                         As one of the security concerns, backdoor attacks pose
+by [22] and [23].                                                                  significant threats to FL systems, where malicious participants
+   To overcome these challenges, we introduce the PFL-ALP                          inject triggers into their local training data to manipulate the
+algorithm, a two-step approach that combines the strengths                         output of the global model. These triggers, ranging from pixel
+of both server-side and client-side defenses. In the first step,                   patterns to subtle feature alterations, are challenging to detect
+we implement a server-side dynamic clustering approach that                        because the local data are transparent in FL, making standard
+segregates model updates. Ideally, model updates are split into                    validation and visual inspection difficult to implement.
+distinct groups: several groups consist of model updates from                         Bagdasaryan et al. [5] demonstrated how attackers could
+benign clients with similar data distributions, while one group                    successfully backdoor FL models by uploading scaled-up
+
+
+        Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+JIANG et al.: PFL-ALP: PERSONALIZED FEDERATED LEARNING AGAINST BACKDOOR ATTACKS VIA ALP                                                                     12997
+
+
+
+malicious updates. Xie et al. [7] introduced the distributed                        However, these task-relevant auxiliary data-based algo-
+backdoor attack (DBA), where multiple attackers collabora-                       rithms do not consider the accessibility of private data.
+tively embed different components of a global trigger across                     Although there is a vast amount of data available on the
+their local data, making the attack more stealthy and difficult                  Internet, a significant portion of it is noisy and may not be
+to detect. Wang et al. [26] proposed a strategy known as                         suitable for the requirements of the defense algorithms.
+“attack of the tails”, in which attackers manipulate their                          It should be noted that most of the aforementioned server-
+local models to misclassify specific minority classes while                      side defense methods do not provide a privacy guarantee in
+maintaining regular performance on majority classes. This can                    the context of privacy inference attacks. Additionally, some
+be particularly effective in FL settings where data distributions                of these methods are not compatible with current encryption
+across clients may be Non-IID. Other works have explored                         approaches, such as differential privacy (DP) [37], homomor-
+various backdoor strategies, including flipping the training                     phic encryption (HE) [38] and STPC, since they necessitate
+labels [27], directly poisoning model updates [28], [29], and                    access to full plaintext updates.
+designing stealthy triggers [6], etc.                                               2) Client-Side Defenses: Considering the availability of
+   The impact of backdoor attacks in FL is magnified by                          auxiliary dataset and privacy constraints, client-side defense
+various critical factors. Firstly, the inherent invisibility of client           becomes a promising countermeasure since it ensures individ-
+data precludes direct inspection by the central server. Secondly,                ual client security without relying on the central server. In
+attackers can exploit the aggregation mechanism to introduce                     practice, it aims to purify the backdoored model either via
+subtle but persistent patterns into the global model. Lastly,                    perturbation-based or attention-based strategies. Specifically,
+successful backdoor attacks can embed malicious behavior                         perturbation-based backdoor purification is generally untar-
+into a model without noticeably reducing its accuracy on the                     geted. FL-WBC [17] perturbs the parameter space during local
+original task. This dual nature of backdoor attacks makes it                     training to counteract the long-lasting backdoor impact, but it
+difficult to detect using conventional performance monitoring                    may introduce additional bias and degrade model performance.
+methods.                                                                            By contrast, attention-based backdoor purification is tar-
+                                                                                 geted. It exploits the observation that backdoors hijack the
+B. Defense Methods Against Backdoor Attacks                                      attention of model toward triggers and tries to realign the
+   Existing defense mechanisms against backdoor attacks in                       attention with a benign reference. Of which, Chen et al.
+FL can be broadly categorized into server-side and client-side                   [39] utilize matching networks [40] to mitigate backdoor
+approaches.                                                                      impact by removing decision logic from the backdoored
+   1) Server-Side Defenses: Existing server-side approaches                      model. However, its effectiveness was only tested on IID data
+mainly rely on statistics-based outlier detection techniques to                  scenarios. Utilizing the knowledge of historical clean local
+identify and filter out suspicious updates. Notably, Vucovich et                 model, Fed-NAD [20] employs NAD to purify the global
+al. [14] proposed FedBayes, which sets aggregation weights by                    model from backdoors and is effective under IID condition.
+contrasting the mean and variance distance between each local                    However, its effectiveness diminishes significantly in Non-IID
+model and the global model, thereby suppressing malicious                        scenarios. Similarly, leveraging the insight of local model,
+contributions. Flame [30] employs a cosine similarity-based                      SPFL [21] purifies the backdoored model via attention-guided
+HDBSCAN clustering [31] to filter out backdoored models,                         self-knowledge distillation. But its evaluation also omitted the
+and further addresses backdoor impact by utilizing adaptive                      impact of Non-IID scenarios.
+clipping and noising techniques based on the norm of gra-                           Therefore, while attention-based backdoor purification is
+dients. FedDMC [32] clusters gradients using the Euclidean                       effective and addresses data availability and privacy issues
+distance after performing dimension reduction. Multi-metrics                     inherent to server-side defenses, it remains vulnerable in Non-
+[33] dynamically weights multiple metrics to detect backdoor                     IID scenarios.
+attacks.                                                                            3) Hybrid Defense Methods: Some recent work has
+   However, when facing optimization-based poisoning                             attempted to combine both server-side and client-side efforts.
+attacks, where malicious clients can optimize the poisoning                      Among them, FLShield [41] uses representative models gen-
+target based on the aggregation rules, or adapt the attacks                      erated on the server side and the loss impact evaluated on
+to specific metric used by the defense mechanisms, these                         the client side to validate local models prior to aggregation.
+statistical based filtering rules and robust aggregation methods                 Based on pivotal training, FAT [42] predicts the identities
+may fail [4], [22], [34], [35], [36].                                            of participants on the server side and performs adversarial
+   In addition, some strategies propose collecting primitive                     training on the client side. This approach enables the trained
+task-relevant data for the central server to verify the prop-                    model to pivot on sensitive attributes and enhances its robust-
+erty of the received gradients. For example, Cao et al. [15]                     ness with malicious impact. MCDFL [43] introduces a data
+proposed FLTrust, which generates noise gradients through                        quality detection mechanism, in which clients perform local
+auxiliary data and uses cosine similarity between the received                   evaluations, enabling the central server to identify and filter
+gradients and the noise gradients as weights for robust aggre-                   out malicious clients.
+gation. Zhang et al. [16] assumed that there is a clean                             Despite these advances, current methods are hindered by
+unlabeled dataset on server side, which can be labeled by the                    significant constraints. Many rely on unrealistic assumptions
+“voting strategy”. Then the backdoor can be eliminated via                       regarding the availability of auxiliary data, the distribution of
+multi-teacher distillation.                                                      data, and the timing of attacks. Some defenses inadvertently
+
+      Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+12998                                                                       IEEE TRANSACTIONS ON INFORMATION FORENSICS AND SECURITY, VOL. 20, 2025
+
+
+
+lead to a decline in the performance of the model on main                             The primary goal of the adversary is to inject a back-
+task.                                                                              door into the global model, causing it to misclassify specific
+                                                                                   instances during inference while maintaining normal perfor-
+        III. P ROBLEM F ORMULATION AND M OTIVATION                                 mance on the original task.
+  In this section, we will introduce the FL setting, the ability
+                                                                                   C. Nature and Goal of Defense
+and goal of both attackers and defenders, as well as the
+motivations of PFL-ALP.                                                               In PFL-ALP, the defenders include both the central server
+                                                                                   and benign clients, which are able to cooperate to suppress
+                                                                                   backdoor impact. Followed by recent backdoor defense meth-
+A. FL Setting                                                                      ods [16], [21], [30], [41], we define the nature and goal of the
+   PFL-ALP focuses on the traditional horizontal FL frame-                         defenders as follows:
+work, using a weighted average for aggregation. This                                 • The defenders should not violate the privacy principle of
+foundational method is proposed in FedAvg algorithm [44],                               FL, like exposing the raw data of benign clients.
+which can be mathematically formulated as follows:                                   • The defenders do not have the availability of additional
+   Let θt be the global model in round t. Each client k employs                         auxiliary datasets.
+this model to initialize its local model and performs updates                        • The defenders do not have knowledge about the data
+using the local data Dk with Stochastic Gradient Descent                                distribution of the participating clients.
+(SGD). Subsequently, the updates ∇`(θkt+1 ) are transmitted                          • The defenders know nothing about the backdoor knowl-
+back to the server:                                                                     edge, including the proportion of malicious clients and
+                                                                                        injected backdoor triggers.
+                         θk,e+1
+                          t
+                                = θk,e
+                                   t
+                                       − η∇`(θk,e
+                                              t
+                                                  ),                        (1)
+                                                                                     • A server is honest but curious about the raw data of
+where e denotes the local updating epoch and η is the learning                          clients, which requires the defense method to not violate
+rate. Eq. (1) depicts a one-step SGD optimization process,                              the privacy computation mechanism.
+and the final local model θkt+1 is derived from multiple local                        The primary goal of defenders is to reduce the attack success
+updating epochs denoted by E, i.e., θkt+1 = θk,E  t
+                                                      .                            rate while maintaining model accuracy on main tasks.
+   The server aggregates the updates using a weighted average
+and updates the global model:                                                      D. Motivation
+                         X       |D |                                                 PFL-ALP consists of two main components: dynamic
+             θt+1 = θt −     P k            ∇`(θkt+1 ),    (2)
+                                k∈S t |Dk |
+                                                                                   clustering-based representative model generation and
+                                k∈S t
+                                                                                   attention-based local purification. The motivations of PFL-
+where |Dk | is the number of training samples in client k, and                     ALP contain two key aspects.
+S t is the selected client set. This process will be repeated for                     Firstly, by clustering the model updates, it becomes possible
+T rounds until the global model converges.                                         to categorize clients into distinct groups based on their data
+   To further enhance privacy, model updates will be encrypted                     distribution rather than model behavior.
+before sending to the server. This measure ensures that even                          Recent defense strategies [30], [41], [45] proposed the
+if the server is compromised, it cannot access the raw updates                     use of dynamic clustering on model updates to differentiate
+from the clients. For instance, STPC prevents a single server                      between benign and malicious clients. However, it becomes
+from accessing all local updates via introducing an external                       challenging in Non-IID scenarios, as shifts in data distribu-
+server for privacy computation.                                                    tion can cause benign updates to appear more distinct than
+                                                                                   malicious ones, particularly when attackers make updates
+                                                                                   indistinguishable through dimension constraints. To be more
+B. Threat Model
+                                                                                   specific, an experiment is conducted for DBA on the MNIST
+  Following recent backdoor attack methods [5], [7], [26], the                     task under a Non-IID scenario. In this experiment, ten clients
+ability of attackers is defined as follows.                                        (three of which are malicious) are chosen to conduct local
+  • The attacker can control a subset of clients, with the                         training and upload their model updates. The dynamic clus-
+      proportion of compromised clients potentially exceeds                        tering results of these updates are shown in Fig. 2, with the
+      50%.                                                                         updates projected into a 2D space through principal component
+  • The attacker is able to access the local models and                            analysis. The specific experimental settings are consistent
+      training data of compromised clients. They can also                          with Section V-A. The results indicate that, while dynamic
+      manipulate the local training process and craft the updated                  clustering effectively groups updates from clients with similar
+      parameters sent to the server during the entire FL process.                  data distributions, it is unable to filter out backdoor updates.
+  • The attacker has complete knowledge of the aggregation                            Nevertheless, dynamic clustering remains valuable as it aids
+      algorithm and configuration, but lacks the ability to alter                  in grouping clients with similar data distributions into the same
+      them.                                                                        cluster, reducing the bias introduced by Non-IID data. By
+  • The attacker has no control over the benign clients whose                      deriving a representative model from each cluster and further
+      contributions remain unaffected and genuine throughout                       implementing a purification approach, it is still promising to
+      the training process.                                                        address the impact of backdoor attacks.
+
+        Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+JIANG et al.: PFL-ALP: PERSONALIZED FEDERATED LEARNING AGAINST BACKDOOR ATTACKS VIA ALP                                                                     12999
+
+
+                                                                                 Algorithm 1 PFL-ALP Algorithm
+                                                                                 Input: Global model θ, Global training rounds T , Local
+                                                                                     updating epochs E, Selected client set S t
+                                                                                 Output: Personalized model ξkt+1 for each benign client
+                                                                                  1: for each global round t ∈ [1, T ] do
+                                                                                  2:    //Server Executes
+                                                                                  3:    Send current global model θt to selected clients
+                                                                                  4:    //Client Executes
+                                                                                  5:    for each client k ∈ S t do
+                                                                                  6:       Receive global model θt
+                                                                                  7:       Update θt using local data and send gradient
+                                                                                           ∇`(θkt+1 ) back to the server                    . Eq. 1
+                                                                                  8:    end for
+Fig. 2. A dynamic clustering result of DBA on MNIST task under Non-IID
+scenario.                                                                         9:    //Server Executes
+                                                                                 10:    Receive local updates {∇`(θkt+1 )|k ∈ S t } from selected
+                                                                                        clients
+   Secondly, Nwadike et al. [46] and Li et al. [24] show that                    11:    for each pair in {∇`(θkt+1 )|k ∈ S t } do
+attention inconsistencies in intermediate layers between back-                   12:       S cores.Append(Md (pair))                        . Eq. 3
+doored and clean models can be rectified by the knowledge of                     13:    end for
+a clean model. Based on this insight, NAD has been applied to                    14:    (g1 , . . . , gc ) ← DynamicClustering(S cores)
+rectify backdoor information on client side in FL settings [20],                 15:    for each group j ∈ [1, c] do
+[21], but it falls short in Non-IID scenarios since these methods                16:       ωt+1        ← Generate(g j )                     . Eq. 5
+                                                                                                j
+rely on the knowledge of local historical model, which lacks                     17: end for
+generalization. To address this challenge, we employ NAD                         18: θt+1 ← GlobalU pdate({∇`(θk )|k ∈ S t })
+                                                                                                                           t+1
+                                                                                                                                            . Eq. 2
+with the design of a personalized model for each benign client.                  19: Send corresponding representative model ω j
+                                                                                                                                     t+1
+                                                                                                                                         to clients
+The personalized model contains more generalized knowledge                       20: //Client Executes
+than the local historical model, and can be used to purify the                   21: for each client k ∈ S t do
+backdoored representative model in Non-IID scenarios.                            22:              Receive representative model ωt+1k
+                                                                                 23:              if client k is benign then
+  IV. PFL-ALP: P ERSONALIZED F EDERATED L EARNING                                                      ξkt+1 ← Puri f ication(ωt+1         .Alg. 2
+                                                                                 24:                                           k )
+      V IA ATTENTION -BASED L OCAL P URIFICATION                                 25:              end if
+A. Overview of PFL-ALP                                                           26:       end for
+   Before exploring the details, we first show the overall                       27:    end for
+process of PFL-ALP, an overview of which is shown in
+Fig. 3. This framework can be split into two sides: the
+server side and the client side. On the server side, the focus                   receiving, each benign client performs a local purification to
+is on identifying model updates from clients with similar                        cleanse the representative model (Line 22 - 24). The purified
+data distribution, mitigating bias introduced by Non-IID data                    representative model serves as a new personalized model,
+via dynamic clustering-based representative model generation.                    retained on the client side for the main task inference and
+While on the client side, each benign client aims at cleansing                   for purification guidance in the next round. The global model
+the backdoor information embedded within the representative                      serves as a warm start for local training in the next round,
+model, ensuring its integrity.                                                   and its update information only serves as the foundation for
+   The pseudocode of PFL-ALP is depicted in Algorithm 1.                         dynamic clustering.
+Initially, the server broadcasts global model θt to each selected
+client (Line 3). After receiving, each client performs local                     B. Dynamic Clustering-Based Representative Model
+update based on its individual data and sends the model                          Generation
+gradients ∇`(θkt+1 ) back to the server (Line 5 - 8). After                         To identify model updates from clients with similar
+receiving, the server computes the pairwise distinction among                    data distribution, PFL-ALP designs a dynamic cluster-
+the received model gradients {∇`(θkt+1 )|k ∈ S t } and splits them               ing approach based on the angular deviations of model
+into several groups (g1 , . . . , gc ) via dynamic clustering (Line              updates.
+10 - 14). This dynamic clustering process is instrumental in                        Initially, a distinction metric is designed utilizing pairwise
+mitigating the bias introduced by Non-IID data for subsequent                    cosine distance to assess the angular variations across all
+operations. The server then generates representative models                      model updates. This metric is designed to meet two key
+{ωt+1
+   j | j ∈ [1, c]} for these groups via weighted average aggre-                  criteria. Firstly, it is designed to assign a lower value to model
+gation, and updates the global model θt+1 in the same way                        updates sharing akin angles and a value of zero to those with
+(Line 15 - 18). Subsequently, the server sends the correspond-                   identical angles. Secondly, the metric is tailored to escalate
+ing representative model ωt+1   j     to each client (Line 19). After            in value in correlation with the degree of angular differences
+
+
+      Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+13000                                                                       IEEE TRANSACTIONS ON INFORMATION FORENSICS AND SECURITY, VOL. 20, 2025
+
+
+
+
+Fig. 3. Overview of proposed PFL-ALP. O      1 The server distributes current global model to selected clients. O
+                                                                                                                2 Each selected client conducts local update on
+the received global model. O 3 After local training, clients send model updates to the server. O
+                                                                                               4 Upon receiving, the server initiates dynamic clustering, dividing
+model updates into several groups based on the pairwise distinction. O   5 Subsequently, the server performs model aggregation, generating a global model and
+several representative models. O 6 The server then sends the representative models to corresponding clients. O   7 Upon receiving, each benign client performs
+attention-based local purification to purify the backdoored representative model, generating local purified model. This model serves as a personalized model
+for local inference and purification guidance in the next round. The updated global model is distributed for local update in the next round and its gradients
+only serve as the foundation for dynamic clustering.
+
+
+
+between model updates. Formally, considering each pair of                          groups, the optimal number of clusters is determined through
+model updates where u represents the foundational update and                       the evaluation of the silhouette score, a renowned metric
+v signifies the paired one, the distinction of these two updates                   widely acknowledged for its effectiveness in cluster assessment
+is defined as:                                                                     [47]. Upon the completion of such a dynamic clustering pro-
+                                 < u, v >
+                       Md = 1 −           ,                  (3)                   cess, the model updates are segmented into multiple groups,
+                                  kukkvk                                           with each group comprising updates from clients sharing akin
+where < ·, · > and k · k are inner product and Euclidean norm                      data distributions. For each group g j ( j ∈ [1, c]), the server can
+operators. The value of Md ranges from 0 to 2, with lower                          generate the representative model through weighted average
+values indicating similarity between updates and higher values                     aggregation, which can be formulated as:
+reflecting increasing angular disparities.                                                                    X      |D |
+   Upon completion of the pairwise distinction computa-                                            gj = θ −
+                                                                                                 ωt+1     t       P k           ∇`(θkt+1 ).         (5)
+tion, a comprehensive representation of the distinction values                                                      k∈g j |Dk |
+                                                                                                                   k∈g j
+assigned to each pair of updates is obtained, denoted as matrix
+                                                                                      To this end, we generate a representative model for each
+scores:
+                           0                      1                                group that aggregates knowledge from clients with similar
+                             s1,1 s1,2 · · · s1,n                                  data distributions. This approach mitigates the bias stemming
+                           B s2,1 s2,2 · · · s2,n C                                from the Non-IID conditions across clients. Then, to eliminate
+                 scores = B . . .             . C,          (4)
+                           B                      C
+                           @ .. .. . . .. A                                        the backdoor impact, we introduce a client-side backdoor
+                                   sn,1 sn,2 · · · sn,n                            purification approach to refine the representative model.
+
+where su,v (u, v ∈ S t & |S t | = n) denotes the differentiation
+between updates u and v, and S t signifies the chosen clients.                     C. Attention-Based Local Purification
+The u-th row in the matrix scores illustrates the distinction                         Upon receiving the representative model from the server,
+values between the update u and the others.                                        each benign client conducts attention-based local purification
+   Subsequently, the K-MEANS clustering algorithm is applied                       to cleanse the backdoor information within the model.
+for dynamic clustering of model gradients. Given the absence                          As shown in Fig. 4, the attention-based local purification
+of prior knowledge regarding the exact number of clustering                        proceeds in two stages. Firstly, the benign client fine-tunes its
+
+        Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+JIANG et al.: PFL-ALP: PERSONALIZED FEDERATED LEARNING AGAINST BACKDOOR ATTACKS VIA ALP                                                                    13001
+
+
+
+                                                                                   Therefore, the objective of purifying the representative
+                                                                                model is the combination of LCE,ωk and LNAD (ωlk , ξkl ), which
+                                                                                is given by:
+                                                                                                     "                            #
+                                                                                                                 X
+                                                                                      Lωk = E(x,y)∈Dk LCE,ωk + β   LNAD (ωk , ξk ) ,
+                                                                                                                          l    l
+                                                                                                                                           (10)
+                                                                                                                           l∈L
+
+                                                                                where L represents the number of attention layers, β is the
+                                                                                hyperparameter controlling the strength of knowledge transfer.
+         Fig. 4. Overview of attention-based local purification.                Minimizing Lωk not only increases the main task accuracy
+                                                                                of representative model, but also improves the alignment of
+                                                                                saliency maps between the personalized model and backdoored
+personalized model on local data to learn benign and data-                      representative model.
+consistent knowledge. Subsequently, treating this personalized                     After purification, each benign client adopts the cleansed
+model as a frozen teacher, the representative model received                    representative model as its new local personalized model. This
+from the server is treated as a student. Training on the local                  model is then utilized for main task inference and knowledge
+data, the student minimizes a joint objective comprising the                    transfer in the subsequent purification round. Notably, in the
+NAD loss and task loss that promotes attention alignment                        initial training round, when benign clients have not obtained
+with the teacher while maintaining task performance. Then,                      personalized models yet, they can utilize their local models as
+the purified representative model is promoted as the new                        guidance for purification.
+personalized model, which is used for inference and serves
+as the teacher in the next round.                                               Algorithm 2 Attention-Based Local Purification
+   Formally, let x, y be the samples and corresponding labels                   Input: : Representative model ωt+1
+                                                                                                                 k , Purifying rounds R
+in local data, ξk be the local personalized model, using cross-                 Output: : Updated personalized model ξkt+1
+entropy loss `CE as a criterion, the task loss in the first step                 1: for each purifying round r ∈ [1, R] do
+can be formulated as:                                                            2:    for mini-batch d in Dk do
+                       LCE,ξk = `CE (ξk (x), y).                         (6)     3:       Update Local personalized model ξkt on main task .
+                                                                                          Eq. 6
+   After training, the local personalized model can be utilized                  4:       Compute NAD loss between local personalized
+to transfer benign and data-consistent knowledge. For the                                 model ξkt and representative model ωt+1
+                                                                                                                               k      . Eq. 8
+design of knowledge transfer, we employ NAD to align                             5:       Compute main task loss for representative model
+intermediate-layer attention of the backdoored model with that                            ωt+1
+                                                                                            k                                         . Eq. 9
+of the personalized model.                                                       6:       Purify representative model ωt+1
+                                                                                                                        k           .  Eq. 10
+   Formally, given the activation output at the l-th layer of                    7:    end for
+the model as Al ∈ RC×H×W , where C, H, and W indicate the                        8: end for
+                                                                                 9: ξk   ← ωt+1
+                                                                                     t+1
+channel, height, and width dimensions of the activation map                                   k
+                                                                                10: return ξk
+                                                                                            t+1
+respectively. A mapping function F operates on the activation
+to transform a 3D tensor into a 2D tensor across the channel
+dimension. The function is denoted as F : RC×H×W → RH×W ,                           The process of attention-based local purification is outlined
+and the formulation is given by:                                                in Algorithm 2. After receiving the corresponding represen-
+                                        C
+                                                                                tative model ωt+1k , benign client k first updates the local
+                                     1X lp                                      personalized model on the main task, extracting benign knowl-
+                       F p (Al ) =     |Ai | ,                           (7)
+                                     C                                          edge from local data (Line 3). The client k then constructs a
+                                        i=1
+                                                                                joint objective comprising the NAD loss and task loss (Line 4 -
+where Ali is the activation map of the i-th channel on l-th layer,              5). By minimizing this joint objective, the representative model
+|·| denotes the absolute value function. The scaling power p > 1                is purified from backdoor impact and optimized for the main
+is used to amplify the disparities between the neurons of clean                 task (Line 6). After purification, a clean representative model
+model and backdoored model. As suggested in [24], we set                        is obtained, which serves as the new local personalized model
+p to 2. Therefore, to cleanse the backdoored representative                     ξkt+1 (Line 9). This model is utilized for main task inference
+model using the knowledge of personalized model, we define                      and as a guide for the next purification round.
+the NAD loss at the l-th layer between them as:
+                                                                                D. Privacy Aspect of PFL-ALP
+                                F p (Alωk )      F p (Alξk )
+        LNAD (ωlk , ξkl ) =                   −                 .        (8)       Similar to FLAME [30], FLShield [41], LSFL [48] and
+                              ||F p (Alωk )||2 ||F p (Alξk )||2
+                                                                                EPPRFL [49], PFL-ALP is compatible with STPC, which
+  In addition, the representative model should also be opti-                    prevents the central server from accessing full local updates,
+mized for main task accuracy, which is formulated as follows:                   thereby mitigating inference attacks. To this end, an external
+                                                                                server can be introduced to collaborate with the central server
+                      LCE,ωk = `CE (ωk (x), y).                          (9)    for privacy computation. As depicted in [30] and [41], the
+
+     Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+13002                                                                       IEEE TRANSACTIONS ON INFORMATION FORENSICS AND SECURITY, VOL. 20, 2025
+
+
+
+                                                                                      Assumption 1: [L-Smoothness] The gradients of the two
+                                                                                   components of J(ω) are locally Lipschitz-Smooth: ∇LCE,ω is
+                                                                                   Lt -smooth and ∇LNAD (ω, ξ) is La -smooth. Consequently, the
+                                                                                   joint objective J(ω) is L := (Lt + βLa )–smooth.
+                                                                                      Assumption 2: [µ-strongly convexity] J(ω) is locally
+                                                                                   µ–strongly convex around a minimizer ω? :
+                                                                                                                         ˛ µ
+                                                                                        J(ω) ≥ J(ω? ) + ∇J(ω? ), ω − ω? + kω − ω? k2 .
+                                                                                                         ˝
+             Fig. 5. Overview of PFL-ALP coupled with STPC.                                                                                   (11)
+                                                                                                                              2
+                                                                                      Assumption 3: [Unbiased stochastic gradients] In purifying
+cosine similarity–based distinction metric and dynamic clus-                       rounds r ∈ [1, R], let η be the learning rate, the update is
+tering of PFL-ALP can be implemented under STPC, and the                           ωr+1 = ωr −ηgr with E[gr | ωr ] = ∇J(ωr ) and Ekgr −∇J(ωr )k2 ≤
+subsequent model generation is likewise compatible with this                       σ2 .
+privacy-preserving framework [30], [41], [48], [49].                                  Lemma 1: [Smoothness of J(ω)]
+   The key difference from existing STPC-based backdoor                               For all ω, u in the local neighborhood, k∇J(ω) − ∇J(u)k ≤
+defense methods lies in the purpose. Prior works leverage                          L kω − uk.
+STPC to enable secure backdoor-robust aggregation. Specifi-                           Proof: With Assumption 1 and the triangle inequality,
+cally, by securely realizing the k-nearest selection [48], or the                       k∇J(ω) − ∇J(u)k ≤ k∇LCE,ω − ∇LCE,u k
+Euclidean distance filtering and clipping [49] through STPC,                                                       + βk∇LNAD (ω, ξ) − ∇LNAD (u, ξ)k
+the backdoor-robust aggregation can proceed without exposing
+raw updates. In contrast, we deploy STPC when reducing Non-                                                     ≤ Lt kω − uk + β La kω − uk
+IID bias by executing dynamic clustering and constructing                                                        = L kω − uk.                                 (12)
+representative and global models. The backdoor purification                                                                              
+step, in turn, is performed locally without STPC, as it relies                       Lemma 2: [SGD Bound under L–smoothness]
+only on the local data and the personalized model of each                            With J(ω) is L–smooth, then for the SGD step ωr+1 =
+benign client, making it inherently privacy-friendly.                              ωr − ηgr , we have
+   We show the overview of PFL-ALP coupled with STPC                                                                       
+                                                                                        E J(ωr+1 ) ˇ ωr ≤ J(ωr ) − η 1 − Lη
+                                                                                                   ˇ 
+                                                                                                                              k∇J(ωr )k2
+                                                                                          
+for server-side secure computation in Fig. 5. Specifically,                                                              2
+each selected client k trains the received global model θt                                                            2
+
+and divides the model updates ∇`(θkt+1 ) into two components                                                    + Lη2 σ2 .                                    (13)
+∇`(θkt+1 )A and ∇`(θkt+1 )B , which are then transmitted separately                   Proof: With Assumption 1, we have
+to the central server and the external server. Upon receiving,
+the central server and the external server can jointly utilize                             J(ωr+1 ) ≤ J(ωr ) + h∇J(ωr ), ωr+1 − ωr i
+STPC, such as the ABY framework [25] to securely per-                                                  L
+                                                                                                    + kωr+1 − ωr k2 .                                         (14)
+form dynamic clustering and generate representative models                                             2
+   j | j ∈ [1, c]} as well as the global model θ
+{ωt+1                                                     t+1
+                                                              . The                With ωr+1 − ωr = −ηgr :
+representative models are then distributed to the corresponding                                                                            Lη2
+clients. Subsequently, benign clients perform local purification                         J(ωr+1 ) ≤ J(ωr ) − η h∇J(ωr ), gr i +                kgr k2 .       (15)
+                                                                                                                                            2
+locally on the received representative model to obtain the
+                                                                                   With the conditional expectation on ωr :
+personalized model for inference.
+                                                                                         E J(ωr+1 ) ˇ ωr ≤ J(ωr ) − η E h∇J(ωr ), gr i| ωr
+                                                                                                     ˇ                                  
+   The deployment of STPC ensures that a curious server
+cannot access to the complete local updates of clients for                                                     Lη2 
+                                                                                                                  E kgr k2 ˇ ωr .
+                                                                                                                           ˇ 
+inference attacks, thereby enabling each benign client to obtain                                           +                                 (16)
+                                                                                                                2
+representative model without privacy concerns.
+                                                                                   Apply  E[gr | ωr ] = ∇J(ωr ) in Assumption 3, then for
+                                                                                   E h∇J(ωr ), gr i| ωr in Eq. 16 we have
+                                                                                    
+
+                                                                                            E h∇J(ωr ), gr i| ωr = h∇J(ωr ), E[gr | ωr ]i
+                                                                                                               
+E. Convergence of the Local Purification
+   Given that the convergence of weighted average aggregation                                                             = h∇J(ωr ), ∇J(ωr )i
+has been established in [50], we focus on the local purifica-                                                             = k∇J(ωr )k2 .                      (17)
+tion phase to provide a convergence guarantee for PFL-ALP.
+                                                                                   Combine Eq. 16 and Eq. 17:
+Specifically, for a benign client k, when performing local
+                                                                                              E J(ωr+1 ) ˇ ωr ≤ J(ωr ) − η k∇J(ωr )k2
+                                                                                                         ˇ 
+purification, the teacher (personalized) model ξk is frozen
+and the student (representative) model ωk is optimized via                                                         Lη2 
+                                                                                                                        E kgr k2 ˇ ωr .
+                                                                                                                                  ˇ 
+minimizing the joint objective Lωk in P  Eq. 10. For brevity,                                                   +                               (18)
+                                                                                                                    2
+we simplify ξk and ωk as ξ and ω,          l∈L LNAD (ωk , ξk ) as
+                                                      l    l
+                                                                                   Write gr = ∇J(ωrˇ) + εr where E[εr | ωr ] = 0 and Ekεr k2 ≤ σ2 .
+LNAD (ω, ξ), and Lωk as J(ω). Then we make the following
+                                                                                   Then for E kgr k2 ˇ ωr in Eq. 18 we have
+standard assumptions, which are prevalent in prior works [51],
+                                                                                         E kgr k2 ˇ ωr = E k∇J(ωr ) + εr k2 ˇ ωr
+                                                                                                 ˇ                         ˇ 
+[52], [53].
+
+        Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+JIANG et al.: PFL-ALP: PERSONALIZED FEDERATED LEARNING AGAINST BACKDOOR ATTACKS VIA ALP                                                                    13003
+
+
+
+                      = k∇J(ωr )k2 + 2 h∇J(ωr ), E[εr | ωr ]i                      2) Backdoor Attacks: We evaluate PFL-ALP against five
+                                                                                prominent attacks: Semantic Attack (SA) [5], Edge-Case
+                                         „     ƒ‚          …
+                                                =0
+                        + E kεr k2 ˇ ωr
+                                  ˇ                                           Backdoor Attack (ECBA) [26], Badnet Attack (BA) [6], DBA
+                                                                                [7] and Targeted Label Flipping Attack (TLFA) [43], all of
+                      ≤ k∇J(ωr )k2 + σ2 .                              (19)     which are well-established and proven to be effective.
+Combine Eq. 18 and Eq. 19:                                                         1) SA. We evaluate the defense methods against all three
+                                                                                      trigger types: background wall (wall), racing stripe
+    E J(ωr+1 ) ˇ ωr ≤ J(ωr ) − η k∇J(ωr )k2
+              ˇ 
+                                                                                      (stripe) and green car (car).
+                        Lη2                                                        2) ECBA. We follow the settings in [26], where the attacker
+                             k∇J(ωr )k2 + σ2
+                                             
+                    +                                                                 utilizes images from Southwest Airlines’ plane class as
+                         2
+                                                                                      edgecase samples on CIFAR-10 and mislabels them as
+                                        
+                    = J(ωr ) − η 1 − Lη2   k∇J(ωr )k2
+                                                                                      trucks.
+                                 2
+                           + Lη2 σ2 ,                                  (20)        3) BA. We implement it on the CIFAR-10 task, the attacker
+                                                                                      inserts a pixel block as backdoor triggers of varying
+which is the claimed inequality.                                                     sizes: 3 × 3, 5 × 5, and 7 × 7.
+  Lemma 3: Under µ–strongly convexity, for all ω in the                            4) DBA. We apply this attack across all three datasets using
+neighborhood,                                                                         trigger patterns consistent with [7], which are split into
+                                                                                      4 parts.
+              k∇J(ω)k2 ≥ 2µ J(ω) − J(ω? ) .
+                                         
+                                                   (21)                            5) TLFA. This attack is a targeted poisoning attack with
+                                                                                      objectives akin to backdoor attacks, aiming to compro-
+  Proof: Impose the first-order optimality condition, the right-                      mise the training model to misclassify specific samples
+hand side of Eq. 11 reaches its minimum at ω = ω? − µ1 ∇J(ω? ).                       into a target class while maintaining overall model per-
+Then we have                                                                          formance on other samples. So we also test the defense
+                                        1                                             methods against this attack. Following the settings in
+                 J(ω) ≥ J(ω? ) −          k∇J(ω? )k2 .                 (22)
+                                       2µ                                             [43], the class pair for CIFAR10, Fashion-MNIST and
+                                                                                      MNIST are (automobile, truck), (coat, shirt), (digit 5,
+Rearrange Eq. 22 yields the result in Lemma 3.                                       digit 3).
+  Theorem 1: [Linear convergence for the objective of local
+purification J(ω) w.r.t. Lωk ]                                                     3) Baseline Defenses: We compare the performance of
+  Suppose 0 < η ≤ 1/L, J(ω) is bounded by                                       PFL-ALP with FedAvg [44] (aggretion without any defense)
+                                                                                and five SOTA defenses, including three server-side defenses:
+                                             ηL 2                               FLTrust [15], FLAME [30] and Multi-metrics [33], a client-
+ E J(ωr )− J(ω? ) ≤ (1−µη)r J(ω0 )− J(ω? ) +    σ . (23)
+                                        
+                                             2µ                                 side defense: FL-WBC [17], and a hybrid defense: FLShield
+                                                                                [41]. These methods have been introduced in Section II.
+  Proof: Apply Lemma 2 and take 0 < η ≤ 1/L, we have
+                                                                                   4) Data Distribution: We consider both IID and Non-IID
+      E[J(ωr+1 ) | ωr ] ≤ J(ωr ) − 2η k∇J(ωr )k2 + 2η σ2 .             (24)     scenarios and follow the one class-expert distribution setting
+                                                                                introduced in [15], [41]. Specifically, clients are randomly
+Apply Lemma 3 to replace k∇J(ωr )k2 in Eq. 24 by                               divided into c groups, where c corresponds to the number of
+2µ J(ωr ) − J(ω? ) :                                                            classes in the dataset. For all three datasets in this experiment,
+                                                                                c is 10. Training samples with label j are allocated to group
+ E[J(ωr+1 )−J(ω? ) | ωr ] ≤ (1−µη) J(ωr )− J(ω? ) + 2η σ2 . (25)                 j with a probability of p, where 0 < p < 1, and to any other
+                                                 
+
+                                                                                groups with a probability of 1−pc−1 . In the IID scenario, we set p
+Take total expectation, unroll the recursion, and use µ/L ≤ 1                   to 0.1, ensuring that each sample is assigned to a group with
+to write 2η = ηL   µ   ηL
+              2µ · L ≤ 2µ , the displayed bound implies the result              an equal probability of 10% while for the Non-IID scenario,
+of Theorem 1.                                                                  we set p to 0.5. In this setting, samples with label j have a
+                                                                                50% likelihood of being assigned to group j, and a probability
+                         V. E XPERIMENTS                                            10−1 = 5.6% to be allocated to other groups.
+                                                                                of 1−0.5
+                                                                                   5) Parameter Settings: The experiment is conducted with
+A. Experimental Setup                                                           a total of K = 100 clients, and unless specified other-
+   1) Datasets and Models: The experiments are carried out                      wise, we maintain the percentage of malicious clients as
+on three datasets, MNIST [54], Fashion-MNIST [55], and                          30%. In each training round, we select 10 clients, three of
+CIFAR-10 [56]. In order to effectively simulate the attacks, we                 which are malicious. The global training process spans 100
+adopt the same model architectures as used in previous attack                   rounds. During the training process, benign clients perform
+studies. Specifically, for the MNIST handwritten recognition                    E = 1 epoch of local training with batch size B = 64 and
+task and the Fashion-MNIST commodity recognition task, we                       learning rate η = 0.1; while adversaries implement attacks
+implement the convolutional neural network introduced in [7].                   with E = 6, B = 64 and η = 0.05. The adversaries
+For the CIFAR-10 image recognition task, we use the same                        implement attacks consistently throughout the FL training
+ResNet18 architecture presented in [5].                                         process.
+
+     Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+13004                                                                       IEEE TRANSACTIONS ON INFORMATION FORENSICS AND SECURITY, VOL. 20, 2025
+
+
+
+                                                               TABLE I
+               ROBUSTNESS C OMPARISON OF D EFENSES AGAINST VARIOUS C HALLENGING ATTACKS ON CIFAR-10 IN IID S CENARIO (%)
+
+
+
+
+                                                               TABLE II
+                   ROBUSTNESS C OMPARISON OF D EFENSES AGAINST DBA AND TLFA ON VARIOUS DATASETS IN IID S CENARIO (%)
+
+
+
+
+   6) Performance Metrics: We evaluate the performance with                        sistently achieves the best overall performance and robustness
+three metrics, including main task accuracy (MA), attack                           under both IID and Non-IID conditions. Specifically, in the
+success rate (ASR) and ranking score (RS). MA assesses the                         IID scenario, the defense performance of FLTrust (the second-
+accuracy of the model in the main task, and ASR quantifies the                     best) and FLAME (the third-best) fluctuates, especially under
+accuracy of the model on backdoored data. RS is the overall                        SA across different trigger types. In contrast, PFL-ALP con-
+improvement across various attacks compared to FedAvg.                             tinuously achieves both the highest MA and the lowest ASR
+Specifically, following [33], [57], we assess the improvement                      in most attack scenarios. For example, when defending against
+                     D −MA B        D −AS R B
+over FedAvg via MAMA    B
+                             − AS RAS  RB     , where MAD and AS RD                SA, PFL-ALP maintains robustness in suppressing backdoor
+are the MA and ASR of defense method, MAB and AS RB are                            effects with ASR of 0%, while maintaining competitive MA
+those under FedAvg. Summing the results over various attacks                       around 73%. Therefore, it achieves the highest RS of 6.54.
+yields the RS.                                                                        Under the more challenging Non-IID setting, the efficacy
+   For defenses based on personalized model, like PFL-ALP                          of most defense methods suffers substantial degradation. For
+and FL-WBC, MA and ASR are reported as the mean across                             example, FLTrust and FLAME still effectively suppress ASR,
+personalized models of benign clients, while for other single                      but at the expense of severe MA drops, which often fall below
+global model defense, these metrics are reported as the per-                       50%. FL-WBC and FLShield do not maintain robustness,
+formance of the final global model.                                                showing an ASR higher than 90% under BA. In contrast,
+   7) Hardware Environment: Our experiments are conducted                          PFL-ALP preserves both high MA and low ASR. Its MA
+using PyTorch 2.4.1 on a Ubuntu 24.04 system equipped with                         remains above 65% for semantic attack across all three tiggers,
+an RTX GPU 8000e and an Intel(R) Xeon(R) Gold 5218                                 above 61% for BA across various trigger size and the highest
+processor running at 2.30GHz.                                                      for ECBA, with ASR remaining near 0 − 5%. This stability
+                                                                                   leads to the best overall RS as 6.57, confirming that PFL-ALP
+B. Performance Comparison With SOTA                                                effectively mitigates the backdoor impact and generalizes well
+  Tables I, II, III and IV show the overall comparison of                          to heterogeneous data.
+PFL-ALP with FedAvg (no defense) and five SOTA defenses                               Similar results are shown in DBA and TLFA across three
+against various attacks on three datasets in both IID and Non-                     datasets in Tables II and IV. Specifically, in IID setting,
+IID scenarios.                                                                     PFL-ALP excels in most scenarios, except defending against
+  Specifically, when countering SA, BA and ECBA on                                 DBA on MNIST task, in which FLAME achieves the best
+CIFAR-10 dataset, as shown in Tables I and III, PFL-ALP con-                       performance with MA of 96.72% and ASR of 0.53%, while
+
+        Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+JIANG et al.: PFL-ALP: PERSONALIZED FEDERATED LEARNING AGAINST BACKDOOR ATTACKS VIA ALP                                                                    13005
+
+
+
+                                                           TABLE III
+         ROBUSTNESS C OMPARISON OF D EFENSES AGAINST VARIOUS C HALLENGING ATTACKS ON CIFAR-10 IN N ON -IID S CENARIO (%)
+
+
+
+
+                                                                         TABLE IV
+             ROBUSTNESS C OMPARISON OF D EFENSES AGAINST DBA AND TLFA ON VARIOUS DATASETS IN N ON -IID S CENARIO (%)
+
+
+
+
+PFL-ALP remains the second-best with MA of 95.33% and                           contrast, PFL-ALP maintains robustness in both IID and Non-
+ASR of 3.35%. However, when it comes to the Non-IID                             IID scenarios due to its local purification technique based on
+scenario, FLAME and other defenses fail in this task, with                      personalized model knowledge, which emphasizes generalized
+ASR exceeding 97%, while PFL-ALP remains robust with an                         knowledge over introducing additional noise. As a result, the
+ASR of 6.08%.                                                                   RS of PFL-ALP is both the most robust across IID and Non-
+   Furthermore, it is noticed that other competing methods                      IID settings and the highest overall, exceeding FLTrsut (the
+also encounter challenges in certain attacks under Non-IID                      second-best) by about 1 point in IID setting and about 2 points
+condition, despite their efficacy in IID scenario. For instance,                in Non-IID setting.
+Multi-metrics demonstrates an ASR of 32.71% and 35.17%
+for BA with trigger sizes of 3 × 3 and 5 × 5 on CIFAR-10
+                                                                                C. Robustness Analysis
+in the IID scenario, yet these rates escalate to 67.95% and
+90.94% in the Non-IID setting.                                                     1) Non-IID Degree: To demonstrate the resilience of PFL-
+   Defenses like Flame, FLTrust, and FLShield employ                            ALP in varying degrees of Non-IID data distribution, we
+dynamic clustering on local updates for Non-IID heterogeneity                   perform a comparison of MA and ASR in PFL-ALP, FedAvg,
+mitigation or backdoor identification, and further leverage clip-               and multiple defense methods against ECBA on the CIFAR-10
+ping, filtering and noising techniques to eliminate malicious                   dataset. The experimental results are depicted in Fig. 6, with
+information. However, these defense methods can inadver-                        the one class-expert distribution probability p ranging from
+tently introduce side effects in IID scenarios. For example,                    0.1 to 0.5, larger p signifies higher Non-IID degree.
+when defending against DBA in the CIFAR-10 task, FLTrust                           Specifically, for server-side defenses, as p increases, the
+achieves an ASR of 9.09% in the Non-IID scenario, but this                      MA of FLTrust and FLAME drifts, whereas Multi-metrics
+rate increases to 39.59% in the IID scenario. Similarly, to                     shows non-monotonic variability. Their ASR correspondingly
+defend against TLFA in the CIFAR-10 task, Flame achieves                        shows spikes and trend reversal, reflecting instability under
+an ASR of 14.22% in the Non-IID scenario, which rises to                        increasing heterogeneity. For example, the ASR of FLTrust
+25.90% in the IID scenario. Similar situation also shown in                     spikes at p = 0.2 with value around 19%, dips at p = 0.3
+the results of FLShield, which is designed to counter attacks                   with value around 11%, and then increases again as p grows,
+occurring during the middle rounds of FL training, struggles                    while its MA steadily decreases to about 46% by p = 0.5. This
+in defending against attacks throughout the entire process. In                  instability is consistent with the shortages that when benign
+
+
+     Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+13006                                                                       IEEE TRANSACTIONS ON INFORMATION FORENSICS AND SECURITY, VOL. 20, 2025
+
+
+
+                                                                            TABLE V
+              ROBUSTNESS OF PFL-ALP AGAINST D IVERSE ATTACKS ON CIFAR-10 W ITH M ALICIOUS R ATE OF 50%, 70% AND 90% (%)
+
+
+
+
+                                                                                   low, never exceeding 12%, and its MA is consistently the
+                                                                                   highest among all methods.
+                                                                                      2) Malicious Rate: To demonstrate the robustness of PFL-
+                                                                                   ALP under varying levels of malicious rates, we perform a
+                                                                                   comparative analysis of PFL-ALP and FedAvg against dif-
+                                                                                   ferent attacks in the CIFAR-10 dataset. Based on the previous
+                                                                                   analysis of a 30% malicious rate, we further explore the impact
+                                                                                   of malicious rates in 50%, 70%, and 90%. The experimental
+                                                                                   results are presented in Table V. It is shown that, since
+                                                                                   PFL-ALP performs client side purification to eliminate the
+                                                                                   backdoor information, its performance is minimally affected
+                                                                                   by the changes of malicious rate. Both MA and ASR have
+                                                                                   only slightly fluctuation, the varying is lower than 5% in
+                                                                                   most cases. For instance, when defending against SA, PFL-
+                                                                                   ALP consistently reduces the ASR by over 97% and sustains
+                                                                                   a comparable MA to FedAvg across all backdoor triggers.
+                                                                                   This underscores the remarkable resilience and effectiveness of
+                                                                                   PFL-ALP in mitigating attacks and maintaining performance
+                                                                                   stability.
+
+                                                                                   D. PFL-ALP Against Advanced Backdoor Attacks
+                                                                                      To evaluate the robustness of PFL-ALP against attackers
+                                                                                   with knowledge of the defense process, we further consider
+                                                                                   two advanced variations of DBA, including a saliency-guided
+                                                                                   Stealth-DBA (SDBA) and a gradient-aligned Adaptive-DBA
+                                                                                   (ADBA). The evaluation is conducted under both IID and Non-
+                                                                                   IID settings on three datasets and the results are shown in
+                                                                                   Table VI.
+Fig. 6. MA and ASR of defenses against ECBA on CIFAR-10 in Non-IID.
+                                                                                      In SDBA, the trigger is placed inside the second-most
+                                                                                   salient region of the images, so it overlaps task-relevant
+                                                                                   features while leaving the most critical region untouched to
+                                                                                   balance the backdoor injection and main feature preservation.
+updates naturally disperse under stronger heterogeneity, the                       This attack poses challenges for the purification method, since
+outlier removal or consensus criteria used at the server become                    when purifying activation to break the backdoor correlation, it
+less robust.                                                                       necessarily pushes on the same regions that contain genuine
+   For client-side defense, as p increases, the MA of FL-WBC                       semantics. The experimental results show that, under FedAvg,
+erodes progressively, falling to around 45% at p = 0.5. Its                        this placement leads to a decrease in MA, for example, around
+ASR curve is also unstable, rising to about 55% at p = 0.3                         2%-points on CIFAR-10 dataset in IID setting, and about 3%-
+and remaining elevated near 48% at p = 0.5.                                        points under Non-IID condition, while ASR remains high.
+   In contrast, PFL-ALP demonstrates a better performance                          In contrast, the ASR decreases markedly when PFL-ALP is
+across all levels of heterogeneity. Its ASR remains uniformly                      employed. For example, on the CIFAR-10 dataset, the ASR
+
+        Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+JIANG et al.: PFL-ALP: PERSONALIZED FEDERATED LEARNING AGAINST BACKDOOR ATTACKS VIA ALP                                                                    13007
+
+
+
+                               TABLE VI
+       P ERFORMANCE C OMPARISON OF F EDAVG AND PFL-ALP
+                    U NDER A DVANCED DBA
+
+
+
+
+                                                                                Fig. 7. MA and ASR of PFL-ALP against BA on CIFAR-10 under different
+                                                                                β value.
+
+
+drops from 99.96% to 26.66% in the IID setting and from
+99.07% to 3.32% in the Non-IID setting. While the MA has a
+modest decrease like FedAvg. The results indicate that PFL-
+ALP is powerful in purifying the backdoor impact of SDBA,
+while the loss of MA stems from the overlapping of the
+trigger with task-relevant features that directly support the
+class decision.
+   Instead of changing where the trigger is placed, ADBA
+                                                                                Fig. 8. MA and ASR of PFL-ALP against ECBA with different components.
+crafts model updates to evade cosine similarity-based filtering                 Fed-LP is PFL-ALP with only the local purification component, Fed-Cluster
+by optimizing a backdoor objective while aligning its gradients                 is PFL-ALP with only the clustering-based representative model generation.
+to a benign reference. PFL-ALP is resilient to this attack
+because it leverages the cosine similarity-based metric for
+reducing Non-IID bias rather than for backdoor defense. As a                       2) Component Contributions: PFL-ALP comprises two
+result, the ASR of PFL-ALP remains low in both IID and Non-                     main components: dynamic clustering-based representative
+IID conditions, coupled with compatible MA. For example,                        model generation and attention-based local purification. The
+on MNIST dataset, the ASR drops from 99.75% in the IID                          former focuses on generating representative models for clients
+condition and 99.87% in the Non-IID condition to 5.07% and                      with similar data distributions, mitigating the bias introduced
+4.38%, respectively, and the MA is comparable to that under                     by Non-IID settings. The second component aims to eliminate
+standard DBA.                                                                   the backdoor impact that remains in the representative model.
+   These observations also clarify the strengths and limitations                   We perform an ablation study on these two components
+of our method. PFL-ALP extends the effectiveness of NAD for                     to explain the effectiveness of PFL-ALP against backdoor
+backdoor defense to Non-IID settings even against saliency-                     attacks. Fig. 8 shows the MA and ASR of PFL-ALP and PFL-
+guided and gradient-aligned attacks. However, maintaining                       ALP with only one component against ECBA.
+a high MA remains challenging, especially when triggers                            The results reveal that with only the dynamic clustering,
+deliberately occupy salient content. This reflects an inherent                  each benign client achieves the highest MA but experiences
+limitation of local purification that mixed activations encoding                significantly elevated ASR due to residual backdoor impact
+both semantics and trigger may be over-suppressed.                              on representative models. Alternatively, employing only local
+                                                                                purification results in reduced ASR for benign clients, with the
+                                                                                cost of MA. By combining these two components, PFL-ALP
+E. Ablation Analysis
+                                                                                effectively reduces ASR to nearly 0 while maintaining MA
+   1) Impact of β: The hyperparameter β plays a crucial                         levels slightly below Fed-Cluster. This underscores the com-
+role in balancing the main task loss and NAD loss in local                      prehensive effectiveness of PFL-ALP in mitigating backdoor
+purification. A higher value of β signifies a greater emphasis                  attacks.
+on backdoor cleansing, potentially at the expense of main task
+accuracy. We present the MA and ASR of PFL-ALP against
+BA with triggers of various sizes under different β value in                    F. Visualization of PFL-ALP
+Fig. 7. The results indicate that as β increases, MA and ASR                       Fig. 9 presents a comparison of the attention maps derived
+both decrease. Remarkably, the optimal value of β is identified                 from the trained models of FedAvg, FLTrust, FL-WBC,
+as 1500, as it effectively reduces ASR while maintaining high                   FLAME, Multi-metrics, FLShield and our method PFL-ALP
+MA levels. Further increasing the value of β is unlikely to                     on three images backdoored by BA with 3 × 3 pixel block
+evidently mitigate the ASR, yet it will inevitably lead to a                    trigger. The visualization results reveal that the attention of
+reduction in MA.                                                                model trained by FedAvg shifts to the backdoor trigger located
+
+     Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+13008                                                                       IEEE TRANSACTIONS ON INFORMATION FORENSICS AND SECURITY, VOL. 20, 2025
+
+
+
+
+Fig. 9. Attention maps of different models. Column (a) is the images with backdoor trigger, columns (b)-(h) are the attention maps of models trained by
+various backdoor defense methods.
+
+
+at the lower right corner, resulting in misclassification. In                      tillation to effectively cleanse the backdoor impacts, while
+column (g), FLShield exhibits insufficient efficacy, as attention                  maintaining the main task accuracy.
+tends to tightly align with the trigger, leading to high ASR. In
+columns (d) and (f), both FL-WBC and Multi-metrics provide
+insufficient backdoor trigger suppression, since the models                                                       R EFERENCES
+produce large and diffuse attention that cover both the object                     [1]  Q. Yang, Y. Liu, T. Chen, and Y. Tong, “Federated machine learning:
+and the trigger, which erodes semantic focus and leads to high                          Concept and applications,” ACM Trans. Intell. Syst. Technol., vol. 10,
+ASR. As shown in column (e), while FLAME successfully                                   no. 2, pp. 1–19, 2019.
+                                                                                   [2] Y. Wan, Y. Qu, W. Ni, Y. Xiang, L. Gao, and E. Hossain, “Data and
+suppresses the backdoor trigger, the model attention often                              model poisoning backdoor attacks on wireless federated learning, and the
+fragments or shifts off the main object. In contrast, the model                         defense mechanisms: A comprehensive survey,” IEEE Commun. Surveys
+trained by PFL-ALP and FLTrust successfully suppresses the                              Tuts., vol. 26, no. 3, pp. 1861–1897, 3rd Quart., 2024.
+trigger while preserving attention concentrated on the task-                       [3] Y. Chai et al., “MalFSCIL: A few-shot class-incremental learning
+                                                                                        approach for malware detection,” IEEE Trans. Inf. Forensics Security,
+relevant object, thereby achieving the lowest ASR and better                            vol. 20, pp. 2999–3014, 2025.
+performance on the main task.                                                      [4] T. D. Nguyen, T. Nguyen, P. L. Nguyen, H. H. Pham, K. D. Doan,
+                                                                                        and K.-S. Wong, “Backdoor attacks and defenses in federated learning:
+                                                                                        Survey, challenges and future research directions,” Eng. Appl. Artif.
+                                                                                        Intell., vol. 127, Jan. 2024, Art. no. 107166.
+                            VI. C ONCLUSION                                        [5] E. Bagdasaryan, A. Veit, Y. Hua, D. Estrin, and V. Shmatikov, “How
+                                                                                        to backdoor federated learning,” in Proc. Int. Conf. Artif. Intell. Statist.,
+   In this paper, we have proposed PFL-ALP, a hybrid                                    2020, pp. 2938–2948.
+                                                                                   [6] T. Gu, B. Dolan-Gavitt, and S. Garg, “BadNets: Identifying vul-
+defense mechanism that performs server-side dynamic cluster-                            nerabilities in the machine learning model supply chain,” 2017,
+ing to generate representative models that mitigates the bias                           arXiv:1708.06733.
+introduced by the Non-IID scenario and further implements                          [7] C. Xie, K. Huang, P. Chen, and B. Li, “DBA: Distributed backdoor
+                                                                                        attacks against federated learning,” in Proc. Int. Conf. Learn. Represent.,
+client-side attention-based purification to cleanse the backdoor                        2020, pp. 1–19.
+information in the representative models. We establish a con-                      [8] K. Wei et al., “Federated learning with differential privacy: Algorithms
+vergence guarantee for PFL-ALP and validate its effectiveness                           and performance analysis,” IEEE Trans. Inf. Forensics Security, vol. 15,
+                                                                                        pp. 3454–3469, 2020.
+through comprehensive experiments against multiple defenses.                       [9] J. Geiping, H. Bauermeister, H. Dröge, and M. Moeller, “Inverting
+Across various backdoor settings, PFL-ALP achieves superior                             gradients—How easy is it to break privacy in federated learning?,” in
+robustness in both IID and Non-IID scenarios, remaining                                 Proc. Adv. Neural Inf. Process. Syst., vol. 33, 2020, pp. 16937–16947.
+effective even when the malicious client rate reaches 90%.                         [10] L. Melis, C. Song, E. De Cristofaro, and V. Shmatikov, “Exploiting
+                                                                                        unintended feature leakage in collaborative learning,” in Proc. IEEE
+Furthermore, PFL-ALP is compatible with STPC, reducing the                              Symp. Secur. Privacy (SP), May 2019, pp. 691–706.
+risk of inference attacks without altering the defense pipeline.                   [11] P. Blanchard, E. M. E. Mhamdi, R. Guerraoui, and J. Stainer, “Machine
+   However, while PFL-ALP extends the effectiveness of                                  learning with adversaries: Byzantine tolerant gradient descent,” in Proc.
+                                                                                        Adv. Neural Inf. Process. Syst., vol. 30, 2017, pp. 118–128.
+NAD-based backdoor purification to Non-IID scenarios, the                          [12] D. Yin, Y. Chen, K. Ramchandran, and P. L. Bartlett, “Byzantine-robust
+MA is hard to maintain because the purification may over-                               distributed learning: Towards optimal statistical rates,” in Proc. Int. Conf.
+suppress activations mixing semantic and trigger features. In                           Mach. Learn., 2018, pp. 5650–5659.
+                                                                                   [13] Z. Zhang, X. Cao, J. Jia, and N. Z. Gong, “FLDetector: Defending fed-
+future work, our focus will be on enhancing local purification                          erated learning against model poisoning attacks via detecting malicious
+techniques by exploring methods such as semantics-aware                                 clients,” in Proc. 28th ACM SIGKDD Conf. Knowl. Discovery Data
+purification, attention-contrastive learning, and knowledge dis-                        Mining, Aug. 2022, pp. 2545–2555.
+
+        Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+JIANG et al.: PFL-ALP: PERSONALIZED FEDERATED LEARNING AGAINST BACKDOOR ATTACKS VIA ALP                                                                           13009
+
+
+
+[14] M. Vucovich, D. Quinn, K. Choi, C. Redino, A. Rahman, and E. Bowen,              [39] C.-L. Chen, L. Golubchik, and M. Paolieri, “Backdoor attacks on
+     “FedBayes: A zero-trust federated learning aggregation to defend against              federated meta-learning,” 2020, arXiv:2006.07026.
+     adversarial attacks,” in Proc. IEEE 14th Annu. Comput. Commun.                   [40] O. Vinyals, C. Blundell, T. Lillicrap, K. Kavukcuoglu, and D. Wierstra,
+     Workshop Conf. (CCWC), Jan. 2024, pp. 0028–0035.                                      “Matching networks for one shot learning,” in Proc. Adv. Neural Inf.
+[15] X. Cao, M. Fang, J. Liu, and N. Z. Gong, “FLTrust: Byzantine-robust                   Process. Syst., vol. 29, 2016, pp. 3637–3645.
+     federated learning via trust bootstrapping,” 2020, arXiv:2012.13995.             [41] E. Kabir, Z. Song, M. R. Ur Rashid, and S. Mehnaz, “FLShield:
+[16] J. Zhang et al., “BadCleaner: Defending backdoor attacks in federated                 A validation based federated learning framework to defend against
+     learning via attention-based multi-teacher distillation,” IEEE Trans.                 poisoning attacks,” in Proc. IEEE Symp. Secur. Privacy (SP), May 2024,
+     Dependable Secure Comput., vol. 21, no. 5, pp. 4559–4573, Sep. 2024.                  pp. 2572–2590.
+[17] J. Sun, A. Li, L. DiValentin, A. Hassanzadeh, Y. Chen, and H. Li,                [42] J. Zhang, D. Wu, C. Liu, and B. Chen, “Defending poisoning attacks
+     “FL-WBC: Enhancing robustness against model poisoning attacks in                      in federated learning via adversarial training method,” in Proc. 3rd Int.
+     federated learning from a client perspective,” in Proc. Adv. Neural Inf.              Conf. Frontiers Cyber Secur., Nov. 2020, pp. 83–94.
+     Process. Syst., 2021, pp. 12613–12624.                                           [43] Y. Jiang, W. Zhang, and Y. Chen, “Data quality detection mechanism
+[18] Y. Cai, J. Qiu, F. Zhang, Q. Li, and L. Chen, “A knowledge extraction                 against label flipping attacks in federated learning,” IEEE Trans. Inf.
+     framework on cyber threat reports with enhanced security profiles,” in                Forensics Security, vol. 18, pp. 1625–1637, 2023.
+     Proc. 48th Int. ACM SIGIR Conf. Res. Develop. Inf. Retr., Jul. 2025,             [44] B. McMahan, E. Moore, D. Ramage, S. Hampson, and B. A. Y. Arcas,
+     pp. 326–336.                                                                          “Communication-efficient learning of deep networks from decentralized
+[19] G. Hinton, O. Vinyals, and J. Dean, “Distilling the knowledge in a neural             data,” in Proc. 20th Int. Conf. Artif. Intell. Statist., 2017, pp. 1273–1282.
+     network,” 2015, arXiv:1503.02531.                                                [45] X. Li, Z. Qu, S. Zhao, B. Tang, Z. Lu, and Y. Liu, “LoMar: A local
+[20] H. Ma, S. Qi, J. Yao, Y. Yuan, Y. Zou, and D. Yu, “Fed-NAD: Backdoor                  defense against poisoning attack on federated learning,” IEEE Trans.
+     resilient federated learning via neural attention distillation,” in Proc. 10th        Dependable Secure Comput., vol. 20, no. 1, pp. 437–450, Jan. 2023.
+     IEEE Int. Conf. Intell. Data Secur. (IDS), May 2024, pp. 7–13.                   [46] M. Nwadike, T. Miyawaki, E. Sarkar, M. Maniatakos, and F. Shamout,
+[21] Z. Liu, W. He, C.-H. Chang, J. Ye, H. Li, and X. Li, “SPFL: A self-                   “Explainability matters: Backdoor attacks on medical imaging,” 2020,
+     purified federated learning method against poisoning attacks,” IEEE                   arXiv:2101.00008.
+     Trans. Inf. Forensics Security, vol. 19, pp. 6604–6619, 2024.                    [47] P. J. Rousseeuw, “Silhouettes: A graphical aid to the interpretation
+[22] S. Huang et al., “Scope: On detecting constrained backdoor attacks                    and validation of cluster analysis,” J. Comput. Appl. Math., vol. 20,
+     in federated learning,” IEEE Trans. Inf. Forensics Security, vol. 20,                 pp. 53–65, Nov. 1987.
+     pp. 3302–3315, 2025.                                                             [48] Z. Zhang et al., “LSFL: A lightweight and secure federated learning
+[23] P. Fang and J. Chen, “On the vulnerability of backdoor defenses for                   scheme for edge computing,” IEEE Trans. Inf. Forensics Security,
+     federated learning,” in Proc. AAAI Conf. Artif. Intell., 2023, vol. 37,               vol. 18, pp. 365–379, 2023.
+     no. 10, pp. 11800–11808.                                                         [49] X. Li, X. Yang, Z. Zhou, and R. Lu, “Efficiently achieving privacy
+[24] Y. Li, X. Lyu, N. Koren, L. Lyu, B. Li, and X. Ma, “Neural attention                  preservation and poisoning attack resistance in federated learning,” IEEE
+     distillation: Erasing backdoor triggers from deep neural networks,” in                Trans. Inf. Forensics Security, vol. 19, pp. 4358–4373, 2024.
+     Proc. Int. Conf. Learn. Represent., 2021, pp. 1–19.                              [50] X. Li, K. Huang, W. Yang, S. Wang, and Z. Zhang, “On the convergence
+                                                                                           of FedAvg on non-IID data,” in Proc. Int. Conf. Learn. Represent., 2019,
+[25] D. Demmler, T. Schneider, and M. Zohner, “ABY—A framework for
+                                                                                           pp. 1–26.
+     efficient mixed-protocol secure two-party computation,” in Proc. Netw.
+                                                                                      [51] L. Tan et al., “AdaFed: Optimizing participation-aware federated learn-
+     Distrib. Syst. Secur. Symp., 2015, pp. 1–15.
+                                                                                           ing with adaptive aggregation weights,” IEEE Trans. Netw. Sci. Eng.,
+[26] H. Wang et al., “Attack of the tails: Yes, you really can backdoor
+                                                                                           vol. 9, no. 4, pp. 2708–2720, Jul. 2022.
+     federated learning,” in Proc. Adv. Neural Inf. Process. Syst., 2020,
+                                                                                      [52] P. Guo et al., “A new federated learning framework against gra-
+     pp. 16070–16084.
+                                                                                           dient inversion attacks,” in Proc. AAAI Conf. Artif. Intell., 2024,
+[27] V. Tolpegin, S. Truex, M. E. Gürsoy, and L. Liu, “Data poisoning
+                                                                                           pp. 16969–16977.
+     attacks against federated learning systems,” in Proc. 25th Eur. Symp.
+                                                                                      [53] L. Wang, M. Huang, Z. Zhang, M. Li, J. Wang, and K. Gai, “RaSA:
+     Res. Comput. Secur., Sep. 2020, pp. 480–501.
+                                                                                           Robust and adaptive secure aggregation for edge-assisted hierarchi-
+[28] H. Li et al., “3DFed: Adaptive and extensible framework for covert                    cal federated learning,” IEEE Trans. Inf. Forensics Security, vol. 20,
+     backdoor attack in federated learning,” in Proc. IEEE Symp. Secur.                    pp. 4280–4295, 2025.
+     Privacy (SP), May 2023, pp. 1893–1907.                                           [54] Y. Lecun, L. Bottou, Y. Bengio, and P. Haffner, “Gradient-based learn-
+[29] Z. Zhang et al., “Neurotoxin: Durable backdoors in federated learning,”               ing applied to document recognition,” Proc. IEEE, vol. 86, no. 11,
+     in Proc. Int. Conf. Mach. Learn., 2022, pp. 26429–26446.                              pp. 2278–2324, 1998.
+[30] T. D. Nguyen et al., “FLAME: Taming backdoors in federated                       [55] H. Xiao, K. Rasul, and R. Vollgraf, “Fashion-MNIST: A novel
+     learning,” in Proc. 31st USENIX Secur. Symp. (USENIX Secur.), 2022,                   image dataset for benchmarking machine learning algorithms,” 2017,
+     pp. 1415–1432.                                                                        arXiv:1708.07747.
+[31] R. J. G. B. Campello, D. Moulavi, and J. Sander, “Density-based                  [56] A. Krizhevsky and G. Hinton, “Learning multiple layers of features from
+     clustering based on hierarchical density estimates,” in Proc. Pacific-Asia            tiny images,” Dept. Comput. Sci., University of Toronto, Toronto, ON,
+     Conf. Knowl. Discovery Data Mining, vol. 7819, 2013, pp. 160–172.                     Canada, Tech. Rep. 4, 2009.
+[32] X. Mu et al., “FedDMC: Efficient and robust federated learning via               [57] N. Ye et al., “OoD-bench: Quantifying and understanding two dimen-
+     detecting malicious clients,” IEEE Trans. Dependable Secure Comput.,                  sions of out-of-distribution generalization,” in Proc. IEEE/CVF Conf.
+     vol. 21, no. 6, pp. 5259–5274, Nov. 2024.                                             Comput. Vis. Pattern Recognit. (CVPR), Jun. 2022, pp. 7937–7948.
+[33] S. Huang, Y. Li, C. Chen, L. Shi, and Y. Gao, “Multi-metrics adaptively
+     identifies backdoors in federated learning,” in Proc. IEEE/CVF Int. Conf.
+     Comput. Vis. (ICCV), Oct. 2023, pp. 4629–4639.
+[34] M. Fang, X. Cao, J. Jia, and N. Z. Gong, “Local model poisoning attacks
+     to Byzantine-robust federated learning,” in Proc. 29th USENIX Secur.
+     Symp. (USENIX Secur. 20), 2019, pp. 1605–1622.
+[35] S. P. Karimireddy, L. He, and M. Jaggi, “Learning from history
+     for Byzantine robust optimization,” in Proc. Int. Conf. Mach. Learn.
+     (ICML), vol. 139, 2021, pp. 5311–5319.
+[36] V. Shejwalkar and A. Houmansadr, “Manipulating the Byzantine: Opti-                                        Yifeng Jiang received the M.S. degree from
+     mizing model poisoning attacks and defenses for federated learning,” in                                    Guangdong University of Technology, Guangzhou,
+     Proc. Netw. Distrib. Syst. Secur. Symp., 2021, pp. 1148–1164.                                              China, in 2024. He is currently pursuing the Ph.D.
+[37] J. Le, D. Zhang, X. Lei, L. Jiao, K. Zeng, and X. Liao, “Privacy-                                          degree in computer applied technology with the
+     preserving federated learning with malicious clients and honest-                                           Faculty of Applied Sciences, Macao Polytechnic
+     but-curious servers,” IEEE Trans. Inf. Forensics Security, vol. 18,                                        University, Macau, China. His current research
+     pp. 4329–4344, 2023.                                                                                       interests include deep learning, federated learning,
+[38] M. Hao, H. Li, G. Xu, H. Chen, and T. Zhang, “Efficient, private and                                       byzantine robustness, and watermarking techniques.
+     robust federated learning,” in Proc. Annu. Comput. Security Appl. Conf.,
+     2021, pp. 45–60.
+
+       Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+13010                                                                       IEEE TRANSACTIONS ON INFORMATION FORENSICS AND SECURITY, VOL. 20, 2025
+
+
+
+                           Xiaochen Yuan (Senior Member, IEEE) received                                      Wei Ke received the B.Sc. degree from Sun Yat-
+                           the Ph.D. degree in software engineering from the                                 sen University in 1991, the M.S. degree from
+                           University of Macau in 2013. From 2014 to 2015,                                   Chinese Academy of Sciences in 2001, and the
+                           she was a Post-Doctoral Fellow with the Department                                Ph.D. degree from Beihang University in 2012.
+                           of Computer and Information Science, University of                                He is currently a Professor with the Faculty of
+                           Macau. From 2016 to 2021, she was an Assistant                                    Applied Sciences, Macao Polytechnic University.
+                           Professor and an Associate Professor with the Fac-                                His research interests include software engineering,
+                           ulty of Information Technology, Macau University                                  programming language, formal method, computer
+                           of Science and Technology. She is currently an                                    vision, and machine learning.
+                           Associate Professor with the Faculty of Applied
+                           Sciences, Macau Polytechnic University, Macau. Her
+research interests include digital multimedia processing, digital watermarking,
+multimedia forensics, tampering detection and self-recovery, quantum image
+watermarking, remote image processing, and deep learning techniques and
+applications.
+                                                                                                             Chan-Tong Lam (Senior Member, IEEE) received
+                                                                                                             the Ph.D. degree from Carleton University, Ottawa,
+                                                                                                             ON, Canada, in 2007. He is currently a Profes-
+                                                                                                             sor with the Faculty of Applied Sciences, Macao
+                                                                                                             Polytechnic University, Macau, SAR, China. His
+                                                                                                             research interests include mobile wireless com-
+                                                                                                             munications, digital signal processing, quantum
+                                                                                                             information, machine learning in communications,
+                                                                                                             and computer vision in smart cities. He is a member
+                                                                                                             of the IEEE Communications and Signal Processing
+                                                                                                             Society.
+
+                          Weiwen Zhang received the B.E. degree in software
+                          engineering and the M.E. degree in computer science
+                          from South China University of Technology (SCUT)
+                          in 2008 and 2011, respectively, and the Ph.D. degree                            Sio-Kei Im (Senior Member, IEEE) received the
+                          in computer engineering from Nanyang Technolog-                                 degree in computer science and the master’s degree
+                          ical University (NTU), Singapore, in 2015. He is                                in enterprise information system from King’s Col-
+                          currently an Associate Professor with the School                                lege, University of London, U.K., in 1998 and 1999,
+                          of Computer Science and Technology, Guangdong                                   respectively, and the Ph.D. degree in electronic engi-
+                          University of Technology (GDUT), China. Prior to                                neering from the Queen Mary University of London
+                          joining GDUT, he was a Scientist with the Institute                             (QMUL), U.K., in 2007. He was a Visiting Scholar
+                          of High Performance Computing (IHPC), Agency                                    with the School of Engineering, University of Cal-
+for Science, Technology and Research (A*STAR), Singapore, a Research                                      ifornia, Los Angeles, (UCLA) and an Honorary
+Associate with NTU, and a Visiting Scholar with Purdue University, USA.                                   Professor of the Open University of Hong Kong. He
+His research interests include cloud computing, mobile computing, big data                                is currently a Full Professor with Macao Polytechnic
+analytics and machine learning.                                                    University, Macau, SAR, China.
+
+
+
+
+        Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 09,2026 at 11:32:09 UTC from IEEE Xplore. Restrictions apply.
+

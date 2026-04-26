@@ -1,0 +1,7 @@
+==================================================
+[START] PFLALP_FULL
+TIME=2026-04-18 19:36:21
+GPU=0
+LOG=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/pflalp_full_r300_20260418_193621/PFLALP_FULL.log
+CMD=/home/huangtu/miniconda3/envs/torch/bin/python CMD=-u CMD=/home/huangtu/PFL_Backdoor_Defense/PFedBA/main.py CMD=--dataset CMD=Cifar10 CMD=--model CMD=resnet CMD=--resnet_pretrained CMD=0 CMD=--algorithm CMD=PFLALP CMD=--learning_rate CMD=0.1 CMD=--lr_head CMD=0.1 CMD=--plocal_epochs CMD=1 CMD=--local_epochs CMD=10 CMD=--num_global_iters CMD=300 CMD=--numusers CMD=10 CMD=--batch_size CMD=64 CMD=--attack_start CMD=30 CMD=--attack_method CMD=attackall CMD=--poisoning_per_batch CMD=5 CMD=--defense CMD=none CMD=--per_epoch CMD=1 CMD=--malclient CMD=10 CMD=--times CMD=1 CMD=--purify_beta CMD=1500 CMD=--purify_rounds CMD=1 CMD=--cluster_max_k CMD=4 
+==================================================

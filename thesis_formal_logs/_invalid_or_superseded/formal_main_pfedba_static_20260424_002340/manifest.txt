@@ -1,0 +1,35 @@
+Formal thesis main run
+
+Run name:
+  formal_main_pfedba_static_20260424_002340
+
+Formal log root:
+  /home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/formal_main_pfedba_static_20260424_002340
+
+PFedBA main setting:
+  dataset=Cifar10 model=resnet resnet_pretrained=0
+  learning_rate=0.1 lr_head=0.1 plocal_epochs=1
+  total_users=100 selected_users_per_round=10
+  batch_size=64 attack_start=30 attack_method=attackall
+  poisoning_per_batch=1 defense=none per_epoch=1
+  malclient=10 times=3 seed=1
+  local_epochs=1 global_rounds=1000
+  FedRT   : rt_beta=0.10 adv_eps=0.10 adv_num_iter=5 aug_strength=0.10
+  FedCLCM : rt_beta=0.20 lambda_cl=0.20 mask_tau=12.0 mask_alpha=0.70
+             adv_eps=0 adv_num_iter=0 enable_channel_mask=1 cosine_gate=0
+
+Static main setting:
+  dataset family=Cifar10_dir0.5_bdoor0.2_nclient_100_{badnet,blend,sig}_adv10
+  model=ResNet18 num_clients=100 join_ratio=0.1 batch_size=64
+  learning_rate=0.1 lr_head=0.1 local_epochs=1 plocal_epochs=1
+  global_rounds=600 num_adv_clients=10
+  Blend: blend_alpha=0.2
+  SIG  : sig_delta=30/255 sig_f=6 sig_label_mode=dirty
+  Static FedCLCM explicit args: rt_beta=0.2 lambda_cl=0.5 aug_strength=0.1
+                                adv_eps=0.1 adv_num_iter=5 mask_tau=2.0 mask_alpha=0.3
+
+Task layout:
+  gpu0: P01_fedavg, P05_fedrt, S01_badnet_fedavg, S04_blend_fedavg
+  gpu1: P02_fedavg_mkrum, P06_fedclcm, S02_badnet_fedrep, S05_blend_fedrep
+  gpu2: P03_fedavg_trim, S03_badnet_fedclcm, S06_blend_fedclcm
+  gpu3: P04_fedrep, S07_sig_fedavg, S08_sig_fedrep, S09_sig_fedclcm

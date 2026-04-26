@@ -1,0 +1,766 @@
+                                                   BD P FL: Backdoor Defense for Personalized Federated Learning via
+                                                                       Explainable Distillation
+                                                            Chengcheng Zhu1 , Jiale Zhang1 ∗ , Di Wu2 , Guodong Long3
+                                                             1
+                                                               School of Information Engineering, Yangzhou University, China
+                                             2
+                                               School of Mathematics, Physics and Computing, University of Southern Queensland, Australia
+                                              3
+                                                Australian Artificial Intelligence Institute, FEIT, University of Technology Sydney, Australia
+                                                                 {jialezhang}@yzu.edu.cn, MX120220554@stu.yzu.edu.cn,
+                                                                      {di.wu}@unisq.edu.au, guodong.long@uts.edu.au
+arXiv:2503.06554v1 [cs.CR] 9 Mar 2025
+
+
+
+
+                                                                 Abstract                                 To tackle this challenge, many effective strategies have been
+                                                                                                          proposed such as parameter decoupling [Arivazhagan et al.,
+                                             Federated learning is a distributed learning                 2019; Chen and Chao, 2021], regularization [Li et al., 2021;
+                                             paradigm that facilitates the collaborative training         T Dinh et al., 2020], clustering [Ghosh et al., 2020; Man-
+                                             of a global model across multiple clients while              sour et al., 2020], and model interpolation [Mansour et al.,
+                                             preserving the privacy of local datasets. To address         2020]. These strategies have gradually developed into a new
+                                             inherent challenges related to data heterogeneity            line of work, called personalized federated learning (pFL),
+                                             and satisfy personalized needs, a new direction              whose core characteristic lies in allowing personalized mod-
+                                             within FL, known as personalized Federated                   els for each participating client.
+                                             Learning (pFL), has gradually evolved. Extensive                Despite its practical relevance, recent studies show that
+                                             attention has been directed toward developing                both FL and pFL have severe backdoor attacks[Bagdasaryan
+                                             novel frameworks and methods to enhance the                  et al., 2020; Sun et al., 2019; Wang et al., 2020b; Zhang et
+                                             performance of pFL. Regrettably, the aspect of               al., 2022; Ye et al., 2024; Lyu et al., 2024]. Due to the decen-
+                                             security in pFL has been largely overlooked. Our             tralized nature of FL, the server can not control the training
+                                             objective is to fill this gap. Similar to FL, pFL            process of the participating clients, and thus the adversary can
+                                             is susceptible to backdoor attacks. However,                 compromise a subset of clients and use them to inject a back-
+                                             existing backdoor defense strategies are primarily           door into aggregated model. Moreover, backdoor attacks are
+                                             tailored to general FL frameworks, and pFL                   stealthy since backdoored models behave normally towards
+                                             lacks robustness against backdoor attacks. We                clean inputs and are only activated by specific triggers.
+                                             propose a novel, backdoor-robust pFL framework                  Existing research primarily focuses on defenses within the
+                                             named BD P FL to address these challenges. First,            generic FL scenario [Wang et al., 2019; Andreina et al., 2021;
+                                             BD P FL introduces layer-wise mutual distillation            Fung et al., 2020], whose effectiveness remains unsatisfac-
+                                             that enables clients to learn their personalized             tory under pFL. More specifically, pFL is frequently accom-
+                                             local models while mitigating potential backdoors.           panied by data heterogeneity, wherein each client exhibits a
+                                             Then, BD P FL employs explanation heatmap to                 distinct data distribution pattern. This variance in data distri-
+                                             learn high-quality intermediate representations and          butions markedly amplifies the complexity of identifying po-
+                                             enhance the effect of eliminating deeper and more            tential malicious clients. In other words, the detection-based
+                                             entrenched backdoors. Moreover, we perform                   approach in pFL encounters challenges. While certain ad-
+                                             empirical evaluations of BD P FL’s performance               vanced methodologies have demonstrated commendable re-
+                                             on three datasets and compare BD P FL with four              sults in defense performance, their compatibility with pFL
+                                             backdoor defense methods.         The experiments            remains a challenge [Chen et al., 2023]. Moreover, these ap-
+                                             demonstrate that BD P FL outperforms baseline                proaches grapple with the difficulty of tuning or determining
+                                             methods and is effective under various settings.             suitable hyperparameters. Recently, Qin et al. [Qin et al.,
+                                                                                                          2023] demonstrated that pFL methods especially based on pa-
+                                        1   Introduction                                                  rameter decoupling (i.e., partial model-sharing) appear to be
+                                                                                                          robust to backdoor attacks. That may be because the parame-
+                                        Federated learning (FL) [McMahan et al., 2017] is a dis-
+                                                                                                          ter decoupling mode breaks the connection between triggers
+                                        tributed learning paradigm aggregating information from di-
+                                                                                                          and target labels. However, the performance of such defenses
+                                        verse clients to train a shared global model. However, FL
+                                                                                                          is limited, and even ineffective, especially for feature-level
+                                        suffers from the challenge of data heterogeneity, i.e., the na-
+                                                                                                          attacks which do not depend on establishing a connection be-
+                                        ture of data in clients is non-identically and independently
+                                                                                                          tween triggers and target labels. In summary, there is a re-
+                                        distributed (Non-IID) [Zhao et al., 2018; Wang et al., 2020a].
+                                                                                                          search gap that a tailored defense method to effectively miti-
+                                           ∗                                                              gate backdoor attacks in pFL.
+                                             Jiale Zhang and Chengcheng Zhu contributed equally to this
+                                        research.                                                            Our contributions. To this end, we proposed BD P FL, the
+first backdoor-robust framework to pFL, which aims to ensure                      Local Training
+
+the personalization of local models while eliminating any po-                          Upload                   ...                                 Aggregation
+
+                                                                                      Download
+tential backdoors present in the global model. Specifically,            Sever Side                                                                                   Global Model
+we introduce mutual distillation to ensure the personaliza-             Client Side        Full Shared Model                     Client Side
+tion of local models. Moreover, based on the fact that back-                                                                                       Partial Shared Model
+door triggers are more likely to propagate in deeper layers,                    LCE
+
+
+
+
+                                                                                                                Regularization
+we design layer-wised intermediate knowledge transfer. Sub-                                                                                  LCE
+                                                                                           Personalized Model
+sequently, we utilize explanation heatmap to acquire high-
+                                                                          Local                                                     Local                                 Personalized
+quality intermediate representations, thereby improving the                     L
+                                                                         Dataset CE                                                Dataset               Encoder            Classifier
+
+performance of the model and enhancing the efficacy of elim-
+inating backdoors.
+                                                                            Figure 1: Framework of personalized federated learning
+   In summary, this paper makes the following contributions:
+                                                                        where the local personalized model is separated into two
+    • To the best of our knowledge, we are the first to ex-
+                                                                      group parameters, wip and w̃, in which only parameters of
+      plore backdoor defense against pFL. Correspondingly,
+                                                                      w̃ are shared across clients. Once finishing local training,
+      we propose BD P FL, a backdoor-robust pFL framework.
+                                                                      globally shared parameters w̃ are uploaded to the server for
+    • We enable each client to learn a personalized local             aggregation to integrate global knowledge while parameters
+      model and mitigate the potential backdoor in the global         wip are held locally to meet local personalized needs. The
+      model by layer-wised mutual distillation. Additionally,         parameters for maintaining local vary across studies.
+      we introduce the explanation heatmap, which facilitates           For Full model-sharing methods, they allow each client to
+      the transfer of high-quality immediate knowledge and            have their own local personalized models and exchange more
+      enhances the effect of backdoor mitigation.                     parameters with the clients. The optimization objective of
+    • We conduct a comprehensive evaluation of our method             Full model-sharing methods is
+      on three public benchmarks: MNIST, Fashion-MNIST,
+      and CIFAR-10. The experimental results demonstrate                    min          E(x,y)∼Di ,i∈N [ℓ(x, y; w̃, wi )] + λH(w̃, wi )),
+      that our method significantly surpasses the performance          w̃,{wi }i∈N
+      of existing backdoor defense methods and also appears                                                                                                                         (3)
+      effective under various settings.
+                                                                      where wi represents the local personalized model owned by
+                                                                      each client i, and w̃ denotes the global model distributed
+2     Related Work                                                    across all clients. The newly introduced term H serves as
+2.1    Personalized Federated Learning                                a regularizer, promoting similarity between wi and w̃, with
+In FL, consider there are N clients, each of which hold a local       λ as the coefficient for each client. Note that selected clients
+training dataset Di , i ∈ {1, ..., N }. Formally, the objective is    use w̃ as the reference to train wi and wi is also updated
+to solve the following optimization problem:                          on local datasets and then uploaded to the server to partic-
+                                                                      ipate in the aggregation process. Full model-sharing meth-
+                               N                                      ods achieved personalization through various means, includ-
+                               X |Di |
+                         min               Li (wi ),            (1)   ing adaptive aggregation, regularization, and fine-tuning, etc.
+                          θ
+                               i=1
+                                     |D|
+                                                                      2.2     Backdoor Attacks and Defenses in FL
+where Li (wi ) = |D1i | (x,y)∈Di ℓ(x, y; wi ) is the loss func-
+                         P
+                                                                      Backdoor attack against FL is first presented by Bagdasaryan
+tion of the client i, and ℓ refers to the loss function applied to    et al. [Bagdasaryan et al., 2020], where an attacker pretends
+each data instance.                                                   to be a benign participant and uploads the crafted local model
+   Instead of constructing a global model shared among all            updates to compromise the global model. After that, back-
+clients, personalized FL is proposed to address data hetero-          door attacks have attracted widespread attention and exhib-
+geneity issues by learning customized models at each client.          ited severe security threats in the context of FL [Fung et al.,
+Existing pFL methods can be broadly categorized into two              2018; Goldblum et al., 2022]. Recently, more advanced back-
+types, i.e., Partial model-sharing [Arivazhagan et al., 2019;         door threats have employed various techniques to achieve
+Collins et al., 2021; Chen and Chao, 2021; Chen et al., 2022]         stealthier and more durable attacks. For example, DBA [Xie
+and Full model-sharing [Sun et al., 2021; Zhang et al., 2023;         et al., 2019] decomposes the trigger pattern into sub-patterns
+Ma et al., 2022; Li et al., 2021]. Fig. 1 illustrates the differ-     and distributes them for several malicious clients to implant.
+ence between these two types. Partial model-sharing methods           Neurotoxin [Zhang et al., 2022] increases the persistence of
+achieve model personalization by only aggregating parts of a          backdoor influence during the federated average phases by
+model at the server while keeping or learning additional mod-         adding a simple one-line modification to backdoor attacks.
+ules locally. The optimization objective of such methods can          Recently, [Qin et al., 2023] have proven these attacks effec-
+be expressed as follows:                                              tive in pFL.
+                                                                         To counter backdoor attacks in federated learning (FL), re-
+             min         E(x,y)∼Di ,i∈N [ℓ(x, y; w̃, wpi )] ,         searchers have explored defenses from multiple angles, fo-
+         w̃,{wip }                                              (2)   cusing on detection and elimination. Detection methods, such
+                   i∈N
+as identifying triggers in models or filtering suspect data, are   clients, BD P FL allows each client to train two models wi
+reactive and do not remove the attack’s impact [Wang et al.,       and wp : the former designated for FL communication and the
+2019; Andreina et al., 2021; Fung et al., 2020]. In contrast,      latter for the preservation of personalized knowledge. Specif-
+elimination strategies, like fine-tuning on clean data subsets     ically, during the local training phase of FL, client i receives
+and using model pruning, aim to purify corrupted models [Liu       an initialization of the global model controlled by the cen-
+et al., 2018]. Other techniques, including data augmentation,      tral server. Client i utilizes its local dataset Di to concur-
+regularization, and model repair, are also employed to miti-       rently train the local personalized model and then upload it to
+gate backdoor effects [Truong et al., 2020]. However, exist-       the server. In subsequent rounds, client i receives the global
+ing defenses primarily focus on the generic FL scenario and        model aggregated from multiple models of selected clients.
+demonstrate limited capabilities in pFL. This paper aims to        To facilitate the transfer of knowledge from the global model
+design a backdoor defense framework tailored for pFL.              to the personalized model and simultaneously enhance the
+                                                                   performance of the global model, BD P FL employs mutual
+3     Threat Model                                                 distillation. The loss function is defined as follows:
+                                                                   (
+3.1    Adversary’s Goal                                              Lmut (wit ) = LCE (Fwit (x), y) + λLKL (q(wpt )||q(wit )),
+Given clean local samples Di , the attacker aims to pollute a        Lmut (wpt ) = LCE (Fwpt (x), y) + λLKL (q(wit )||q(wpt )),
+portion r of them by adding specific triggers ∆ and tricks the                                                                  (5)
+model F to output desired target label yt when taking the pol-
+luted samples as input. Meanwhile, the backdoor model can          Here, LCE denotes the cross entropy (CE) loss and Fwit
+perform normally on clean samples. Thus, attackers manipu-         represents the output of the model with wit as parameter,
+late the training process to minimize:                             where t is the t-th communication round of FL. KL denotes
+                   X  L(F (x + ∆), y ) r                          the Kullback-Leibler (KL) divergence function between the
+                                           t                       global model prediction and local personalized prediction.
+        Loss =                                             (4)
+                             L(F (x), y)        1−r                The soft prediction q is calculated with softmax function σ(·)
+                (x,y)∈Di
+                                                                   of logits z, i.e., q = Pexp(z/τ )
+                                                                                                        , logits z is the output of the
+                                                                                            c exp(z/τ )
+3.2    Adversary’s Knowledge and Capability                        last fully connected layer, τ is the temperature hyperparam-
+The adversary pretends as a benign participant and possesses       eter of the softmax function. The hyperparameter λ controls
+certain knowledge related to the FL system, including ❶The         the contributions of knowledge distillation.
+attacker has knowledge about model structure and a global              Nevertheless, existing research [Ge et al., 2021] indicates
+model for each iteration. ❷The attacker has access to the          that conventional knowledge distillation may not effectively
+clean dataset as the local dataset.                                filter out backdoors embedded in the global model. In other
+   In FL setting, followed by recent backdoor attack meth-         words, in the presence of malicious participants who locally
+ods [Bagdasaryan et al., 2020; Wang et al., 2020b], we define      train backdoor models, the aggregation process through the
+the capabilities of attackers as follows: ❶The adversary can       server introduces backdoors into the global model. Con-
+freely modify their own local dataset, such as embedding trig-     sequently, this backdoor logic is propagated to the person-
+gers into the samples, tampering with labels, and so on. ❷The      alized models of all participants via knowledge distillation.
+adversary can take control over the training process of local      To address this challenge, we propose a novel layer-wise
+model and can modify the parameters of the models. ❸The            Distillation. Recently, explanatory studies [Komodakis and
+adversary can masquerade as contributors and surreptitiously       Zagoruyko, 2017] on neural networks have shown that shal-
+submit their manipulated models while receiving the global         low layers mainly extract macro features while intermediate
+model from the server.                                             and deep layers mainly extract micro features or fine-grained
+                                                                   details, meaning that backdoor triggers will be more likely to
+3.3    Defense Goal                                                deliver in deeper layers. However, we can not completely
+For the abilities of defenders (i,e., benign participants), we     drop the deeper layers since they also contain meaningful
+define that they just need to comply with the established          knowledge. Therefore, we aim to amplify the significance
+BD P FL algorithm to execute the training procedure while no       of knowledge in shallower layers. Specifically, we introduce
+additional capabilities are required. Correspondingly, the de-     a weight decay parameter to achieve this objective.
+fense goal of BD P FL is to prevent the attacker from achiev-
+                                                                                                      1
+ing its attack targets, which means the negative impact of                                 βl =                                    (6)
+backdoored model updates can be effectively eliminated by                                         (1 + γ · l)
+BD P FL to significantly reduce the attack success rate (ASR).     Here, γ is a hyperparameter controlling the decay rate. A
+Besides, the main task performance (ACC) of the global             higher γ leads to a faster decay, while a lower γ results in a
+model must be guaranteed to ensure its utility.                    lower decay of weights. Then, the intermediate information is
+                                                                   distilled between the global model and the local model using
+4     Framework of BD P FL                                         the proposed term as follows:
+4.1    Layer-wised Mutual Distillation
+To leverage underlying client characteristics to learn a strong
+                                                                                         X         1
+                                                                              Linter =                    ||F l − Fwl 2 ||2        (7)
+model and enable efficient model personalization for all                                       (1 + γ · l) w1
+                                                                                         l∈L
+          Client 1                                                                                 Upload      Server
+
+
+                                                                                                  Download
+                  Client i
+                                                                                                                               Global
+                                                                                                                               Model
+
+          Local dataset
+                                                                                                   Upload
+
+
+                  Local dataset
+         ...
+
+
+
+                                                                                                  Download
+                                                                                                                         Aggregation
+
+                                  Forward       Cross Entropy Loss           Distillation Loss
+
+
+Figure 2: Workflow of BD P FL: ⃝  1 In each communication round, BD P FL randomly selects a set of clients and broadcasts the global model
+to them. ⃝2 Each client initializes the local model with the global model and trains it locally. ⃝
+                                                                                                 3 The server collects the local models and
+aggregates them. Local Training: ⃝   4 BD P FL emphasizes layer-wise mutual distillation, allowing each client to learn a personalized local
+model while mitigating potential backdoors. ⃝ 5 BD P FL employs an explanation heatmap to acquire high-quality intermediate representations,
+enhancing model performance and effectively eliminating backdoors.
+
+where Fwl represents the output of the model at the l-th layer          sum of feature maps, followed by a ReLU operator:
+with w as parameter.                                                                                  X
+                                                                                        Hlc = ReLU (      αkc Al,k ).                    (10)
+4.2   Explanation Heatmap                                                                                     k
+Although backdoor attacks can be effectively mitigated
+through weight attenuation, some useful deep information is             As a result, Grad-CAM is a class-specific heatmap of the
+also lost. In addition, only considering the output of each             same size as the feature maps.
+layer cannot effectively convey the effective information of               Moreover, considering the interpretative function of ex-
+the intermediate layers. More effective knowledge is ob-                planation heatmaps, for a model that may contain a back-
+tained by matching attention maps solely by the gradients of            door, its neural units might focus on the backdoor trigger
+each spatial feature representation concerning the target class.        while neglecting other meaningful features. In contrast, for
+However, these attention maps are often not fine-grained and            a benign model, its explanation heatmap reveals a focus on
+unrefined. Class Activation Mapping, which is an explain-               meaningful features. This suggests that employing explana-
+ability method, provides an improvement over saliency maps              tion maps for distillation in intermediate layers not only fa-
+for convolutional neural networks, by identifying important,            cilitates the transfer of significant knowledge in these layers
+class-specific features at the last convolutional layer as op-          but also ensures explanation alignment. In such ways, the
+posed to the input space. It is well-known that such fea-               backdoor neurons that are more responsive to the trigger pat-
+tures tend to be more meaningful and interpretive. Consider             tern are aligned with benign neurons that are only responsible
+an input image x and a deep neural network F . Let y be                 for meaningful representations, further mitigating more sub-
+the vector of output logits when we feed x to the model F               tle and less conspicuous backdoors. Specifically, for benign
+where y c corresponds to the output for category c. The Grad-           local participants, they give higher reliability to their own lo-
+CAM of model F for image x and a given category c is a                  cal data, while the aggregated global model may hold back-
+heatmap that highlights the regions of image x responsible              doors. Thus, we adopt a weight-decay explanation distillation
+for the model’s classification of the image as category c. We           strategy in the knowledge transfer process from the global
+calculate this heatmap by choosing the k-th intermediate con-           model to the local model. However, this strategy is omitted
+volutional layer. Specifically, Grad-CAM first computes the             in the knowledge transfer from the local model to the global
+gradient of the score y c (before softmax) with respect to the          model, thereby enhancing the backdoor mitigation effective-
+feature maps Al,k :                                                     ness of the explanation heatmaps. Ultimately, our loss func-
+                                  ∂y c                                  tion is formulated as follows:
+                             gc (Ak ) =,                  (8)
+                                 ∂Al,k
+Here, l represents the l-th layer and k is the channel in-                  Ltotal (wit ) = Lmut (wit ) + l∈L βl ||Hlc (wit ) − Hlc (wpt )||2 ,
+                                                                                                        P
+dex. Then, it averages the gradients as the neural importance               Ltotal (wpt ) = Lmut (wpt ) + l∈L ||Hlc (wpt ) − Hlc (wit )||2 .
+                                                                                                         P
+weight ack in each channel:
+                                                                                                                                       (11)
+                         1 X X ∂y c
+                   αkc =                    ,             (9)
+                         Z i j ∂Al,k    i,j
+                                                                           Each participant performs layer-wised mutual knowledge
+                                                                        distillation in the above manner. After completing the default
+in which (i, j) is the spatial index and Z is the spatial reso-         epochs of local training, wit is uploaded to the server while
+lution of the feature map. Finally, Grad-CAM is a weighted              personalized model wpt remains local.
+                      Table 1: Performance of BD P FL compared with baseline backdoor defenses on three datasets.
+
+                                Before                     FG              NC              MK            RLR           BD P FL
+        Dataset           Attack
+                             ASR ACC                  ASR ACC         ASR ACC          ASR ACC        ASR ACC        ASR ACC
+                    CSC      53.24 93.03              10.59 82.93     23.51 87.23      5.95 90.03     5.13 86.51     2.19 92.61
+        MNIST     Neurotoxin 62.19 92.92               14.6 81.21     29.63 86.29      6.11 89.29     8.34 87.37     2.52 93.35
+                    DBA      76.19 89.15              64.71 77.43     26.91 85.44      5.09 88.94     9.29 87.94     4.58 90.31
+                    CSC      58.52 91.24              11.78 84.52      18.5 84.58      7.17 87.72     6.79 85.64     1.47 91.94
+    Fashion-MNIST Neurotoxin 65.88 90.93              16.81 81.88     21.28 86.5       6.21 87.61     7.85 86.05     2.93 91.39
+                    DBA      79.47 90.44              75.02 79.12     21.77 85.42      5.24 88.92     7.27 86.12     3.04 90.76
+                    CSC      55.93 79.39               9.61 70.85     19.78 75.24      5.92 77.14     5.44 76.85     1.58 81.45
+       CIFAR-10   Neurotoxin 57.04 80.89              12.72 71.17     25.07 76.13      8.87 76.15     6.51 77.92     1.87 81.28
+                    DBA      81.58 72.87              73.92 70.65     23.21 77.15      5.92 74.44     6.85 76.58     2.45 80.71
+
+    Table 2: Performance of BD P FL against BapFL and PFedBA.        means significantly reducing the ASR while maintaining a
+                                                                     high ACC.
+                             Non-Defense        BDpFL                Baseline. We test the effect of the defense methods against
+      Attack      Dataset
+                             ASR ACC          ASR ACC                three kinds of known backdoor attacks migrated from FL to
+              MNIST          96.17 94.54      2.14 94.78             pFL, which have been extensively studied in recent work,
+      BapFL  F-MNIST         78.67 91.13      1.51 92.06             including constrain-and-scale (CSC) [Bagdasaryan et al.,
+             CIFAR-10        63.89 76.46      1.25 80.27             2020], distributed backdoor attacks (DBA) [Xie et al., 2019],
+              MNIST          98.72 93.17      3.67 94.2              and durable backdoor attacks (Neurotoxin) [Zhang et al.,
+      PFedBA F-MNIST         97.42 92.24      1.19 92.13             2022]. Additionally, we selected four representative back-
+                                                                     door defense methods in FL as our comparison baselines, i.e.,
+             CIFAR-10         100 85.78       6.23 86.09
+                                                                     FoolsGold (FG) [Fung et al., 2020]: FG defended the back-
+5     Experimental Evaluations                                       door by reducing the weight of malicious participants. (2)
+                                                                     Multi-Krum (MK) [Blanchard et al., 2017]: MK selects top-
+In this section, we evaluate BD P FL from different perspec-         k updates based on the ranking of computed similarity and
+tives. First, we compare its performance with four baseline          then takes an average as the aggregation result. (3) Norm-
+backdoor defenses. Then, we measure the effectiveness of             clipping (NC) [Shejwalkar et al., 2022]: NC clips the model
+BD P FL under various pFL settings. Finally, we do ablation          update so as not to exceed the given threshold before aggre-
+studies to find out how the parameters and components influ-         gation. (4) Robust learning rate (RLR) [Ozdayi et al., 2021]:
+ence the performance of BD P FL.                                     RLR relieves backdoor with a robust learning rate.
+                                                                     Attack Setup. We configured the number of attackers to be
+5.1    Experimental Setup                                            3, employing a fixed-frequency attack strategy, ensuring that
+Datasets and Models. We conduct evaluations on three                 these three attackers are selected in each round. Moreover,
+widely used image classification datasets: MNIST, Fashion-           in this paper, we focus on all-to-one attack scenario, where
+MNIST, and CIFAR-10. To simulate data heterogeneity, we              all poisoned samples are assigned the same target. That is to
+use Dirichlet allocation to split it into 100 clients with a con-    say, attacker’s goals are consistent. Such setups significantly
+centration coefficient of α = 0.5. For MNIST and Fashion-            increase the success rate of the backdoor attacks. In the CSC
+MNIST, we use a simple CNN model. For the CIFAR-10                   attack, we adhere to its original configurationand the scale
+dataset, we employ ResNet-18 to align with previous back-            factor is set to enlarge backdoor updates. For DBA attack, we
+door attack works.                                                   follow distributed trigger configurations outlined in its experi-
+Implementation Details. In our experiments, federated                ments. In other backdoor attacks on different datasets, unless
+training protocol is run with 100 clients where the total train-     otherwise specified, we employ grid patterns as the trigger,
+ing round T is set to be 1, 000. For each training round, the        which has been extensively utilized in FL backdoor attacks.
+server randomly samples 10 clients to participate in the train-
+ing process. During the training procedure, each participant         5.2    Experimental Results
+uses SGD as an optimizer and trains for E = 20 local epochs          Comparison.
+with a local learning rate η = 0.1 incorporating a learning          For backdoor defenses in pFL, we assess NC with a prede-
+rate decay of 0.99 every 10 rounds.                                  fined threshold value of 0.5 to normalize clients’ model up-
+Evaluation Metrics. We evaluate the performance of defense           dates. In KM, we calculate the Krum distance for each update
+mechanisms with two metrics: Model Accuracy (ACC), and               by summing the parameter distance between the update and
+Attack Success Rate (ASR). ACC is the accuracy of the main           the other 7 closest clients. Besides, column “Before” is listed
+classification task on clean samples and ASR represents the          as the original baseline without any defense and the best re-
+ratio of samples embedded with triggers that are misclassified       sults are in Bold.
+as the labels specified by attackers. A robust FL framework             The experiments are presented in Table 1, from which we
+                                                                                Fedavg                                             FG                           NC                          MK                 RLR                     BDPFL
+                                                                                                                                                                         95                                    95                                   85
+80                                                     80                                                          80
+                                                                                                                                                                         90                                    90                                   80
+
+60                                                     60                                                          60
+                                                                                                                                                                         85                                    85                                   75
+
+40                                                     40                                                          40
+                                                                                                                                                                         80                                    80                                   70
+
+20                                                     20                                                          20                                                    75                                    75                                   65
+
+ 0                                                      0                                                           0                                                    70                                    70                                   60
+     0.05      0.1     0.5         1          5   10         0.05       0.1     0.5             1        5   10          0.05      0.1        0.5   1    5          10         0.05   0.1   0.5   1   5   10        0.05   0.1   0.5   1   5   10        0.05   0.1   0.5   1   5   10
+              (a) ASR on MNIST                                  (b) ASR on F-MNIST                                            (c) ASR on CIFAR-10                                 (d) ACC on MNIST                    (e) ACC on F-MNIST                   (f) ACC on CIFAR-10
+
+                                                   Figure 3: Performance evaluation of the proposed BD P FL with different degree of heterogeneity.
+
+         80
+                                                  80.57 80.71
+                                                                83.09
+                                                                        81.04               4                           ASR        ACC                   84                    Impact of pFL Settings
+                              VGG16
+                                                                                            3                                                            83
+         60                   ResNet-18
+                              ResNet-50                                                                                                                                             Data Heterogeneity. Data heterogeneity is a crucial char-
+
+
+
+
+                                                                                                                                                              ACC
+                                                                                      ASR
+
+
+
+
+                              WRN-50-2
+                                                                                                                                                                                 acteristic of pFL. Through mutual knowledge distillation,
+     %
+
+
+
+
+         40                                                                                 2                                                            82
+
+
+                                                                                                                                                                                 BD P FL achieves personalization of local models, effectively
+         20
+                                                                                            1                                                            81
+                                                                                                                                                                                 addressing the issue of data heterogeneity. In this section, we
+          0
+                1.95   2.45     4.32
+                                       2.03                                                         10        20              30         40         50                           vary α ∈ {0.05, 0.1, 0.5, 1, 5, 10} on three datasets against
+                          ASR                                ACC                                                   Distillation Epoch
+                                                                                                                                                                                 DBA, where α = 10 represents IID and a smaller α indicates
+         (a) Impact of architecture.                                              (b) Impact of distillation epoch.                                                              higher data heterogeneity.
+                                                                                                                                                                                    Fig. 3 reports the final results for the Non-IID setting.
+Figure 4: Performance evaluation    of the proposedFG BD P FL withNC
+                                                                   dif-                                                                                                          The results indicate that, without any defenses (Fedavg), both
+                                Fedavg                                                                                                                                                MK              RLR              BDPFL
+                       100 and distillation epoch.100
+ferent model architecture                                                                                                                                                     90
+                                                                                                                                                                                 ASR and ACC decreased    90
+                                                                                                                                                                                                                      with the deepening
+                                                                                                                                                                                                                                       90
+                                                                                                                                                                                                                                                   of Non-IID
+80
+                                                        80                                                          80                                                        85
+                                                                                                                                                                                 variables, where ASR     85
+                                                                                                                                                                                                                 decreased significantly.
+                                                                                                                                                                                                                                       85
+                                                                                                                                                                                                                                                   This means
+60                                                                                                                                                                            80
+                                                                                                                                                                                 that   data  heterogeneity
+                                                                                                                                                                                                          80
+                                                                                                                                                                                                                  can   cause    a decrease
+                                                                                                                                                                                                                                       80
+                                                                                                                                                                                                                                                in  model per-
+                                                        60                                                          60
+                                                                                                                                                                              75formance and increase     75      the difficulty of 75backdoor injection,
+can
+40    observe that BD P FL   40     can lower the ASR40 of all three back-
+                                                                                                                                                                              70which is a normal phenomenon
+                                                                                                                                                                                                          70                 as the degree
+                                                                                                                                                                                                                                       70      of heterogene-
+door
+20      attacks to 5% on20the three benchmark 20datasets, surpass-                                                                                                            65ity increases, each client65       is likely to have65several dominating
+ing
+ 0
+      the performance of      0
+                                   the other defense 0methods. More-                                                                                                          60classes while owning      60 a few or even zero samples60          from    the re-
+   0    20   40    60    80     0    20    40    60    80    0    20   40    60    80                                                                                            0    20   40    60    80    0     20    40   60   80     0    20    40    60   80
+over,    BD P   FL  also
+     (a) ASR against CSC   makes    improvements
+                                (b) ASR                  in ACC,
+                                        against Neurotoxin         proving
+                                                               (c) ASR against that
+                                                                               DBA                                                                                               maining     classes.
+                                                                                                                                                                                    (d) ACC against CSC Similarly,            heterogeneity
+                                                                                                                                                                                                                       dataNeurotoxin
+                                                                                                                                                                                                             (e) ACC against                      also
+                                                                                                                                                                                                                                            (f) ACC     deepens
+                                                                                                                                                                                                                                                     against DBA
+BD P FL is an effective framework to suit pFL scenarios. To                                                                                                                      the difficulty of backdoor defense, and BD P FL is least af-
+our analysis, it is thanks to the mutual distillation strategy that                                                                                                              fected by data heterogeneity. In more detail, BD P FL lowers
+can effectively learn the knowledge of local participants and                                                                                                                    the ASR of DBA to below 10 % although there has been a
+transmit this knowledge globally, thereby significantly im-                                                                                                                      certain degree of degradation in the performance of its main
+proving the accuracy of the main task. From the defender’s                                                                                                                       task. However, the bassline methods exhibit significant per-
+perspective, all defense methods in the experiments are al-                                                                                                                      formance degradation, even almost failure under the Non-IID
+most effective against backdoor attacks under pFL scenar-                                                                                                                        setting. In contrast, BD P FL demonstrated excellent results
+ios, except for FoolsGold which fails to defend against DBA                                                                                                                      by mitigating backdoors during the training process via layer-
+which is in a distributed manner. For NC, it can only re-                                                                                                                        wise distillation and enhancing the effectiveness of mitigation
+duce ASR to about 20%, reflecting the unsatisfactory effect                                                                                                                      through explanation heatmap. Therefore, it can be drawn that
+of pruning in heterogeneous scenarios. Additionally, all the                                                                                                                     BD P FL is almost independent of data distribution and has ex-
+baseline defense case degeneration in ACC while BD P FL ex-                                                                                                                      cellent applicability. We also explore the effect of the number
+hibits a superior defense effect and maintains model perfor-                                                                                                                     of clients on BD P FL in Appendix B.
+mance. It can be drawn that BD P FL is more suitable for
+                                                                                                                                                                                    Model Architecture. In general, BD P FL should be ag-
+personalized scenarios.
+                                                                                                                                                                                 nostic to different model architectures. This means that dif-
+   Furthermore, we validate our method against two sophis-                                                                                                                       ferent model structures may affect the performance of the
+ticated backdoor attacks in pFL, specifically BapFL[Ye et                                                                                                                        main task, but should be independent of the defense effect of
+al., 2024] and PFedBA[Lyu et al., 2024]. BapFL is tar-                                                                                                                           the backdoor, which is beneficial for integrating various mod-
+geted solely at the feature encoder while maintaining the                                                                                                                        els. Fig. 4(a) shows the impact of different model architec-
+classifier intact, subsequently introducing noise to diversify                                                                                                                   tures. We employ four commonly used model architectures,
+the classifier, mimicking the behavior of benign clients as                                                                                                                      i.e., VGG16, ResNet-18, ResNet-50, and WRN-50-2. The
+an evasion strategy. Conversely, PFedBA adeptly aligns the                                                                                                                       experiments are performed on CIFAR-10. Intuitively, the ex-
+backdoor learning objective with the primary learning objec-                                                                                                                     perimental results are within expectation. Though the ACC
+tive of FL through an optimized trigger generation process.                                                                                                                      varies with the model architectures, the ASR is nearly rele-
+The outcomes of our experiments are presented in Table 2.                                                                                                                        vant to that, where ASRs are all reduced to below 6%.
+Our method demonstrates effective resistance against both of                                                                                                                        Distillation Epoch. Moreover, we explore the impact of
+these advanced attacks since they still result in discrepancies                                                                                                                  knowledge distillation epochs on BD P FL where the dataset
+in attention maps across different layers of the model.                                                                                                                          is CIFAR-10 and the attack is DBA. In more detail, we vary
+                                                                                                                                                                                 the knowledge distillation epochs from 10 to 50 where the
+                                                                            Fedavg                                            FG                 NC                       MK               RLR                  BDPFL
+                                                            100                                                  100                                        90                                   90                                90
+80
+                                                             80                                                      80                                     85                                   85                                85
+
+60                                                                                                                                                          80                                   80                                80
+                                                             60                                                      60
+                                                                                                                                                            75                                   75                                75
+40
+                                                             40                                                      40
+                                                                                                                                                            70                                   70                                70
+20                                                           20                                                      20
+                                                                                                                                                            65                                   65                                65
+
+ 0                                                            0                                                       0                                     60                                   60                                60
+     0                 20       40       60          80           0    20      40                  60       80            0            20   40   60    80        0        20     40   60   80         0    20    40     60   80         0     20   40    60   80
+                   (a) ASR against CSC                            (b) ASR against Neurotoxin                                   (c) ASR against DBA                       (d) ACC against CSC          (e) ACC against Neurotoxin            (f) ACC against DBA
+
+                                                          Figure 5: Performance evaluation of the proposed BD P FL with different ratios of malicious client.
+                   5                                                                          95
+                                                                                                                                                                               Table 3: BD P FL With or Without explanation heatmap.
+                                              MNIST
+                                              Fashion-MNIST
+                                              CIFAR-10                                        90
+                   4                                                                                                                                                                 Before                           Without EM               With EM
+                                                                                                                                                                           Dataset
+                                                                                              85                                                                                  ASR ACC                             ASR ACC                 ASR ACC
+         ASR (%)
+
+
+
+
+                                                                                    ACC (%)
+
+
+
+
+                   3
+
+                                                                                              80                                                                          MNIST 76.19 89.15                           12.78 85.12             4.58 90.31
+                   2
+                                                                                              75            MNIST
+                                                                                                                                                                         F-MNIST 79.47 90.44                          16.04 81.77             3.04 90.76
+                                                                                                            Fashion-MNIST
+                                                                                                            CIFAR-10                                                     CIFAR-10 81.58 72.87                         14.73 71.14             2.45 80.71
+                   1                                                                          70
+                            2        4           6            8         10                              2        4                 6        8     10
+                                                 γ                                                                                 γ                                 a conclusion is validated in the experiments shown in Fig.
+                                                                                                                                                                     6(a) and Fig. 6(b) with three datasets, which differ α from 2
+                   (a) ASR curves of BD P FL.                                             (b) ACC curves of BD P FL.                                                 to 10 where the gap is 2. From the results, the performance
+                                                                                                                                                                     change trend of BD P FL accords with our anticipation. The
+                   Figure 6: Performance of BD P FL with different values of γ.                                                                                      ASR will decrease as the increase of γ and the ACC appears
+span is 10. Fig. 4(b) shows the trend of ACC and ASR with                                                                                                            to drop. However, achieving a satisfactory defense effect is
+knowledge distillation rounds. Expectedly, ASR decreased                                                                                                             already possible when γ = 1. When configuring hyperpa-
+while ACC increased with the increase of epochs, meaning                                                                                                             rameters, a lower value can be chosen, considering that the
+that more distillation epochs contribute to the defense effect                                                                                                       enhancement of backdoor defense ability becomes less sig-
+and main task accuracy. Besides, more distillation epochs are                                                                                                        nificant with increasing values.
+meant for more calculation overhead. Therefore, it is signif-                                                                                                           Explanation Heatmap. To further explore the impact
+icant to set reasonable epochs to balance model performance                                                                                                          of the explanation heatmap (EM), we process additional
+and overhead.                                                                                                                                                        experiments with/without explanation heatmap across three
+   Impact of Ratios of Malicious Client. To ensure t relia-                                                                                                          datasets. Note that in the setting without EM, we directly use
+bility of FL against backdoor attacks, it is crucial for defense                                                                                                     the output of the middle layer of the model as the middle layer
+methods to be robust to varying proportions of malicious par-                                                                                                        loss instead of directly discarding intermediate knowledge.
+ticipants. Fig. 5 illustrates subfigures of the trend of ASR and                                                                                                     Table 3 represents the experimental results. In general, both
+ACC with the increasing malicious participation ratio.                                                                                                               the ACC and ASR have degeneration after we remove the ex-
+   As we can observe the ACC shows a decreasing trend as                                                                                                             planation heatmap. Specifically, the ACC decreased by about
+the malicious participation ratio increases while the ASR ap-                                                                                                        10% at most, underscoring the substantial role played by the
+pears a significant increase. It is reasonable because more                                                                                                          explanation heatmap in upholding ACC. This outcome aligns
+malicious participants mean more backdoors are embedded,                                                                                                             with our expectations, as the explanation heatmap can pro-
+causing greater disturbance to the global model. Meanwhile,                                                                                                          vide high-quality intermediate representations, thus improv-
+the increasing of malicious clients implies plenty of backdoor                                                                                                       ing the distillation effect. In addition, the experimental results
+data are used to train the target model, which causes improve-                                                                                                       indicate that explanation heatmap can align the backdoor neu-
+ment in ASR. However, BD P FL maintained relatively high                                                                                                             rons that are more responsive to trigger patterns with benign
+main task accuracy and effectively mitigated the success rate                                                                                                        neurons, further mitigating deeper and solid backdoors.
+of backdoor attacks across different malicious participation                                                                                                            Additionally, certain advanced backdoor methods aim to
+ratios. On the contrary, baseline methods face various chal-                                                                                                         make the attention map of backdoored models similar to those
+lenges at higher malicious participation ratios.                                                                                                                     of clean models by designing various triggers or imposing
+                                                                                                                                                                     constraints on models, similar to adaptive attacks. We verify
+Ablation Studies                                                                                                                                                     the effectiveness of BD P FL in Appendix C.
+
+   Weight Decay. According to Eq. 6, γ is a hyperparam-
+eter controlling the decay rate. Specifically, the larger the
+                                                                                                                                                                     6         Conclusion
+value of α, the greater the decrease in weight for each layer.                                                                                                       In this paper, we propose a novel backdoor defense frame-
+This means that larger values lead to a reduction in the weight                                                                                                      work against pFL, called BD P FL. BD P FL introduces layer-
+of deep knowledge, thereby increasing the likelihood that                                                                                                            wise mutual distillation, enabling each client to learn its per-
+backdoor knowledge will not be learned. However, this also                                                                                                           sonalized local model while mitigating potential backdoors.
+means that deep and effective knowledge is reduced, which                                                                                                            Subsequently, BD P FL utilizes an explanation heatmap to ac-
+may lead to a decrease in the performance of the model. Such                                                                                                         quire high-quality intermediate representations, thereby con-
+tributing to the model performance and enhancing the effi-       [Fung et al., 2018] Clement Fung, Chris JM Yoon, and Ivan
+cacy of eliminating deeper and more entrenched backdoors.           Beschastnikh. Mitigating sybils in federated learning poi-
+Results show that BD P FL outperforms baseline methods and          soning. arXiv preprint arXiv:1808.04866, 2018.
+is effective under different settings. In future work, we aim    [Fung et al., 2020] Clement Fung, Chris JM Yoon, and Ivan
+to deploy defense mechanisms on the server side and explore
+                                                                    Beschastnikh. The limitations of federated learning in
+robust aggregation algorithms.
+                                                                    sybil settings. In 23rd International Symposium on Re-
+                                                                    search in Attacks, Intrusions and Defenses (RAID 2020),
+References                                                          pages 301–316, 2020.
+[Andreina et al., 2021] Sebastien Andreina, Giorgia Azzurra
+   Marson, Helen Möllering, and Ghassan Karame. Baffle:          [Ge et al., 2021] Yunjie Ge, Qian Wang, Baolin Zheng,
+   Backdoor detection via feedback-based federated learn-          Xinlu Zhuang, Qi Li, Chao Shen, and Cong Wang. Anti-
+   ing. In 2021 IEEE 41st International Conference on              distillation backdoor attacks: Backdoors can really survive
+   Distributed Computing Systems (ICDCS), pages 852–863.           in knowledge distillation. In Proceedings of the 29th ACM
+   IEEE, 2021.                                                     International Conference on Multimedia, pages 826–834,
+                                                                   2021.
+[Arivazhagan et al., 2019] Manoj Ghuhan Arivazhagan,
+   Vinay Aggarwal, Aaditya Kumar Singh, and Sunav                [Ghosh et al., 2020] Avishek Ghosh, Jichan Chung, Dong
+   Choudhary.       Federated learning with personalization        Yin, and Kannan Ramchandran. An efficient framework
+   layers. arXiv preprint arXiv:1912.00818, 2019.                  for clustered federated learning. Advances in Neural In-
+[Bagdasaryan et al., 2020] Eugene Bagdasaryan, Andreas             formation Processing Systems, 33:19586–19597, 2020.
+   Veit, Yiqing Hua, Deborah Estrin, and Vitaly Shmatikov.       [Goldblum et al., 2022] Micah Goldblum, Dimitris Tsipras,
+   How to backdoor federated learning. In International            Chulin Xie, Xinyun Chen, Avi Schwarzschild, Dawn
+   conference on artificial intelligence and statistics, pages                           ˛
+                                                                   Song, Aleksander Madry,    Bo Li, and Tom Goldstein.
+   2938–2948. PMLR, 2020.                                          Dataset security for machine learning: Data poisoning,
+[Barni et al., 2019] Mauro Barni, Kassem Kallas, and               backdoor attacks, and defenses. IEEE Transactions on
+   Benedetta Tondi. A new backdoor attack in cnns by train-        Pattern Analysis and Machine Intelligence, 45(2):1563–
+   ing set corruption without label poisoning. In 2019 IEEE        1580, 2022.
+   International Conference on Image Processing (ICIP),          [Komodakis and Zagoruyko, 2017] Nikos Komodakis and
+   pages 101–105. IEEE, 2019.                                      Sergey Zagoruyko. Paying more attention to attention: im-
+[Blanchard et al., 2017] Peva Blanchard,         El Mahdi          proving the performance of convolutional neural networks
+   El Mhamdi, Rachid Guerraoui, and Julien Stainer.                via attention transfer. In ICLR, 2017.
+   Machine learning with adversaries: Byzantine toler-           [Li et al., 2021] Tian Li, Shengyuan Hu, Ahmad Beirami,
+   ant gradient descent. Advances in neural information
+                                                                    and Virginia Smith. Ditto: Fair and robust federated learn-
+   processing systems, 30, 2017.
+                                                                    ing through personalization. In International Conference
+[Chen and Chao, 2021] Hong-You Chen and Wei-Lun Chao.               on Machine Learning, pages 6357–6368. PMLR, 2021.
+   On bridging generic and personalized federated learning
+   for image classification. In International Conference on      [Liu et al., 2018] Kang Liu, Brendan Dolan-Gavitt, and Sid-
+   Learning Representations, 2021.                                  dharth Garg. Fine-pruning: Defending against backdoor-
+                                                                    ing attacks on deep neural networks. In International sym-
+[Chen et al., 2017] Xinyun Chen, Chang Liu, Bo Li, Kim-
+                                                                    posium on research in attacks, intrusions, and defenses,
+   berly Lu, and Dawn Song. Targeted backdoor attacks on            pages 273–294. Springer, 2018.
+   deep learning systems using data poisoning. arXiv preprint
+   arXiv:1712.05526, 2017.                                       [Lyu et al., 2024] Xiaoting Lyu, Yufei Han, Wei Wang,
+[Chen et al., 2022] Cen Chen, Tiandi Ye, Li Wang, and Ming          Jingkai Liu, Yongsheng Zhu, Guangquan Xu, Jiqiang Liu,
+   Gao. Learning to generalize in heterogeneous federated           and Xiangliang Zhang. Lurking in the shadows: Unveiling
+   networks. In Proceedings of the 31st ACM International           stealthy backdoor attacks against personalized federated
+   Conference on Information & Knowledge Management,                learning. In 33rd USENIX Security Symposium (USENIX
+   pages 159–168, 2022.                                             Security 24), pages 4157–4174, Philadelphia, PA, August
+                                                                    2024. USENIX Association.
+[Chen et al., 2023] Zekai Chen, Shengxing Yu, Mingyuan
+   Fan, Ximeng Liu, and Robert H Deng. Privacy-enhancing         [Ma et al., 2022] Xiaosong Ma, Jie Zhang, Song Guo, and
+   and robust backdoor defense for federated learning on           Wenchao Xu. Layer-wised model aggregation for person-
+   heterogeneous data. IEEE Transactions on Information            alized federated learning. In Proceedings of the IEEE/CVF
+   Forensics and Security, 2023.                                   Conference on Computer Vision and Pattern Recognition
+[Collins et al., 2021] Liam Collins, Hamed Hassani, Aryan          (CVPR), pages 10092–10101, June 2022.
+   Mokhtari, and Sanjay Shakkottai. Exploiting shared repre-     [Mansour et al., 2020] Yishay Mansour, Mehryar Mohri, Jae
+   sentations for personalized federated learning. In Interna-     Ro, and Ananda Theertha Suresh. Three approaches for
+   tional conference on machine learning, pages 2089–2099.         personalization with applications to federated learning.
+   PMLR, 2021.                                                     arXiv preprint arXiv:2002.10619, 2020.
+[McMahan et al., 2017] Brendan McMahan, Eider Moore,              [Wang et al., 2020a] Hao Wang, Zakhary Kaplan, Di Niu,
+   Daniel Ramage, Seth Hampson, and Blaise Aguera y Ar-             and Baochun Li. Optimizing federated learning on non-
+   cas. Communication-efficient learning of deep networks           iid data with reinforcement learning. In IEEE INFO-
+   from decentralized data. In Artificial intelligence and          COM 2020-IEEE Conference on Computer Communica-
+   statistics, pages 1273–1282. PMLR, 2017.                         tions, pages 1698–1707. IEEE, 2020.
+[Nguyen and Tran, 2020] Tuan Anh Nguyen and Anh Tuan              [Wang et al., 2020b] Hongyi Wang, Kartik Sreenivasan,
+   Tran. Wanet-imperceptible warping-based backdoor at-             Shashank Rajput, Harit Vishwakarma, Saurabh Agarwal,
+   tack. In International Conference on Learning Represen-          Jy-yong Sohn, Kangwook Lee, and Dimitris Papailiopou-
+   tations, 2020.                                                   los. Attack of the tails: Yes, you really can backdoor feder-
+[Ozdayi et al., 2021] Mustafa Safa Ozdayi, Murat Kantar-            ated learning. Advances in Neural Information Processing
+                                                                    Systems, 33:16070–16084, 2020.
+   cioglu, and Yulia R Gel. Defending against backdoors in
+   federated learning with robust learning rate. In Proceed-      [Xie et al., 2019] Chulin Xie, Keli Huang, Pin-Yu Chen, and
+   ings of the AAAI Conference on Artificial Intelligence, vol-     Bo Li. Dba: Distributed backdoor attacks against fed-
+   ume 35, pages 9268–9276, 2021.                                   erated learning. In International conference on learning
+                                                                    representations, 2019.
+[Qin et al., 2023] Zeyu Qin, Liuyi Yao, Daoyuan Chen,
+   Yaliang Li, Bolin Ding, and Minhao Cheng. Revisiting           [Ye et al., 2024] Tiandi Ye, Cen Chen, Yinggui Wang, Xiang
+   personalized federated learning: Robustness against back-        Li, and Ming Gao. Bapfl: You can backdoor personalized
+   door attacks. In Proceedings of the 28th ACM SIGKDD              federated learning. ACM Transactions on Knowledge Dis-
+   Conference on Knowledge Discovery and Data Mining,               covery from Data, 2024.
+   pages 4333–4345, 2023.                                         [Zhang et al., 2022] Zhengming Zhang, Ashwinee Panda,
+[Saha et al., 2020] Aniruddha Saha, Akshayvarun Subra-              Linyue Song, Yaoqing Yang, Michael Mahoney, Prateek
+   manya, and Hamed Pirsiavash. Hidden trigger backdoor             Mittal, Ramchandran Kannan, and Joseph Gonzalez. Neu-
+   attacks. In Proceedings of the AAAI conference on artifi-        rotoxin: Durable backdoors in federated learning. In Inter-
+   cial intelligence, volume 34, pages 11957–11965, 2020.           national Conference on Machine Learning, pages 26429–
+                                                                    26446. PMLR, 2022.
+[Shejwalkar et al., 2022] Virat         Shejwalkar,       Amir
+   Houmansadr, Peter Kairouz, and Daniel Ramage.                  [Zhang et al., 2023] Jianqing Zhang, Yang Hua, Hao Wang,
+   Back to the drawing board: A critical evaluation of              Tao Song, Zhengui Xue, Ruhui Ma, and Haibing Guan.
+   poisoning attacks on production federated learning. In           Fedala: Adaptive local aggregation for personalized fed-
+   2022 IEEE Symposium on Security and Privacy (SP),                erated learning. In Proceedings of the AAAI Conference
+   pages 1354–1371. IEEE, 2022.                                     on Artificial Intelligence, volume 37, pages 11237–11244,
+                                                                    2023.
+[Sun et al., 2019] Ziteng        Sun,        Peter     Kairouz,
+   Ananda Theertha Suresh, and H Brendan McMahan.                 [Zhao et al., 2018] Yue Zhao, Meng Li, Liangzhen Lai,
+   Can you really backdoor federated learning?            arXiv     Naveen Suda, Damon Civin, and Vikas Chandra. Fed-
+   preprint arXiv:1911.07963, 2019.                                 erated learning with non-iid data.            arXiv preprint
+                                                                    arXiv:1806.00582, 2018.
+[Sun et al., 2021] Benyuan Sun, Hongxing Huo, Yi Yang,
+   and Bo Bai. Partialfed: Cross-domain personalized feder-
+   ated learning via partial initialization. Advances in Neural
+   Information Processing Systems, 34:23309–23320, 2021.
+[T Dinh et al., 2020] Canh T Dinh, Nguyen Tran, and Josh
+   Nguyen. Personalized federated learning with moreau en-
+   velopes. Advances in Neural Information Processing Sys-
+   tems, 33:21394–21405, 2020.
+[Truong et al., 2020] Loc Truong, Chace Jones, Brian
+   Hutchinson, Andrew August, Brenda Praggastis, Robert
+   Jasper, Nicole Nichols, and Aaron Tuor. Systematic eval-
+   uation of backdoor data poisoning attacks on image clas-
+   sifiers. In Proceedings of the IEEE/CVF conference on
+   computer vision and pattern recognition workshops, pages
+   788–789, 2020.
+[Wang et al., 2019] Bolun Wang, Yuanshun Yao, Shawn
+   Shan, Huiying Li, Bimal Viswanath, Haitao Zheng, and
+   Ben Y Zhao. Neural cleanse: Identifying and mitigat-
+   ing backdoor attacks in neural networks. In 2019 IEEE
+   Symposium on Security and Privacy (SP), pages 707–723.
+   IEEE, 2019.
+Appendix                                                                 Table 4: BD P FL under different number of clients.
+
+A. BD P FL Algorithm                                                                              Before            BD P FL
+                                                                      Datasets      Setting
+                                                                                               ASR ACC            ASR ACC
+  Algorithm 1: BD P FL Algorithm                                                       10      76.19 89.15        4.58 90.31
+   Input: Number of clients N , number of                                              20      77.21 90.85        3.04 91.77
+                                                                       MNIST
+            communication round T , learning rate η, local                             40      54.12 91.01        1.45 92.05
+            training epoch Econ .                                                      80      42.72 93.54        0.84 93.97
+   Output: The final global model w̃T .                                                10      79.47 90.44        3.04 90.76
+ 1 Server executes:                                                   Fashion-         20      75.64 89.96        2.98 91.32
+                                   0
+ 2 Initialize the global encoder w̃ .;                                MNIST            40      61.42 91.67        2.35 92.42
+ 3 for each communication round t ∈ [1, 2, · · · , T ] do                              80      56.14 92.74        1.21 93.01
+ 4      St ←(random set of N clients);                                                 10      81.58 72.87        2.45 80.71
+ 5      for each client k ∈ St do                                                      20      69.72 79.85        1.95 82.77
+ 6          wkt ← LocalTraining (k, w̃t );                           CIFAR-10
+                                                                                       40      63.81 82.03        1.43 84.01
+        // global model aggregation                                                    80      51.24 83.71        0.84 85.12
+        w̃t+1 ← k∈St DDk wkt ;
+                  P
+ 7
+
+ 8 Return w̃T ;                                                   Table 5: Performance of BD P FL against different types of attacks.
+ 9 Client executes:
+                          t                                                 Non-Defense            Simple-T          BDpFL
+10 LocalTraining (k, w̃ ) ;                                          Attack
+     t      t                                                               ASR ACC               ASR ACC          ASR ACC
+11 wk ← w̃ ;
+   // Layer-wised Mutual Distillation                                 Blend 86.12 71.74           30.41 80.9       3.74 79.95
+12 for each local epoch e ∈ [1, 2, · · · , Elocal ] do
+                                                                       SIG  71.99 73.63           18.54 78.79      1.24 80.17
+13     for each batch b ∈ Dk do                                      WanNet 71.31 75.54           38.12 81.17      0.97 81.42
+14         Ltotal (wkt ) = P                                         Hidden 76.52 76.61           54.93 78.63       2.9 80.19
+            Lmut (wkt ) + l∈L βl ||Hlc (wkt ) − Hlc (wpt )||2 ;
+15         Ltotal (wpt ) =                                        WanNet[Nguyen and Tran, 2020], and Hidden[Saha et al.,
+            Lmut (wpt ) + l∈L ||Hlc (wpt ) − Hlc (wkt )||2 ;
+                            P
+                                                                  2020], and compare it with the robustness enhancement ap-
+16         wkt ← wkt − η∇Ltotal (wkt ; b);                        proach for pFL against backdoors proposed by [Qin et al.,
+17         wpt ← wpt − η∇Ltotal (wpt ; b);                        2023], which involves fine-tuning. The experimental results
+                                                                  in Table 5 indicate that our method remains effective against
+18   Return wkt .                                                 these attacks, as these attacks are unable to ensure consis-
+                                                                  tency in representations both across different models and
+                                                                  between different layers within the same model. Further-
+B. Number of Clients                                              more, simple fine-tuning is not sufficient to effectively de-
+                                                                  fend against these sophisticated attacks, especially for Hidden
+The number of clients is a key setting in the FL scenarios.       which is a feature-level attack.
+To verify the applicability of our proposed method, we eval-
+uate the impact on the performance of BD P FL by varying
+the number of selected clients in each round. Specifically,
+we vary the proportion of clients selected for aggregation in
+each round by 10%, 20%, 40%, and 80%. Our experiment
+was evaluated for DBA on three datasets. In general, BD P FL
+is effective in different client number settings. Although we
+can see from Table 4 that the success rate of backdoor attacks
+decreases with the increase in the number of clients, we think
+it is mainly because more clients decrease the aggregation
+weights of attackers. In addition, more number of participants
+in the aggregation has a slight improvement in the accuracy
+of the FL global model. This indicates that the mutual dis-
+tillation strategy adopted by BD P FL can effectively maintain
+the personalization of the local model while ensuring that the
+global model learns the knowledge of each participant.
+C. Various Types of Attacks.
+We assess the impact of such attacks on our method, in-
+cluding Blend[Chen et al., 2017], SIG[Barni et al., 2019],
+

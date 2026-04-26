@@ -1,0 +1,63 @@
+Goal matrix: 24 runs
+
+Main goal:
+- keep FedRep as baseline
+- validate paper-inspired lite modules on top of FedRep
+- compare against FedRT / FedCLCM
+- run paper-full reproductions separately instead of mixing them into the FedRep matrix
+
+Common args for E01-E22:
+  dataset=Cifar10 model=resnet resnet_pretrained=0
+  learning_rate=0.1 lr_head=0.1 plocal_epochs=1
+  numusers=10 batch_size=64 attack_start=30 attack_method=attackall
+  poisoning_per_batch=1 defense=none per_epoch=1 malclient=10 times=1
+  malicious client pool mode = legacy_fixed
+  selection strategy = uniform
+
+LE10 / GI400:
+  E01 FedRep
+  E02 FedRepPFLALP cluster_only: alp_use_cluster=1 alp_use_purify=0 cluster_max_k=4
+  E03 FedRepPFLALP cluster_purify: alp_use_cluster=1 alp_use_purify=1 purify_beta=1500 purify_rounds=1 cluster_max_k=4
+  E04 FedRepBDPFL inter_only: bd_lambda=1 bd_tau=1 bd_gamma=1 inter=1 em=0
+  E05 FedRepBDPFL inter_em: bd_lambda=1 bd_tau=1 bd_gamma=1 inter=1 em=1
+  E06 FedRT: rt_beta=0.10 adv_eps=0.10 adv_num_iter=5 aug_strength=0.10
+  E07 FedCLCM: rt_beta=0.20 lambda_cl=0.20 mask_tau=12 mask_alpha=0.70 adv_eps=0 adv_num_iter=0 enable_channel_mask=1 cosine_gate=0
+  E08 FedRepPFLALP cluster_only_strong: cluster_max_k=6
+  E09 FedRepPFLALP cluster_purify_strong: purify_rounds=2 cluster_max_k=6
+  E10 FedRepBDPFL inter_only_strong: bd_gamma=2 inter=1 em=0
+  E11 FedRepBDPFL inter_em_strong: bd_gamma=2 inter=1 em=1
+
+LE1 / GI1000:
+  E12 FedRep
+  E13 FedRepPFLALP cluster_only: alp_use_cluster=1 alp_use_purify=0 cluster_max_k=4
+  E14 FedRepPFLALP cluster_purify: alp_use_cluster=1 alp_use_purify=1 purify_beta=1500 purify_rounds=1 cluster_max_k=4
+  E15 FedRepBDPFL inter_only: bd_lambda=1 bd_tau=1 bd_gamma=1 inter=1 em=0
+  E16 FedRepBDPFL inter_em: bd_lambda=1 bd_tau=1 bd_gamma=1 inter=1 em=1
+  E17 FedRT: rt_beta=0.10 adv_eps=0.10 adv_num_iter=5 aug_strength=0.10
+  E18 FedCLCM: rt_beta=0.20 lambda_cl=0.20 mask_tau=12 mask_alpha=0.70 adv_eps=0 adv_num_iter=0 enable_channel_mask=1 cosine_gate=0
+  E19 FedRepPFLALP cluster_only_strong: cluster_max_k=6
+  E20 FedRepPFLALP cluster_purify_strong: purify_rounds=2 cluster_max_k=6
+  E21 FedRepBDPFL inter_only_strong: bd_gamma=2 inter=1 em=0
+  E22 FedRepBDPFL inter_em_strong: bd_gamma=2 inter=1 em=1
+
+Paper-full runs:
+  F23 PFLALP full paper-aligned:
+    attack_start=0
+    selection_strategy=fixed_malicious_mix fixed_malicious_per_round=3
+    malclient_id_mode=seeded_pool malclient=30
+    learning_rate=0.1 num_global_iters=100 local_epochs=1
+    purify_beta=1500 purify_rounds=1 cluster_max_k=4
+    mal_local_epoch=6 mal_learning_rate=0.05
+  F24 BDPFL full paper-aligned:
+    attack_start=0
+    selection_strategy=fixed_malicious_mix fixed_malicious_per_round=3
+    malclient_id_mode=seeded_pool malclient=3
+    learning_rate=0.1 num_global_iters=1000 local_epochs=20
+    lr_decay=0.99 lr_decay_step=10
+    bd_lambda=1 bd_tau=1 bd_gamma=1 inter=1 em=1
+
+Queue split:
+  gpu0: E01 E05 E09 E13 E17 E21
+  gpu1: E02 E06 E10 E14 E18 F24
+  gpu2: E03 E07 E11 E15 E19 F23
+  gpu3: E04 E08 E12 E16 E20 E22

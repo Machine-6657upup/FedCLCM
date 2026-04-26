@@ -1,0 +1,13 @@
+==================================================
+[START] P04_fedrep
+TIME=2026-04-24 00:43:23
+GPU=3
+FAMILY=pfedba
+WORKDIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local
+LOG=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/formal_main_pfedba_static_20260424_004323/pfedba/P04_fedrep.log
+CMD=/home/huangtu/miniconda3/envs/torch/bin/python CMD=-u CMD=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/main.py CMD=--dataset CMD=Cifar10 CMD=--model CMD=resnet CMD=--resnet_pretrained CMD=0 CMD=--learning_rate CMD=0.1 CMD=--lr_head CMD=0.1 CMD=--plocal_epochs CMD=1 CMD=--numusers CMD=10 CMD=--batch_size CMD=64 CMD=--attack_start CMD=30 CMD=--attack_method CMD=attackall CMD=--poisoning_per_batch CMD=1 CMD=--defense CMD=none CMD=--per_epoch CMD=1 CMD=--malclient CMD=10 CMD=--times CMD=3 CMD=--seed CMD=1 CMD=--algorithm CMD=FedRep CMD=--local_epochs CMD=1 CMD=--num_global_iters CMD=1000 
+[GPU_CHECK]
+3, NVIDIA GeForce RTX 3090, 24576 MiB
+==================================================
+[END] P04_fedrep RC=1 TIME=2026-04-24 08:23:17
+==================================================

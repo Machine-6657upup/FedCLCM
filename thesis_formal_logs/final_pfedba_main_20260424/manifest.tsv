@@ -1,0 +1,13 @@
+task_tag	status	algorithm	setting	source_or_plan
+P01	reused_single_seed	FedRep	LE1 GI1000 ppb1 users10/100 lr0.1 lr_head0.1 attack_start30	main_single_seed_reused/P01_fedrep_le1_gi1000_E12.log
+P02	reused_single_seed	FedRT	LE1 GI1000 ppb1 users10/100 lr0.1 lr_head0.1 attack_start30 rt_beta0.10 adv_eps0.10 adv_num_iter5 aug_strength0.10	main_single_seed_reused/P02_fedrt_le1_gi1000_E17.log
+P03	reused_single_seed	FedCLCM	LE1 GI1000 ppb1 users10/100 lr0.1 lr_head0.1 attack_start30 rt_beta0.20 lambda_cl0.20 mask_tau12 mask_alpha0.70	main_single_seed_reused/P03_fedclcm_le1_gi1000_E18.log
+R01	reused_reference	FedRT	LE10 GI400 ppb1 users10/100 lr0.1 lr_head0.1 attack_start30 rt_beta0.10 adv_eps0.10 adv_num_iter5 aug_strength0.10	reference_le10_reused/R01_fedrt_le10_gi400_E06.log
+R02	reused_reference	FedCLCM	LE10 GI400 ppb1 users10/100 lr0.1 lr_head0.1 attack_start30 rt_beta0.20 lambda_cl0.20 mask_tau12 mask_alpha0.70	reference_le10_reused/R02_fedclcm_le10_gi400_E07.log
+N01	pending	FedAvg	defense=none LE1 GI1000 times=3	no clean aligned reusable log found; run new thesis batch
+N02	pending	FedAvg	defense=mkrum LE1 GI1000 times=3	no clean aligned reusable log found; run new thesis batch
+N03	pending	FedAvg	defense=trim LE1 GI1000 times=3	no clean aligned reusable log found; run new thesis batch
+N04	pending_if_need_3seed	FedRep	LE1 GI1000 times=3	current folder has only aligned single-seed log; complete seeds 2-3 or rerun unified 3-seed batch
+N05	pending_if_need_3seed	FedRT	LE1 GI1000 times=3	current folder has only aligned single-seed log; complete seeds 2-3 or rerun unified 3-seed batch
+N06	pending_if_need_3seed	FedCLCM	LE1 GI1000 times=3	current folder has only aligned single-seed log; complete seeds 2-3 or rerun unified 3-seed batch
+N07	pending	FedRep	LE10 GI400	source manifest lists E01 but source log file is absent; rerun if epoch study includes FedRep LE10

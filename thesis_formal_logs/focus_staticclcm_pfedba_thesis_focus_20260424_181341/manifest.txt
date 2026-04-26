@@ -1,0 +1,37 @@
+Focused thesis batch
+
+Goal:
+- rerun static FedCLCM under lr_head=0.1 for badnet/blend/sig
+- run PFedBA missing main baselines FedAvg / FedAvg+mkrum / FedAvg+trim
+- run PFedBA attackers / FedCLCM ablation groups
+
+Static targets:
+- S04_badnet_fedclcm  dataset=Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10
+- S08_blend_fedclcm   dataset=Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10
+- S12_sig_fedclcm     dataset=Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10
+- static args: model=ResNet18 join_ratio=0.1 lr=0.1 lr_head=0.1 local_epochs=1 plocal_epochs=1
+               global_rounds=600 eval_gap=10 num_adv_clients=10
+               rt_beta=0.2 lambda_cl=0.20 aug_strength=0.1 adv_eps=0 adv_num_iter=0
+               mask_tau=12.0 mask_alpha=0.70
+
+PFedBA targets:
+- main missing: T01 T02 T03
+- attackers: T10 T11 T12 T13 T14 T15 T16 T17 T18
+- ablation: T25 T26 T27 T28
+- PFedBA args: dataset=Cifar10 model=resnet resnet_pretrained=0
+               learning_rate=0.1 lr_head=0.1 plocal_epochs=1
+               total_users=100 selected_users_per_round=10
+               batch_size=64 attack_start=30 attack_method=attackall
+               poisoning_per_batch=1 defense=none per_epoch=1
+               eval_gap=10 personalized_eval_gap=0
+               times=3 seed=1 malclient=10
+
+Queue layout:
+- gpu0: S04_badnet_fedclcm, T01, T10, T14, T18
+- gpu1: S08_blend_fedclcm, T02, T11, T15
+- gpu2: S12_sig_fedclcm, T03, T12, T16, T25
+- gpu3: T13, T17, T26, T27, T28
+
+Output roots:
+- static logs: /home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/final_static_main_20260424/static
+- pfedba logs: /home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/final_pfedba_main_20260424/focus_staticclcm_pfedba_thesis_focus_20260424_181341

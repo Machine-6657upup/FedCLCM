@@ -1,0 +1,11 @@
+==================================================
+[START] E21
+TIME=2026-04-19 16:02:23
+GPU=0
+ALGORITHM=PFLALP
+LOCAL_EPOCHS=1
+NUM_GLOBAL_ITERS=1000
+LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_debugdry_20260419_1603/E21.log
+CMD=/home/huangtu/miniconda3/envs/torch/bin/python CMD=-u CMD=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/main.py CMD=--dataset CMD=Cifar10 CMD=--model CMD=resnet CMD=--resnet_pretrained CMD=0 CMD=--learning_rate CMD=0.1 CMD=--lr_head CMD=0.1 CMD=--plocal_epochs CMD=1 CMD=--numusers CMD=10 CMD=--batch_size CMD=64 CMD=--attack_start CMD=30 CMD=--attack_method CMD=attackall CMD=--poisoning_per_batch CMD=1 CMD=--defense CMD=none CMD=--per_epoch CMD=1 CMD=--malclient CMD=10 CMD=--times CMD=1 CMD=--algorithm CMD=PFLALP CMD=--local_epochs CMD=1 CMD=--num_global_iters CMD=1000 CMD=--purify_beta CMD=1500 CMD=--purify_rounds CMD=2 CMD=--cluster_max_k CMD=4 
+==================================================
+[DRY_RUN] E21

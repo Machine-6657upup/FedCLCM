@@ -1,0 +1,10 @@
+==================================================
+[START] E07
+RUN_TS=20260418_162933
+GPU=2
+ALGORITHM=FedRPD
+LOCAL_EPOCHS=1
+VARIANT=full
+TIME=2026-04-18 17:39:56
+LOG=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/localepoch22_20260418_162933/E07.log
+==================================================

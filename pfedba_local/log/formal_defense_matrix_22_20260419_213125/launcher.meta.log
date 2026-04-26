@@ -1,0 +1,9 @@
+RUN_TS=20260419_213125
+LOGDIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_213125
+STATUS_DIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_213125/status
+SCRIPT=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/scripts/run_formal_defense_matrix_22_4gpu.sh
+START_TIME=2026-04-19 21:29:46
+[LAUNCHER_GPU_CHECK]
+cuda_available=True
+device_count=4
+==================================================

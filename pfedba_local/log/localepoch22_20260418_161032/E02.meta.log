@@ -1,0 +1,9 @@
+==================================================
+[START] E02
+GPU=1
+ALGORITHM=FedRep
+LOCAL_EPOCHS=5
+VARIANT=baseline
+TIME=2026-04-18 16:10:32
+LOG=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/localepoch22_20260418_161032/E02.log
+==================================================

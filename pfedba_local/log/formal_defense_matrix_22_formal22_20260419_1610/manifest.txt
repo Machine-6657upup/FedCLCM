@@ -1,0 +1,38 @@
+Formal matrix: 22 runs
+Common args:
+  dataset=Cifar10 model=resnet resnet_pretrained=0
+  learning_rate=0.1 lr_head=0.1 plocal_epochs=1
+  numusers=10 batch_size=64 attack_start=30 attack_method=attackall
+  poisoning_per_batch=1 defense=none per_epoch=1 malclient=10 times=1
+
+LE10 / GI400:
+  E01 FedRep
+  E02 FedRepPFLALP cluster_only: alp_use_cluster=1 alp_use_purify=0 cluster_max_k=4
+  E03 FedRepBDPFL inter_only: bd_lambda=1.0 bd_tau=1.0 bd_gamma=1.0 bd_use_inter=1 bd_use_em=0
+  E04 PFLALP full: purify_beta=1500 purify_rounds=1 cluster_max_k=4
+  E05 BDPFL full: bd_lambda=1.0 bd_tau=1.0 bd_gamma=1.0 bd_use_inter=1 bd_use_em=1
+  E06 FedRT: rt_beta=0.10 adv_eps=0.10 adv_num_iter=5 aug_strength=0.10
+  E07 FedCLCM: rt_beta=0.20 lambda_cl=0.20 mask_tau=12.0 mask_alpha=0.70 adv_eps=0 adv_num_iter=0 enable_channel_mask=1 cosine_gate=0
+  E08 FedRepPFLALP cluster_only_strong: alp_use_cluster=1 alp_use_purify=0 cluster_max_k=6
+  E09 FedRepBDPFL inter_only_strong: bd_lambda=1.0 bd_tau=1.0 bd_gamma=2.0 bd_use_inter=1 bd_use_em=0
+  E10 PFLALP full_strong: purify_beta=1500 purify_rounds=2 cluster_max_k=4
+  E11 BDPFL full_strong: bd_lambda=1.0 bd_tau=1.0 bd_gamma=2.0 bd_use_inter=1 bd_use_em=1
+
+LE1 / GI1000:
+  E12 FedRep
+  E13 FedRepPFLALP cluster_only: alp_use_cluster=1 alp_use_purify=0 cluster_max_k=4
+  E14 FedRepBDPFL inter_only: bd_lambda=1.0 bd_tau=1.0 bd_gamma=1.0 bd_use_inter=1 bd_use_em=0
+  E15 PFLALP full: purify_beta=1500 purify_rounds=1 cluster_max_k=4
+  E16 BDPFL full: bd_lambda=1.0 bd_tau=1.0 bd_gamma=1.0 bd_use_inter=1 bd_use_em=1
+  E17 FedRT: rt_beta=0.10 adv_eps=0.10 adv_num_iter=5 aug_strength=0.10
+  E18 FedCLCM: rt_beta=0.20 lambda_cl=0.20 mask_tau=12.0 mask_alpha=0.70 adv_eps=0 adv_num_iter=0 enable_channel_mask=1 cosine_gate=0
+  E19 FedRepPFLALP cluster_only_strong: alp_use_cluster=1 alp_use_purify=0 cluster_max_k=6
+  E20 FedRepBDPFL inter_only_strong: bd_lambda=1.0 bd_tau=1.0 bd_gamma=2.0 bd_use_inter=1 bd_use_em=0
+  E21 PFLALP full_strong: purify_beta=1500 purify_rounds=2 cluster_max_k=4
+  E22 BDPFL full_strong: bd_lambda=1.0 bd_tau=1.0 bd_gamma=2.0 bd_use_inter=1 bd_use_em=1
+
+Queue split:
+  gpu0: E01 E05 E09 E13 E17 E21
+  gpu1: E02 E06 E10 E14 E18 E22
+  gpu2: E03 E07 E11 E15 E19
+  gpu3: E04 E08 E12 E16 E20

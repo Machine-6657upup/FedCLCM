@@ -1,0 +1,1270 @@
+                                                                                                                                                                                     2024 Annual Computer Security Applications Conference (ACSAC)
+
+
+
+
+                                                                                                                                                            Lightweight Secure Aggregation for Personalized Federated Learning with
+                                                                                                                                                                                     Backdoor Resistance
+2024 Annual Computer Security Applications Conference (ACSAC) | 979-8-3315-2088-5/24/$31.00 ©2024 IEEE | DOI: 10.1109/ACSAC63791.2024.00071
+
+
+
+
+                                                                                                                                                          Tingyu Fan∗†‡ , Xiaojun Chen∗†‡ ¶ , Ye Dong§ , Xudong Chen∗† , Yuexin Xuan∗†‡ , and Weizhan Jing∗†‡
+                                                                                                                                                                           ∗ Institute of Information Engineering, Chinese Academy of Sciences, Beijing, China
+                                                                                                                                                                                       † Key Laboratory of Cyberspace Security Defense, Beijing, China
+                                                                                                                                                                          ‡ School of Cyber Security, University of Chinese Academy of Sciences, Beijing, China
+                                                                                                                                                                                      § iTrust, Singapore University of Technology and Design, Singapore
+                                                                                                                                                                   {fantingyu, chenxiaojun, chenxudong, xuanyuexin, jingweizhan}@iie.ac.cn, ye dong@sutd.edu.sg
+
+
+                                                                                                                                                 Abstract—Existing federated learning (FL) systems are highly
+                                                                                                                                                 vulnerable in terms of security and privacy due to their                                                Infer data                  Infer data   Prediction
+                                                                                                                                                 distributed architecture, facing poisoning attacks and inference                                                      Aggregation                Car   Ship
+                                                                                                                                                 attacks from adversaries. Some prior works have combined                                                                            …
+                                                                                                                                                 poisoning defenses with cryptographic tools: Secure Multi-                                  FL Server
+                                                                                                                                                 Party Computation, Zero-Knowledge Proof, and Homomor-
+                                                                                                                                                                                                                                                                                     …
+                                                                                                                                                 phic Encryption to propose robust secure aggregation meth-
+                                                                                                                                                 ods that provide security and privacy preservation for FL.
+                                                                                                                                                                                                                                                                                         … Training
+                                                                                                                                                 Recently, Qin et al. (KDD’23) demonstrate that personalized                                Training                  Training
+
+                                                                                                                                                 federated learning (pFL) can effectively resist backdoor in-
+                                                                                                                                                 jection in poisoning attacks. In this paper, we analyze that                                                             Clients
+
+                                                                                                                                                 as the number of malicious attackers increases, pFL remains                        Figure 1: Two distinct types of attacks in federated learning.
+                                                                                                                                                 vulnerable to backdoor attacks. Moreover, we reveal that
+                                                                                                                                                 current robust secure aggregation methods fail to offer efficient
+                                                                                                                                                 and robust backdoor defense for pFL. Therefore, we propose                         medical image analysis [48], autonomous vehicles assis-
+                                                                                                                                                 FLIGHT, a robust secure aggregation method for pFL. It                             tance [44], and anomaly detection in Internet of Things [40].
+                                                                                                                                                 implements a lightweight backdoor detection through a two-
+                                                                                                                                                                                                                                        However, due to its distributed architecture, FL faces
+                                                                                                                                                                                                                                    significant challenges in security and privacy. For example,
+                                                                                                                                                 stage personalized defense mechanism and ensures privacy
+                                                                                                                                                                                                                                    in the field of image classification (cf. Figure 1), covering
+                                                                                                                                                 preservation using communication-efficient two-party secure
+                                                                                                                                                                                                                                    medical analysis and industrial detection, distributed clients
+                                                                                                                                                 computation (2PC) protocols. Extensive experiments on diverse
+                                                                                                                                                                                                                                    use their private local images to train local models and
+                                                                                                                                                 datasets and neural networks validate that FLIGHT decreases
+                                                                                                                                                                                                                                    then upload the model updates to the server. The server
+                                                                                                                                                 run-time up to 64× compared by prior work RoFL (S&P’23),
+                                                                                                                                                                                                                                    aggregates these updates to train a more generalized global
+                                                                                                                                                 and 42× compared to FLAME (USENIX Security’22).
+                                                                                                                                                                                                                                    model, which can better perform image classification tasks.
+                                                                                                                                                 Index Terms—Secure Aggregation, Personalized Federated                             However, during training, malicious clients compromised
+                                                                                                                                                 Learning, Backdoor Attack, Security and Privacy                                    by adversary can launch poisoning attacks to tamper the
+                                                                                                                                                                                                                                    global model: untargeted attacks [17] aim to reduce the
+                                                                                                                                                                                                                                    main task accuracy (MA) on clean samples, while stealthier
+                                                                                                                                                 1. Introduction                                                                    targeted (backdoor) attacks [23], [4], [53] seek to increase
+                                                                                                                                                                                                                                    the backdoor task accuracy (BA) on poisoned samples
+                                                                                                                                                     Federated Learning (FL) is an emerging distributed ar-                         without affecting the MA on clean samples, causing the
+                                                                                                                                                 chitecture used to collaboratively train machine learning                          global model to misclassify poisoned samples with specific
+                                                                                                                                                 (ML) models across multiple clients while preserving their                         triggers. Such attacks severely threaten the security of the
+                                                                                                                                                 data privacy. Each client trains a local model and uploads its                     global model. In terms of privacy, a compromised server
+                                                                                                                                                 model update to a central server, where the server aggregates                      can launch inference attacks [10], [20], attempting to infer
+                                                                                                                                                 these updates to obtain a global model. This approach avoids                       the original private images from the model updates uploaded
+                                                                                                                                                 direct collection of client’s sensitive data, as the global                        by clients. This clearly undermines the fundamental privacy-
+                                                                                                                                                 model is then returned to the clients for further training                         preserving nature of FL.
+                                                                                                                                                 rounds. This distributed nature of FL has found widespread                             To defend against poisoning attacks, common ap-
+                                                                                                                                                 applications in various privacy-sensitive scenarios, including                     proaches implement robust aggregation to filter out poi-
+                                                                                                                                                                                                                                    soned updates. FLTrust [9] assumes that the server pos-
+                                                                                                                                                 ¶
+                                                                                                                                                     Xiaojun Chen is the corresponding author.                                      sesses benign validation dataset, further removes updates
+
+
+                                                                                                                                              2576-9103/24/$31.00 ©2024 IEEE                                                  810
+                                                                                                                                              DOI 10.1109/ACSAC63791.2024.00071
+                                                                                                                                                       Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+with large deviations from the direction of benign samples                      server-aggregated parameters, it still faces privacy issues,
+in linear complexity by computing the cosine similarity with                    namely the inability to resist inference attacks from ma-
+each model update. Sun et al. utilizes the characteristic                       licious server. Therefore, we need to implement privacy-
+that the norm of poisoned updates differs from that of                          preserving pFL based on cryptographic secure aggregation,
+benign updates, excluding poisoned updates using prede-                         while also filtering out backdoor attack from malicious
+fined norm bound [49]. FLAME [41] strengthens resistance                        clients. Existing robust secure aggregation methods men-
+to poisoning attacks by using HDBSCAN clustering [7]                            tioned earlier, such as FLAME, RoFL, and SecureFL, pro-
+to dynamically eliminate updates that deviate significantly                     vide privacy preservation and robustness against poisoning
+from benign ones, and then applying norm clipping to                            attacks for FL under IID data distributions. However, can
+further mitigate the impact of any remaining poisoned up-                       these methods provide sufficient robustness guarantees for
+dates. Correspondingly, in the face of inference attacks,                       pFL under Non-IID data distributions? Additionally, consid-
+encrypting model updates using cryptographic tools can                          ering these schemes rely on complex detection algorithms
+effectively prevent malicious server from inferring privacy                     and cryptographic tools, can they provide high aggregation
+data. Furthermore, some schemes combine robust aggre-                           efficiency (low communication and run-time)? Thus, we
+gation with cryptographic tools Secure Multi-Party Com-                         pose the following question:
+putation (MPC) [21], Zero-Knowledge Proof (ZKP) [18],                               Q2: How do existing robust secure aggregation
+and Homomorphic Encryption (HE) [16] to achieve robust                          schemes applied to pFL perform regarding robustness
+secure aggregation [36], preserving data privacy while pro-                     and efficiency? In Section 3, we evaluate the robustness
+viding robustness against poisoning attacks. For example,                       and efficiency of pFL when integrated with existing robust
+SecureFL [25] integrates MPC with FLTrust defense strat-                        secure aggregation methods. The experiments show that
+egy, deploying cosine similarity detection method based on                      while FLAME enhances backdoor defense through dynamic
+Secure Two-party Computation (2PC) [13], [39] protocols                         detection, it incurs significant communication and run-time
+between client and server. RoFL encrypts model updates                          overhead due to its complex clustering algorithm. Con-
+using HE and combines defense rule [49], verifying whether                      versely, RoFL and SecureFL, undermine MA and backdoor
+the norm of updates exceeds predefined bound through                            defense in Non-IID setting, respectively, because of their
+ZKP. FLAME employs two MPC servers and designs 2PC                              small norm bound and fixed validation dataset. Notably,
+protocols to implement ciphertext clustering detection.                         SecureFL is more efficient in secure aggregation, leveraging
+     Moreover, in real-world scenarios, the private data of                     a linear detection algorithm.
+clients usually exhibits heterogeneous characteristics and                      Goals and Contributions. From the above observations, we
+presents Non-IID (Non-Independently and Identically Dis-                        find that: 1) The backdoor resistance of pFL decreases as
+tributed) distribution, making it difficult for traditional FL to               the number of malicious clients increases; 2) Existing robust
+generate a generalizable global model with satisfactory per-                    secure aggregation schemes struggle to balance robustness
+formance. To address the issue of client data heterogeneity,                    and efficiency for pFL. To address this challenge, we pro-
+personalized federated learning (pFL) presents a promising                      pose FLIGHT, aiming to combine the strengths of FLAME
+solution for customizing the personalized models for each                       and SecureFL to achieve strong backdoor defense with
+client through Fine-tuning [34], Regularization [32], [50],                     lightweight complexity. Firstly, we design a two-stage per-
+and Parameter-decoupling [33], [43] of the global model.                        sonalized defense mechanism to enable efficient backdoor
+As a specialized form of FL, it is still necessary to analyze                   attack detection. In Stage1, a limited amount of clustering
+the security and privacy issues associated with pFL. In                         is performed to determine the direction of benign updates.
+terms of security, recent work conducted by Qin et al. has                      In Stage2, historical updates are leveraged to dynamically
+demonstrated that some pFL methods can provide robustness                       construct next-round validation models for each client, deter-
+against backdoor attacks [45]. However, these observations                      mining whether the model update is from a malicious client
+are only tested under poisoned model rate δ < 0.02 (δ is                        by calculating the inconsistency between the actual update
+the fraction of malicious clients m to the total clients n),                    and its validation model with linear complexity. Further-
+which deviates from real-world attack scenarios. In order to                    more, we design a series of communication-efficient 2PC
+further validate the robustness of pFL approaches, we raise                     protocols for this two-stage defense algorithm and deploy
+the following questions:                                                        them on two MPC servers. By leveraging the two-stage
+     Q1: How does the robustness of pFL against back-                           feature, we only need a small amount of communication-
+door change with the increasing number of malicious                             intensive clustering in Stage1, allowing for a large num-
+clients? In Section 3, to simulate realistic scenarios of                       ber of communication-efficient linear detection protocols in
+malicious client attacks, we evaluate various pFL schemes                       Stage2. This reduces the overall communication cost for
+on CIFAR-10 against Badnet Backdoor Attack [23] across a                        end-to-end training, achieving efficient and robust secure
+wide range of poisoned model rate δ ∈ {0.1, 0.2, 0.3, 0.4}.                     aggregation. In summary, we make the following contribu-
+The experiments illustrate that as the number of malicious                      tions:
+clients grows, existing pFL schemes fail to effectively resist                      (1) We first observe that as the number of malicious
+backdoor attacks. The backdoor task converges after only a                      clients increases, the robustness of pFL against backdoor
+few training rounds, achieving a high accuracy of 80-99%.                       attacks decreases. Additionally, we find that existing robust
+     Similarly, since pFL is also based on the paradigm of                      secure aggregation scheme fail to achieve an optimal trade-
+
+
+
+
+                                                                          811
+
+   Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+off between backdoor resistance and aggregation efficiency                           (1) Fine-tuning [34]. Clients perform standard FL to
+for pFL.                                                                         obtain a global model wg , which is then fine-tuned based on
+    (2) We propose FLIGHT, a two-stage personalized back-                        their respective private data to obtain personalized models.
+door defense mechanism. By running a few rounds of                               This approach preserves the generalization of the global
+clustering algorithms in Stage1, we enable a lightweight                         model while making it more suitable for local tasks.
+detection method with linear complexity in Stage2, which                             (2) Regularization [32], [50]. Initially, each client gen-
+optimizes MPC communication.                                                     erates personalized models wi using their local data Di ,
+    (3) We design a series of 2PC detection protocols with                       while global model wg is also trained among all clients. To
+linear complexity for FLIGHT: ΠCos , ΠNT , and ΠSoftmax                          enhance the model’s personalization, a regularization loss
+to achieve privacy preservation. Leveraging the two-stage                        R is added to the local loss function, which describes the
+feature, we employ a small number of communication-                              similarity between wg and wi to constrain the influence
+intensive clustering protocol to enable a large number of                        of local updates. For instance, Ditto [32] introduces the
+communication-efficient linear detection protocols. This re-                     regularizer λ∥wi − wg ∥2 to improve the effectiveness of
+duces the end-to-end training communication cost by 3-67×                        personalized models.
+compared to FLAME and RoFL.                                                          (3) Parameter-decoupling [33], [43]. This approach di-
+    (4) On the MNIST, Fashion-MNIST, and CIFAR-10                                vides the client’s local model wi into two parts: shared pa-
+training tasks with Non-IID distribution, we demonstrate                         rameters wis and private parameters wip . The shared parame-
+that FLIGHT1 effectively defends against various backdoor                        ters wis are shared among all clients in the FL system, while
+attacks for pFL while reducing run-time by 2-64× compared                        the private parameters wip are trained locally on the clients.
+to FLAME, RoFL, and SecureFL.                                                    For example, FedBN [33] stores the BN layer parameters
+                                                                                 wip locally while sharing the remaining parameters wis .
+2. Preliminaries
+                                                                                 2.2. Adversary Attacks and Capabilities
+2.1. Personalized Federated Learning
+                                                                                 Backdoor Attack. In this work, we focus on backdoor
+    Suppose FL has n clients, each client Ci , i ∈ [1, n] has                    attack of poisoning attacks in FL, the malicious client com-
+its own dataset Di . Initially, server broadcasts the global                     promised by Ac adds a backdoor trigger T on the selected
+parameter wg to each client Ci , where Ci locally train their                    subset of training samples, converting the target label y to
+parameters based on the wg and private dataset Di :                              an attacker-chosen label y ′ . This creates poisoned samples
+                                                                                 (T (x), y ′ ) that cause the model to learn the main task while
+              Li (wg ) = E(x,y)∼Di [fi (wg ; x, y)]                  (1)         also learning the backdoor subtask, ultimately leading the
+Here, Li (wg ) represents the expected loss for each Ci ,                        poisoned global model wg to predict the attacker-chosen
+typically the cross-entropy loss for classification tasks. Then,                 label y ′ for the attacker-chosen test inputs T (x).
+Ci gets local model wi , while the purpose of server is to                              max MA = E(x,y)∼D [P r(f (wg ; x)) = y]
+                                                                                         wg
+weight aggregate Li (wg ) to minimize the global objective                                                                                          (3)
+function:                                                                               max BA = E(x,y)∼D [P r(f (wg ; T (x)) = y ′ )]
+                                  N                                                      wg               y ′ ̸=y
+                                 X
+                min Lg (wg ) =       γi Li (wg )             (2)                 The objective of this attack is to maximize the Backdoor
+                  wg
+                                     i=1                                         Task Accuracy (BA) on poisoned samples, while maintain-
+Various aggregation methods are employed to update global                        ing the high Main Task Accuracy (MA) on benign samples.
+wg , for instance, FedAvg [37] sets the weight factor γi in                      There are three common types of backdoor attacks on FL:
+Eq. 2 as |D  i|
+           |D| .
+                                                                                     (1) Badnet [23]. This method injects a global trigger to
+    However, in Non-IID scenario (class skew), different                         the training samples and flips the label to the desired target
+participants have distinct tasks, making it challenging for                      class.
+standard FL to provide personalized models for each client.                          (2) Scaling Attack [4]. To enhance the impact of the
+If clients Ci only obtains own model wi through local                            backdoor attack on the global model, scaling attack scales
+training without sharing the global parameters wg through                        up the weight of poisoned model updates by a factor of λ.
+communication, the limited number of local training sam-                             (3) DBA [53]. DBA decomposes the global trigger pat-
+ples can lead to models that are highly personalized but lack                    tern into separate local patterns. Malicious clients implant
+generalization. To strike the balance between generalization                     these patterns into different dataset, targeting different neu-
+and personalization, personalized federated learning (pFL)                       rons.
+customizes local models wi for each participant based on                         Inference Attack. Although FL systems protect private data
+the global model wg , thus better adapting to the Non-                           through local training, the malicious sever compromised by
+IID scenario. Depending on different personalized strategies,                    As can exploit match terms with Euclidean and angular met-
+pFL can be categorized in such Fine-tuning, Regularization,                      rics to construct a loss function between the reconstructed
+Parameter-decoupling approaches:                                                 data x∗ and the actual data x derived from the model update.
+                                                                                 By continuously minimizing this loss function, the adversary
+  1. Our code is available at https://github.com/SimonB6/OpenFLIGHT.             is able to reconstruct the local data Di [10], [20].
+
+
+
+
+                                                                           812
+
+  Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+                                  FedAvg                                                   Fine-tuning                                      Ditto                                   100
+                                                                                                                                                                                                FedBN
+               100                                                          100                                                 100
+                                                                                                                                                                                       75
+Accuracy (%)
+
+
+
+
+                                                      Accuracy (%)
+
+
+
+
+                                                                                                                 Accuracy (%)
+
+
+
+
+                                                                                                                                                                     Accuracy (%)
+                     75                                                         75                                              75
+                                                0.1                                                        0.1                                                0.1                                                 0.1
+                                                0.2                                                        0.2                                                0.2                                                 0.2
+                     50                         0.3                             50                         0.3                  50                            0.3                      50                         0.3
+                                                0.4                                                        0.4                                                0.4                                                 0.4
+                     25                                                         25                                              25                                                     25
+                                   MA      BA                                                 MA      BA                                    MA       BA                                          MA      BA
+                      0                                                          0                                               00                                                    00
+                          0   100 200 300 400 500                                    0   100 200 300 400 500                          100 200 300 400 500                                   100 200 300 400 500
+                                  Rounds                                                     Rounds                                         Rounds                                              Rounds
+                               Figure 2: Impact of backdoor attack on typical pFL approaches with varying δ ∈ {0.1, 0.2, 0.3, 0.4}.
+
+                     80                                                         80                                              104                                                 104
+                                                        Backdoor Accuracy (%)
+ Main Accuracy (%)
+
+
+
+
+                                                                                                                                                                      Run-time (Min)
+                     60                                                         60
+
+
+
+
+                                                                                                                  Comm (GB)
+                                                                                                                                103                                                 103
+                     40                                                         40
+                                                                                                                                102                                                 102
+                     20                                                         20
+                     0 FedBN FLAME RoFL SecureFL                                0 FedBN FLAME RoFL SecureFL                     101 FLAME    RoFL         SecureFL                  101 FLAME     RoFL        SecureFL
+         (a) MA under backdoor attack.                              (b) BA under backdoor attack.                                (c) Comm of total rounds.                      (d) Run-time of total rounds.
+Figure 3: Robustness enhancement and efficiency of different robust secure aggregation methods on FedBN with δ = 0.3.
+
+
+Adversary Capabilities. In this paper, we define the ca-                                                                    poisoned model rate δ = m  n to indicate the ratio of malicious
+pabilities for two types of adversaries: 1) Adversary Ac                                                                    clients m to all participating clients n in the aggregation.
+can compromise up to c users, where c < n2 with n                                                                           Evaluation Metrics. For robustness evaluation, we consider
+being the total number of clients, but cannot control the                                                                   two metrics: Main Task Accuracy (MA) and Backdoor
+remaining benign clients. The malicious clients initiate a                                                                  Task Accuracy (BA). Here, MA denotes the classification
+backdoor attack by uploading poisoned updates to inject a                                                                   accuracy of the model on clean samples, while BA repre-
+backdoor trigger into the global model; 2) Adversary As                                                                     sents the classification accuracy of the model on poisoned
+can compromise at most one server, and does not collude                                                                     samples. The goal of the backdoor attack is to maximize
+with clients, honestly running the aggregation protocol and                                                                 BA while maintaining a high MA of the global model. We
+launching inference attacks to infer private information Di                                                                 evaluate average MA and BA respectively on all clients’
+from the model updates uploaded by the target client (semi-                                                                 test dataset and the test dataset excluding malicious clients.
+honest setting).                                                                                                            Each experiment is conducted with 5 times and records the
+                                                                                                                            average.
+3. Analysis and Motivation
+                                                                                                                            3.2. Impact of Backdoor Attack on pFL
+    In this section, we evaluate the robustness of pFL ap-
+proaches under backdoor attacks, as well as the robustness                                                                      To assess the robustness of pFL schemes against
+enhancement of pFL brought by robust secure aggregation                                                                     backdoor attacks, we select representative methods Fine-
+methods. We also analyze the efficiency of existing robust                                                                  tuning [34], Ditto [32], and FedBN [33] from each classifi-
+secure aggregation methods. Based on the experimental                                                                       cation in Section 2.1 and perform robustness evaluation with
+results, we present the motivations of this work.                                                                           FedAvg [37] as the baseline. The training consists of 500
+                                                                                                                            rounds in total, and each round the servers select 10% of the
+                                                                                                                            100 clients to participate in the aggregation. During this pro-
+3.1. Experimental Setup                                                                                                     cess, malicious clients consistently launch backdoor attacks,
+                                                                                                                            striving to maximize BA on crafted poisoned samples while
+Dataset and Model. We select the CIFAR-10 [28] image                                                                        maintaining high MA on clean samples. As shown in Figure
+dataset and simulate the Non-IID setting by distributing it                                                                 2, we measure the MA and BA of different schemes under
+among 100 clients using Dirichlet allocation with a con-                                                                    poisoned model rate δ ∈ {0.1, 0.2, 0.3, 0.4}, and observe
+centration factor α = 0.5 following [45]. Meanwhile, we                                                                     that:
+employ ResNet-20 [26] for the classification task.                                                                              O1: We observe that backdoor attacks successfully
+Backdoor Attack Setting. The malicious clients launch the                                                                   demonstrate their stealth across various schemes, maintain-
+continuous Badnet Attack, using grid pattern as trigger to                                                                  ing high MA on clean samples while continuously increas-
+poison half of the training samples, aiming to classify the                                                                 ing BA on poisoned samples. Furthermore, we can observe
+‘airplane’ label in CIFAR-10 as ‘ship’. Meanwhile, we use                                                                   that both Fine-tuning and the Regularization-based scheme
+
+
+
+
+                                                                                                                 813
+
+             Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+Ditto are susceptible to backdoor attacks, achieving a high                    inefficient secure aggregation. The primary communication
+BA of 72-75% at δ = 0.1, which is no different from Fe-                        in RoFL originates from the transmission HE ciphertexts
+dAvg. In contrast, the Parameter-decoupling scheme FedBN                       during the C-S phase, and the creation and verification
+manages to control BA of around 20% at δ = 0.1, effectively                    of L2 -norm proofs entail substantial time overhead, thus
+limiting the convergence of the backdoor task. However,                        resulting in low aggregation efficiency. FLAME incurs sig-
+as the number of attackers increases, BA also rises. When                      nificant communication cost due to the high complexity
+δ = 0.4, BA quickly reaches around 85%.                                        of its clustering detection. While the detection protocol
+     To evaluate the backdoor-resistant capability enhance-                    operates in the S-S phase, the 2PC protocol executed in
+ment of pFL brought by existing robust secure aggregation                      the LAN environment mitigates some aggregation pressure
+methods, we conduct experiments of state-of-the-art robust                     but also leads to prolonged run-time. Conversely, SecureFL
+secure aggregation approaches: FLAME (cluster filtering),                      adopts a linear detection method from FLTrust, making the
+RoFL (L2 -norm bound), and SecureFL (similarity detection)                     aggregation process more faster. Overall, current pFL lacks
+on FedBN in the Non-IID setting. In Figure 3a-3b, with                         robust secure aggregation strategy that balance robustness
+δ = 0.3, we measure the MA and BA of training process of                       and aggregation efficiency.
+FedBN based on different robust secure aggregation meth-                           Therefore, we require an efficient detection method for
+ods against Badnet Attack. In Figure 3c-3d, we assess the                      pFL that can resist backdoor attacks in Non-IID scenarios,
+communication cost and run-time of completing all rounds                       while design a lightweight robust secure aggregation for fast
+aggregation for each robust secure aggregation scheme in                       aggregation.
+both LAN and WAN setting. Following [15], the client to
+server (C-S) connection is over 50 Mbps WAN with 50 ms                         4. FLIGHT Design
+round trip time (rtt) and server to server (S-S) connection is
+over 10 Gbps LAN with 0.2 ms rtt. Then, we observe that:                           In this section, we first identify the goals of designing
+     O2: As shown in Figure 3a-3b, both FLAME (cluster                         a robust secure aggregation that balances backdoor-resistant
+filtering) and RoFL (L2 -norm bound) can effectively reduce                    capability and aggregation efficiency. To achieve these goals,
+BA, but RoFL leads to a significant decrease in MA by 10%                      we provide a detailed design of FLIGHT in terms of security
+compared with FedBN. In contrast, SecureFL (similarity de-                     and privacy.
+tection) cannot effectively defend against backdoor attacks
+in Non-IID scenarios, resulting in the BA up to 80%.                           4.1. Goals and Solutions
+     O3: In Figure 3c-3d, FLAME and RoFL face a large
+communication overhead, resulting in a long run-time of                            In the FL framework, client Ci , i ∈ [1, n] minimizes the
+end-to-end aggregation on total 500 training rounds. While,                    local loss function using their local data on the global model
+the detection algorithm of SecureFL is lighter, thus the                       wgt−1 of last training round t − 1, obtaining the local model:
+aggregation run-time is faster.
+                                                                                                 wit = wgt−1 − ηi ∇Li (wgt−1 )                          (4)
+3.3. Motivations
+                                                                               Here, ηi represents the local learning rate. Subsequently,
+    Based on the observations above, we have summarized                        Ci uploads the model updates ∆wit = wgt−1 − wit to the
+the following motivations:                                                     server. The server aggregates the updates with the weight
+    M1: pFL is vulnerable to backdoor attacks. As Ob-                          Pn γi tot−1
+                                                                               factor        minimize the global task loss Lg (wgt−1 ) =
+                                                                                                                            t
+servation 1, we validate that pFL based on the Parameter-                           γ L
+                                                                                  i i i (w g ), moving the global model wg towards the
+                                                                                                              t
+decoupling method can defend against a limited number of                       direction of the local models wi as:
+malicious attackers. However, we also observe that as the                                     wgt = wgt−1 − ∇Lg (wgt−1 )
+number of malicious attackers increases, the backdoor task                                                   n
+can quickly converge on existing pFL schemes. This implies
+                                                                                                            X                                           (5)
+                                                                                                  = wgt−1 −    γi (wgt−1 − wit )
+that as poisoned updates increase, the global model used for                                                      i
+generalization is rapidly tainted with backdoor trigger, and
+local personalized training fails to effectively remove the                    However, the malicious clients aim to replace the global
+                                                                                                                         t
+poisoned features.                                                             model by crafting poisoned updates ∆wm        = wgt−1 −
+                                                                                 t
+    M2: pFL lacks a practically robust secure aggrega-                         wm , m ∈ [malicious clients]. This move shifts the global
+tion method. Through Observation 2 and 3, we find that                         parameter wgt towards wmt
+                                                                                                         , minimizing both the main task
+both FLAME and RoFL are effective in defending against                         and the backdoor task losses:
+backdoor attacks, but RoFL leads to a significant decrease                                                                t
+                                                                                               wgt = wgt−1 − γm (wgt−1 − wm )                           (6)
+in MA. By contrast, SecureFL, utilizing the fixed server-
+                                                                                                                                 t
+side validation dataset for similarity detection, fails to ef-                 Many works assume that the poisoned updates ∆wm      differ
+                                                                                                                            t
+fectively distinguish between benign and poisoned updates                      significantly from benign ones and exclude ∆wm by assign-
+due to significant differences between updates in the Non-                     ing them smaller γm . However, in the Non-IID setting, due
+IID setting. However, the use of complex cryptographic tools                   to the heterogeneity of local data among different Ci , there
+and detection algorithms by RoFL and FLAME results in                          exists a large difference between local models wit , which
+
+
+
+
+                                                                         814
+
+  Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+diminishes the distinction between benign and poisoned                         stage personalized defense mechanism (shown in Algorithm
+updates. This poses a challenge for defense methods. In                        1), which is friendly to MPC communication:
+Section 3.2, we identify that current robust secure aggre-
+gation techniques face challenges in balancing robustness                       Algorithm 1: FLIGHT personalized defense
+and efficiency:                                                                 mechanism
+   •    High efficiency but poor robustness, typically in-                        Input: Initial global model wg0 .
+        volving low-complexity linear defense operations                          Output: Global model wgR after R training rounds.
+                                                                                1 ¶ Local Training:
+        (SecureFL).                                                             2 for each training round t ∈ [1, R] and client i ∈ [1, n] do
+   •    Low efficiency but strong robustness, typically em-                     3      ∆wit = LocalTrain(wit−1 ), li = ∥∆wit ∥2 .
+        ploying high-complexity non-linear defense opera-                       4 end
+        tions (FLAME).                                                          5 ¶ FLIGHT-Stage1:
+                                                                                6 for each training round t ∈ [1, K] do
+Therefore, to enhance both robustness and efficiency, our
+                                                                                7      [BenignList] = Cluster(∆wit , i ∈ [1, n]).
+goal is to design a lightweight backdoor detection mech-                        8 end
+anism that achieves backdoor defense capabilities similar                       9 Initialize validation model for Ci :
+to FLAME while maintaining the linear complexity of Se-                            pti = Mean(∆wj ), j ∈ [BenignList].
+cureFL. This would reduce communication cost in MPC,                           10 ¶ FLIGHT-Stage2:
+leading to efficient and robust secure aggregation.                            11 for each training round t ∈ [K + 1, R] do
+     To achieve this, we design FLIGHT, a solution that                        12      § Personalized score:
+balances robustness and efficiency. FLIGHT implements a                        13      cosi =
+two-stage Personalized Defense Mechanism to counter                                      CosineSimilarity(∆wit , pti ). ▷ cosine similarity
+backdoor attacks and utilizes MPC to achieve Efficient Ro-                     14      Ti = (Mean(li∈[1,n] )/li )sgn(cosi ) . ▷ norm temperature
+                                                                               15      psi = cosi · Ti . ▷ personalized score
+bust Secure Aggregation while simultaneously defending
+                                                                               16      γi = Softmax(ps  Pi ). ▷ weight  factor
+against inference attacks:                                                             wgt = wgt−1 − n               t
+                                                                               17                         i γi · ∆wi . ▷ weight aggregation
+     Personalized Defense Mechanism (Security): We de-                         18      § Personalized validation model:
+sign a two-stage defense strategy to achieve an efficient                      19      ηi = Select(γi ). ▷ learning rate
+and robust defense mechanism. In the Stage1, we utilize a                      20      pt+1
+                                                                                         i    =
+non-linear clustering algorithm for a few rounds to identify                             pti − ηi (pti − ∆wit ). ▷ upgrade validation model
+initial benign updates. In the Stage2, we use the benign                       21 end
+                                                                                              R
+updates from Stage1 to construct personalized validation                       22 return wg .
+models for each Ci . The difference between the actual
+model and its validation model is then calculated to ob-                       FLIGHT-Stage1. To improve the accuracy of identifying
+tain a personalized score with linear complexity, which is                     poisoning updates, we first employ a clustering algorithm
+communication-friendly for MPC. Subsequently, the scores                       from FLAME to select out candidate benign updates. This
+are employed to perform weighted aggregation to eliminate                      phase is executed only during the initial few K rounds
+poisoning updates and dynamically upgrade each validation                      with the aim of identifying the direction of benign updates.
+model for the next round of aggregation, adapting to the                       Subsequently, we aggregate these selected benign updates
+Non-IID setting.                                                               to assign an initial validation model pti = Mean(∆wj ), j ∈
+     Efficient Robust Secure Aggregation (Privacy): Lever-                     [benign updates] to each Ci .
+aging the advantages of the two-stage defense mechanism,                       FLIGHT-Stage2. To further reduce the complexity of the
+we design a series of efficient MPC protocols to achieve                       backdoor detection algorithm during the subsequent nu-
+robust secure aggregation while simultaneously defending                       merous training rounds, we utilize personalized scores and
+against both poisoning and inference attacks. These proto-                     personalized validation models to implement a detection
+cols require invoking a communication-intensive clustering                     algorithm that scales linearly with the number of clients n.
+protocol only a few times during Stage1. For the majority of                       (1) Personalized Score. Upon receiving the update ∆wit
+the subsequent training rounds, we apply the linear detection                  from Ci , the server determines whether ∆wit is poisoned by
+method from Stage2, using a series of communication-                           checking the inconsistency between ∆wit and pti . We define
+efficient 2PC protocols, which significantly reduces the end-                  personalized score to describe the inconsistency. Based on
+to-end training communication cost.                                            this score, we perform weight aggregation and dynamic
+     Next, we will systematically explain the implementation                   upgrading of pti . Following the analysis of [9], [41], [55],
+details of Personalized Defense Mechanism and Efficient                        poisoned updates often change direction to guide the global
+Robust Secure Aggregation, with the notations used in this                     model towards the target backdoor task. Hence, we first
+work presented in Table 3 of Appendix A.                                       employ cosine similarity to measure the angular differences
+                                                                               of direction between each ∆wit and its validation model pti
+4.2. Personalized Defense Mechanism                                            as:
+                                                                                                              ∆wit · pti
+                                                                                                  cosi =                                 (7)
+    In order to achieve a lightweight and effective backdoor                                              ∥∆wit ∥2 · ∥pti ∥2
+defense in the Non-IID setting, FLIGHT introduces a two-                        Additionally, malicious clients also amplify the weight of
+
+
+
+
+                                                                         815
+
+  Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+poisoned ∆wit to maximize the attack impact, resulting in                        Instead, clustering is only required during the initial few K
+the L2 -norm li = ∥∆wit ∥2 being greater than the benign                         rounds to initialize the validation model pti for each Ci .
+ones. Therefore, we design norm temperature Ti to as-
+sign the potential poisoned updates corresponding penalties                      4.3. Efficient Robust Secure Aggregation
+based on the magnitude of li as:
+                          Mean(li∈[1,n] ) sgn(cosi )                                 In this work, we employ two servers Sj , j ∈ [1, 2] to
+                 Ti = (                  )                           (8)         achieve robust secure aggregation based on secure two-
+                               li                                                party computation (2PC) [13], [39]. We implement additive
+When the cosine similarity cosi < 0, the norm temperature                        secret sharing (denoted as J·K-sharing), where a secret value
+Ti = li /Mean(li∈[1,n] ), which is positively correlated with                    x ∈ Z2ℓ is shared as two random values JxK1 , JxK2 ∈ Z2ℓ
+the norm size li . When cosi ≥ 0, norm size li acts negatively                   with x = JxK1 + JxK2 (mod 2ℓ ). When ℓ > 1, it supports
+on the Ti = Mean(li∈[1,n] )/li . Furthermore, we combine                         arithmetic operations (e.g., +, −, and·), denoted as arith-
+cosine similarity with norm temperature for Ci to compute                        metic sharing. Specifically, when ℓ = 1, this type is referred
+personalized scores psi as:                                                      to boolean sharing and use notation J·KB , where +, − and
+                                                                                 · are respectively replaced by bit-wise ⊕ and ∧. Without
+                          psi = cosi · Ti                            (9)         special declaration, we compute in Z2ℓ and omit (mod 2ℓ )
+We make malicious clients obtain smaller psi , while benign                      for brevity.
+clients receive larger psi . In other words, when the direction                      (1) Sharing and Reconstruction. ΠSS allows client share
+of the update is inconsistent with its validation model, we                      the secret x to Sj : client selects JxK1 ∈R Z2ℓ , computes
+judge it with high probability as a poisoned update, assign-                     JxK2 = x − JxK1 , and sends JxKj to Sj . While, ΠRec is used
+ing psi < 0 and further decreasing the score through Ti                          to reconstruct the secret x: Sj sends JxKj to Sj+1 , then Sj
+positively correlated with li . Conversely, we assign psi ≥ 0,                   can reconstruct x = JxK1 + JxK2 .
+and to avoid missing poisoned updates that align with the                            (2) Addition. Given public constants µ, v, λ and secret
+direction of its validation model, we enable Ti negatively                       sharing JxK, JyK, the sharing JzK = µJxK + vJyK + λ can be
+correlated with li to reduce the impact of these updates.                        computed locally by S1 , S2 as JzK1 = µJxK1 + vJyK1 + λ
+Meanwhile, the Mean(li∈[1,n] ) restricts the significant gaps                    and JzK2 = µJxK2 + vJyK2 .
+between each score, thus avoiding the jiggling that may                              (3) Multiplication. Given secret sharing JxK, JyK, the
+occur during training.                                                           sharing JzK = JxK·JyK can be achieved by ΠMul . In the ΠMul ,
+    Next, to better converge the global model, we regular-                       we use pre-computed beaver triple (JaK, JbK, JcK), where
+ize personalized score psi into weights γi using Softmax                         c = a · b. Then, Sj computes JeKj = JxKj − JaKj and
+function as:                                                                     Jf Kj = JyKj − JbKj , both party executes e = ΠRec (JeKj )
+                      γi = Softmax(psi )                   (10)                  and f = ΠRec (Jf Kj ), finally set JzKj = −jef + f JxKj +
+                                                                                 eJyKj + JcKj . Meanwhile, we also define ΠMulAB to achieve
+         we perform weight aggregation to obtain: wgt =
+Finally, P                                                                       arithmetic-boolean multiplication JzK = JxK · JyKB .
+           n
+  t−1
+wg − i γi · ∆wit .                                                                   (4) Underlying protocols. Besides above basic opera-
+    (2) Personalized Validation Model. Furthermore, after                        tions, we invoke non-linear protocols reciprocal (ΠRecip ),
+each training round t, we utilize historical updates ∆wit                        compare (ΠCmp ), and maximum (ΠMax ) from the state-of-
+of Ci to upgrade the validation model pt+1i   = pti − ηi (pti −                  the-art work [46] in a black-box manner. The inputs and
+     t                                                                           outputs of these protocols are as follows:
+∆wi ) for the next-round aggregation, dynamically adapting
+to changes in local updates during training. Inspired by [42],                      •   JzK = ΠRecip (JxK) s.t. z = 1/x.
+the learning rate ηi is determined by the Select function                           •   JzK = ΠCmp (JxK) s.t. z = 1{x ≥ 0}.
+based on the magnitude relationship between weight γi and                           •   JzK = ΠMax (Jxi∈[1,n] K) s.t. z = Maximum(xi∈[1,n] ).
+threshold θp as:
+                           (                                                         Building on the foundational MPC protocols, we have
+                            ηi = 0 if γi < θp                                    developed the FLIGHT robust secure aggregation frame-
+             Select(γi ) =                                (11)                   work, as illustrated in Figure 4. Next, we will progressively
+                            ηi = η if γi ≥ θp
+                                                                                 detail the execution steps of the framework:
+Where γi , calculated in Eq. 10, represents the aggregation                          For FLIGHT-Stage1, ① we can directly use the 2PC
+weight of Ci . When γi < θp , we classify the update from                        clustering protocol ΠCluster provided by FLAME. Although
+malicious client and return ηi = 0, indicating that model                        it has a high communication cost, it is only executed during
+pt+1
+  i   remains unchanged to prevent learning the backdoor                         the initial few rounds, thus not significantly impacting the
+task. Conversely, when γi ≥ θp , we return ηi = η , allowing                     overall efficiency of FLIGHT.
+model pt+1
+         i  to move in the direction of benign update ∆wit                           For FLIGHT-Stage2, we implement communication-
+as usual.                                                                        efficient 2PC protocols for linear detection method: cosine
+    This approach avoids misclassifying poisoned updates                         similarity (ΠCos ), norm temperature (ΠNT ), and softmax
+in the Non-IID setting where local models are widely dis-                        (ΠSoftmax ) based on the underlying protocols for securely
+persed, and the injective detection method prevent using                         computing personalized weight factor and upgrading vali-
+high complexity clustering algorithm in all training rounds.                     dation model:
+
+
+
+
+                                                                           816
+
+  Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+  Local Training & Sharing           FLIGHT-Stage1                                               FLIGHT-Stage2
+                                               (Cluster)                                     Personalized Validation Model
+                                   �                                            �
+                                                    initial                                                        …
+                                                  validation
+
+                                                                      (Cosine Similarity)             (Norm Temperature)                  (Softmax)
+                                                                �                             �                                �
+                …
+
+
+
+
+                                                                                                  Weight Aggregation
+                                                                                �
+                                                                                                                   …
+
+
+                                                       Figure 4: Framework of FLIGHT.
+
+
+Upload Setting. During the model updates uploading phase,                       proceeds to calculate:
+we further reduce the servers’ non-linear MPC operations                                                negExp(Jpsi K − Jpsmax K)
+by assisting client Ci in computing the model update norm                           ΠSoftmax (psi ) = Pn                                              (12)
+li locally and normalizing the updates: Ci undergoes local                                             i=1 negExp(Jpsi K − Jpsmax K)
+training to obtain the t round model update ∆wit , com-                         The state-of-the-art approaches [46], [24] utilize lookup-
+putes the norm of the update li = ∥∆wit ∥2 , and then                           table (LUT)-based protocols to compute the negExp func-
+normalizes update ∆ŵit = ∆wit /li , finally secret-shares                      tion. However, the communication efficiency is lower when
+(J∆ŵit Kj , Jli Kj ) = ΠSS (∆ŵit , li ) and uploads to the servers            the input bit length is large. To further reduce communica-
+Sj , j ∈ {1, 2}.                                                                tion overhead, we adopt the 2Quad method [31] and com-
+① Cosine Similarity. To securely compute the angular                            bine it with piecewise function to approximate the negExp
+change between the update J∆wit K and its validation up-                        function as follows:
+date Jpti K, we design the secure cosine similarity pro-
+                                                                                                          (
+                                                                                                            0          if x < θexp
+tocol ΠCos . Benefit from the update normalization, the                                    negExp(x) ≈                                 (13)
+                                                                                                            (1 + x)2 if x ≥ θexp
+servers can directly compute the cosine similarity Jcosi K
+using the secure multiplication protocol ΠMul : Jcosi K =                       We perform secure comparisons between Jpsi K and thresh-
+ΠCos (J∆wit /li K, Jpti /li K) = ΠMul (J∆ŵit K, Jp̂ti K).                      old θexp using ΠCmp , followed by square approximation
+② Norm Temperature. After obtaining Jcosi K, we de-                             through Jzi2 K = ΠMul (Jzi K, Jzi K), where zi = 1 + (psi −
+fine ΠNT to compute the norm temperature under secret-                          psmax ). To further
+                                                                                                  Pn reduce      non-linear operations, we sum
+sharing. The norm temperature in FLIGHT is defined as:                                 2                    2
+                                                                                up Jzsum    K =      i=1 (Jzi K) and take its reciprocal to ob-
+(Mean(li∈[1,n] )/li )sgn(cosi ) , where li /Mean(li∈[1,n] ) is ob-                         2
+                                                                                tain J1/zsum                   2
+                                                                                                K = ΠRecip (Jzsum  K). Subsequently, we perform
+tained when cosi < 0, and conversely if cosi ≥ 0, we                                               2
+                                                                                ΠMul (Jzi2 K, J1/zsum  K) operations n times to acquire weights
+get Mean(li∈[1,n] )/li . We first invoke ΠMean , ΠRecip to com-                 Jγi K, avoiding the need for n times non-linear division
+pute the mean JmK of norms Jli∈[1,n] K and its reciprocal                                      2
+                                                                                Div(Jzi2 K, Jzsum  K). The detailed definition of ΠSoftmax is
+1/JmK, then calculate the reciprocal 1/Jli K for each client.                   provided in Protocol 2.
+Subsequently, we compute the candidate values Jli /mK =                         ④ Weight Aggregation & ⑤ Validation Model Upgrad-
+ΠMul (Jli K, J1/mK) and Jm/li K = ΠMul (JmK, J1/li K). Next,                    ing. To perform weight aggregation correctly, the servers
+for the sign extraction of Jcosi K, we invoke ΠCmp , which                      first need to restore the normalized model J∆ŵit K back
+returns a boolean judgment Jbi KB = 1{cosi ≥ 0}. The key                        to J∆wit K by multiplying it with its norm Jli K, where
+challenge lies in how to choose between Jli /mK and Jm/li K                     ∆wit ∈ R1×d . Then, it should be multiplied with the weight
+drew on the judgment Jbi KB . We utilize ΠMulAB to achieve                      factor Jγi K, requiring 2 × d times ΠMul for each Ci . To
+arithmetic-boolean multiplication (Jm/li K−Jli /mK)·Jbi KB +                    reduce the number of calls to ΠMul , we first compute the
+Jli /mK, where return Jli /mK when Jbi KB = 0 and Jm/li K                       product of weight and norm Jli · γi K = ΠMul (Jli K, Jγi K), then
+when Jbi KB = 1. Based on above perspective, ΠNT is                             multiply it with the normalized model J∆ŵit KPand aggregate
+                                                                                                                                   n
+constructed in Protocol 1.                                                      to obtain the global model Jwgt K = Jwgt−1 K− i=1 ΠMul (Jli ·
+                                                                                           t
+③ Softmax. After receiving Jcosi K, JTi K, we can easily com-                   γi K, J∆ŵi K), achieving d+1 times ΠMul for each Ci . Finally,
+pute the personalized scores Jpsi K = ΠMul (Jcosi K, JTi K). To                 the server invoke ΠRec (Jwgt K) to reconstruct the aggregation
+perform the Softmax operation on Jpsi K, we define ΠSoftmax ,                   result wgt and send it back to each Ci .
+which first computes the maximum value Jpsmax K =                                    Furthermore, for each validation model of Ci , we
+ΠMax (Jpsi∈[1,n] K) satisfying psi − psmax ≤ 0, and then                        only need to upgrade its normalized model Jp̂K. Let the
+
+
+
+
+                                                                          817
+
+  Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+weights Jγi K be compared with the threshold θp to get                         for robustness evaluation, while CIFAR-10L is utilized for
+Jbi KB = ΠCmp (Jγi K − θp ), and execute Jp̂ti K = Jp̂t−1   i   K−             efficiency testing under larger-scale parameters.
+ΠMul (ΠMulAB (ηi , Jbi K), Jp̂t−1
+                              i   K − J∆ŵi
+                                           t
+                                             K) to complete the up-            Training Details. We conduct robustness testing using three
+grade.                                                                         mainstream backdoor attack approaches: Badnet, Scaling
+                                                                               Attack, and DBA following the backdoor setting and metrics
+5. Theoretical Analysis                                                        described in Section 3.1, and simulate the Non-IID setting
+                                                                               by distributing dataset among all clients using Dirichlet
+                                                                               factor α = 0.5 following [45]. We employ Main Task
+5.1. Security and Correctness Analysis.                                        Accuracy (MA) to denote the classification accuracy of the
+                                                                               model on clean samples and Backdoor Task Accuracy (BA)
+Theorem 1. Given the ideal protocols ΠMul , ΠMulAB , ΠMean ,                   to represent the classification accuracy of the model on
+ΠRecip , ΠCmp , and ΠMax defined in [46], FLIGHT securely                      poisoned samples, where the goal of the backdoor attack
+realize the protocols ΠCos , ΠNT , and ΠSoftmax against the                    is to maximize BA while maintaining a high MA of the
+semi-honest As , ensuring As cannot infer anything beyond                      global model.
+the aggregation result wg .
+Proof. We provide the proof that relies on the stand-alone                     6.1. Robustness Analysis
+model under sequential composition in Appendix C.1.
+                                                                                    In this section, we analyze the robustness of backdoor
+Theorem 2. The ciphertext operations in FLIGHT correctly                       defense mechanism proposed by FLIGHT under different
+execute secure aggregation without compromising backdoor-                      types of backdoor attacks and varying poisoned model rate
+resistant effectiveness.                                                       δ . The training consists of 500 rounds in total, and each
+                                                                               round the servers select 10% of the 100 clients to participate
+Proof. We provide the proof of FLIGHT’s correctness in                         in the aggregation.
+Appendix C.2.                                                                  Impact of Varying Backdoor Attacks. We choose back-
+                                                                               door attacks: Badnet, Scaling Attack, and DBA to evaluate
+6. Evaluation                                                                  whether FLIGHT can assist the pFL approach, FedBN, in
+                                                                               mitigating backdoor attacks from malicious clients. The
+   In this section, we conduct extensive experiments to                        defense objective is to decrease BA on poisoned samples
+compare the robustness against backdoor attacks and ag-                        while maintaining normal convergence of MA. Table 2
+gregation efficiency of our approach FLIGHT with existing                      shows the performance of different training tasks when the
+robust secure aggregation methods FLAME [41], RoFL [35],                       δ = 0.3. We observe that FLIGHT achieves defense results
+and SecureFL [25].                                                             similar to the state-of-the-art FLAME, limiting the BA to
+Experimental Environment. We implement FLIGHT in                               0.01-5.96% while maintaining a high level of MA as 78.96-
+Python3 and C++. We achieve GPU-based ciphertext ag-                           99.62%. In contrast, SecureFL, based on the fixed server-
+gregation based on FederatedScope [54] and Piranha [51]                        side validation dataset, fails to effectively remove poisoned
+while running our experiments on Intel(R) Xeon(R) Silver                       updates in Non-IID scenarios, resulting in high BA as 80.26-
+4314 CPU @ 2.40 GHz with 512 GB RAM and Nvidia                                 99.25%. Additionally, it filters out some benign updates,
+V100 with 40 GB RAM. We consider two types of network                          leading to a slight decrease in MA compared to FedBN
+environments LAN and WAN. The client to server (C-S)                           by 2.79-4.83%. RoFL employs L2 -norm bound to limit
+connection is over 50 Mbps WAN with 50 ms round trip                           the injection of backdoor tasks, especially against Scaling
+time (rtt) and server to server (S-S) connection is over 10                    Attack. However, the smaller bound also restricts the impact
+Gbps LAN with 0.2 ms rtt.                                                      of benign updates, resulting in a lower MA level and a
+                                                                               significant decrease of 5.09-11.45% compared to FedBN.
+                   TABLE 1: Training Tasks.                                    Impact of Varying δ . We verify in Section 3.2 that as
+                                                                               the δ increases, the backdoor task converges faster on the
+           MNIST         Fashion        CIFAR-10S        CIFAR-10L
+                                                                               pFL. To evaluate the backdoor-resistant effectiveness of
+Dataset MNIST [30] F-MNIST [52] CIFAR-10 [28] CIFAR-10 [28]                    FLIGHT under different δ , Figure 5 shows the robust-
+Model LeNet [29]     LeNet [29] ResNet-20 [26] ResNet-20L [26]
+Params    62K          62K          273K           1.3M                        ness improvement of FLIGHT under Badnet Attack with
+                                                                               δ = {0.1, 0.2, 0.3, 0.4} for FedAvg and different types of
+Training Task Baselines. For a fair comparison, we follow                      pFL schemes during CIFAR-10S training mission: we can
+approaches [41], [35], [25] by selecting public benchmark                      observe that FLIGHT provides a strong backdoor defense
+datasets and network models, which together form the four                      for various pFL schemes at different δ , limiting BA to a
+image classification tasks listed in Table 1. Both CIFAR-10S                   low level of 0.01-0.02%.
+and CIFAR-10L use the CIFAR-10 dataset but employ dif-
+ferent neural network models with varying parameter sizes.                     6.2. Efficiency Analysis
+The increase in parameter size directly impacts the efficiency
+of encrypted aggregation, though its effect on robustness                          In this section, we analyze the efficiency of FLIGHT
+is less significant. Therefore, CIFAR-10S is primarily used                    (Stage1 & Stage2) under varying numbers of clients n and
+
+
+
+
+                                                                         818
+
+  Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+      TABLE 2: MA and BA of FLIGHT and previous works under varying backdoor attacks and training tasks with δ =0.3.
+
+                                                                              FedBN                 RoFL                             FLAME             SecureFL                           FLIGHT
+                     Attack         Training Task
+                                                                            MA     BA             MA     BA                         MA   BA           MA      BA                         MA    BA
+                                         MNIST                              99.73    95.90        94.28                  1.09       99.67    0.01    95.59                      90.41    99.62        0.01
+                     Badnet              Fashion                            91.85    90.14        83.76                  2.57       90.78    0.01    89.06                      82.99    91.79        0.01
+                                        CIFAR-10S                           80.29    80.95        73.03                  2.93       78.29    0.01    75.46                      80.26    79.39        0.02
+                                         MNIST                              99.69    99.36        93.34                  0.09       99.60    0.24    96.06                      95.17    99.19        0.43
+           Scaling Attack                Fashion                            89.30    93.59        81.49                  0.32       89.25    0.37    86.33                      90.38    90.95        0.58
+                                        CIFAR-10S                           80.13    90.27        70.86                  0.56       78.03    0.42    75.36                      88.92    79.81        0.32
+                                         MNIST                              99.02    99.16        91.25                  2.04       99.07    1.21    99.15                      97.88    99.02        0.99
+                         DBA             Fashion                            90.46    99.31        79.01                  5.94       89.51    6.02    89.08                      99.25    90.55        3.65
+                                        CIFAR-10S                           79.56    95.73        69.52                  7.10       78.66    5.67    76.94                      95.81    78.96        5.96
+
+
+                               FedAvg                                           Fine-tuning                                             Ditto                                           FedBN
+               100                                                100                                                    100                                              100
+                               MA       BA                                          MA       BA                                         MA      BA                                       MA      BA
+               75                                                 75                                                     75                                               75
+Accuracy (%)
+
+
+
+
+                                                   Accuracy (%)
+
+
+
+
+                                                                                                          Accuracy (%)
+
+
+
+
+                                                                                                                                                           Accuracy (%)
+                                             0.1                                                    0.1                                              0.1                                                0.1
+               50                            0.2                  50                                0.2                  50                          0.2                  50                            0.2
+                                             0.3                                                    0.3                                              0.3                                                0.3
+                                             0.4                                                    0.4                                              0.4                                                0.4
+               25                                                 25                                                     25                                               25
+
+                0                                                  0                                                      0                                                0
+                     0    100 200 300 400 500                           0     100 200 300 400 500                              0   100 200 300 400 500                          0   100 200 300 400 500
+                               Rounds                                               Rounds                                             Rounds                                           Rounds
+Figure 5: Robust enhancement brought by FLIGHT on typical pFL approaches under Badnet attack with δ ∈
+{0.1, 0.2, 0.3, 0.4}.
+
+
+different tasks (model parameters d) in completing total 500                                                         linearly related to n but because the detection protocol
+training rounds.                                                                                                     executes in the C-S phase, its run-time is higher compared to
+                                                                                                                     FLIGHT. Compared to SecureFL, FLIGHT incurs a increase
+Comparison with Previous Works. Figure 6 demonstrates                                                                in communication cost due to the protocol ΠCluster used in
+the improvement in total aggregation efficiency of FLIGHT,                                                           Stage1. However, in a LAN setting, the limited invocation
+combining Stage1 and Stage2, compared to previous works                                                              of ΠCluster in Stage1 does not result in significant run-time.
+(detailed costs are provided in Appendix D.1). Figure 6a                                                             Additionally, most of the aggregation operations occur at
+and 6b illustrate the communication cost and run-time un-                                                            Stage2 with O(nd) complexity, thereby reduce 3-36× less
+der different training tasks, we find that FLIGHT incurs                                                             run-time in total.
+a 3× higher communication cost than SecureFL due to                                                                  Efficiency of Stage2. Furthermore, we evaluate the ef-
+the use of the communication-intensive protocol ΠCluster in                                                          ficiency of Stage2 with increasing clients n and model
+Stage1. However, it reduces the communication by 3-67×                                                               parameters d in Figure 7. Benefit of the backdoor detection
+compared to FLAME and RoFL. This is because we only                                                                  protocol with complexity O(nd), the communication cost
+invoke a limited amount of ΠCluster during the early rounds                                                          and run-time scale linearly with d and n.
+of training, and implement a communication-efficient 2PC                                                                  The overall efficiency improvements of FLIGHT can be
+protocol in Stage2. Moreover, our GPU-based ciphertext                                                               attributed to two main factors: 1) Our two-stage personalized
+matrix multiplication significantly reduce the run-time of the                                                       defense mechanism is friendly to MPC communication, use
+2PC protocols, completing the entire aggregation in only 2-                                                          less clustering protocols to achieve O(nd) linear detection.
+64× less time. Meanwhile, in Figure 6c and 6d, we observe                                                            2) We design a series of communication-efficient 2PC pro-
+that as client n increases, the overhead faced by prior works                                                        tocols and utilize GPU to perform fast ciphertext multi-
+during aggregation become intolerable. FLAME, which uses                                                             plication. As a result, compared to existing robust secure
+clustering-based detection algorithm with O(n2 d) complex-                                                           aggregation methods, FLIGHT requires 2-64× less run-
+ity, experiences a significant increase in communication cost                                                        time to achieve total 500 rounds backdoor-resistant secure
+as n grows. Even though it invokes 2PC-based detection                                                               aggregation.
+protocol ΠCluster in the S-S phase, it still suffers from long
+aggregation time. RoFL’s communication cost scales linearly                                                          6.3. Robustness-Efficiency Trade-off Analysis.
+with n , but the time required to generate and verify L2 -norm
+proofs also increases with n, leading to low aggregation                                                                Furthermore, we formalize the trade-off between ro-
+efficiency. SecureFL’s communication cost and run-time are                                                           bustness and efficiency under Badnet Attack on MNIST
+
+
+
+
+                                                                                                          819
+
+         Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+                  FLAME           FLIGHT-Stage1                                FLAME              FLIGHT-Stage1                                 FLAME           FLIGHT-Stage1                                        FLAME              FLIGHT-Stage1
+        104       RoFL            FLIGHT-Stage2                                RoFL               FLIGHT-Stage2               104               RoFL            FLIGHT-Stage2                                        RoFL               FLIGHT-Stage2
+
+
+
+
+                                                   Run-time (Min)
+
+
+
+
+                                                                                                                                                                                      Run-time (Min)
+                  SecureFL                                                     SecureFL                                                         SecureFL                                                             SecureFL
+                                                                                                                                                                                                    103
+Comm (GB)
+
+
+
+
+                                                                                                                     Comm (GB)
+                                                                103
+        103                                                                                                                   103
+
+        102                                                     102                                                                                                                                 102
+                                                                                                                              102
+        101                                                     101                                                           101                                                                   101
+                 MNIST       CIFAR-10S CIFAR-10L                           MNIST            CIFAR-10S CIFAR-10L                                 25         50             100                                       25            50              100
+                     Training Tasks                                                 Training Tasks                                              Number of Clients                                                    Number of Clients
+  (a) Communication cost with dif- (b) Run-time with different train- (c) Communication cost with dif- (d) Run-time with different num-
+  ferent training tasks.           ing tasks.                         ferent number of clients.        ber of clients.
+Figure 6: Communication cost (GB) and Run-time (Min) of FLIGHT and previous works. In (a)(b), the number of clients
+selected to participate in aggregation is fixed as 10. In (c)(d), the training task is fixed as MNIST (62k). Note the y-axis is
+in log scale.
+
+            600    25 Clients 75 Clients
+                                                                    200        25 Clients      75 Clients
+                                                                                                                                 900   150k Parameters            250k Parameters                                   150k Parameters         250k Parameters
+            500    50 Clients 100 Clients                                      50 Clients      100 Clients                       750   200k Parameters            300k Parameters                      250          200k Parameters         300k Parameters
+                                                   Run-time (Min)
+
+
+
+
+                                                                                                                                                                                      Run-time (Min)
+Comm (GB)
+
+
+
+
+                                                                                                                     Comm (GB)
+            400                                                     150                                                          600                                                                   200
+            300                                                                                                                  450                                                                   150
+                                                                    100
+            200                                                                                                                  300
+                                                                                                                                                                                                       100
+            100                                                      50                                                          150
+              0 50 100 150 200 250 300                                                                                             0 25 50 75                                                            50
+                                                                          50     100 150 200 250 300                                                            100 125 150                                   25         50     75     100 125 150
+               Number of Parameters (k)                                   Number of Parameters (k)                                              Number of Clients                                                    Number of Clients
+  (a) Communication cost with dif- (b) Run-time with                                                         different (c) Communication cost with dif- (d) Run-time with different num-
+  ferent model parameters.         model parameters.                                                                   ferent number of clients         ber of clients
+Figure 7: Communication cost (GB) and Run-time (Min) of FLIGHT-Stage2. In (a)(b), different lines represent different
+number of clients selected to participate in aggregation. In (c)(d), different lines represent different model parameters.
+
+
+task (Figure 8) across different approaches. We find that                                                                                       FLAME                    RoFL                                  SecureFL                          FLIGHT
+FLIGHT, with the shortest aggregation time, effectively
+                                                                                                                                          99                                                                 100
+
+                                                                                                                                                                                          Backdoor Acc (%)
+limits the convergence of BA on poisoned samples under
+                                                                                                                                          98                                                                  80
+                                                                                                                           Main Acc (%)
+
+
+
+
+the Non-IID setting, reducing run-time by approximately 2-
+17× compared to other schemes. In contrast, both FLAME                                                                                    97                                                                  60
+and RoFL demonstrate similar backdoor defense capabilities                                                                                96                                                                  40
+with lower BA, while RoFL requires a trade-off in the                                                                                     95                                                                  20
+form of reduced MA. However, both methods incur sig-                                                                                      94                                                                   0
+nificantly longer run-time. SecureFL’s higher BA illustrates                                                                                0        200   400        600           800                         0         200         400       600           800
+its inability to resist backdoor injections, and its run-time is                                                                                     Run-time (Min)                                                       Run-time (Min)
+longer than FLIGHT due to the robust protocol employed
+                                                                                                                            Figure 8: Robustness-Efficiency trade-off for various robust
+during the C-S phase. Additionally, Appendix D.2 demon-
+                                                                                                                            secure aggregation methods after 500 training rounds on
+strates that in the larger-scale CIFAR-10S and CIFAR-10L
+                                                                                                                            training task MNIST. The x-axis represents the run-time and
+tasks, FLIGHT’s reduction in run-time becomes even more
+                                                                                                                            the y -axis represents the MA (↑) and BA (↓) after training.
+pronounced (up to 64×) compared to other approaches,
+while maintaining the same level of backdoor resistance.
+Therefore, across tasks of any scale, FLIGHT enhances
+both efficiency and robustness, providing an effective ro-                                                                  Euclidean distances to the majority as the aggregation result.
+bust secure aggregation solution for personalized federated                                                                 Trimmed Mean [56] removes the highest and lowest outliers
+learning.                                                                                                                   in each parameter dimension across updates and computes
+                                                                                                                            the mean of the remaining values. While these approaches
+7. Related Work                                                                                                             are effective against untargeted attacks that severely degrade
+                                                                                                                            the global model’s main task accuracy (MA), they struggle
+Poisoning Attack Defenses. To defend against poisoning                                                                      to defend against stealthy backdoor attacks that have mini-
+attacks, existing robust defense methods commonly utilize                                                                   mal impact on MA. FLTrust [9] assumes access to a benign
+detection algorithms to filter out poisoned updates. Meth-                                                                  validation dataset and filters updates with large angular devi-
+ods such as Krum and M-Krum [5] leverage statistical                                                                        ations from benign samples, but this assumption is difficult
+differences, selecting the model updates with the smallest                                                                  to achieve in practice and is ineffective against dynamic
+
+
+
+
+                                                                                                                    820
+
+      Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+poisoned updates with backdoor, especially under Non-IID                       attacks simultaneously. Nevertheless, the complexity of the
+conditions. Norm-based defenses [49] constrain the L2 -                        detection algorithm results in substantial communication
+norm of updates to mitigate untargeted and backdoor attacks,                   overhead, thereby reducing aggregation efficiency. Com-
+though overly strict norm bounds may inadvertently restrict                    pared to previous works, FLIGHT introduces (1) a two-stage
+benign updates, resulting in reduced MA. FLAME [41] em-                        personalized defense mechanism that effectively mitigates
+ploys density-based clustering (HDBSCAN [7]) for dynamic                       backdoor attacks in the Non-IID setting with lightweight
+defenses, effectively addressing stealthy backdoor attacks in                  complexity, and (2) a series of 2PC protocols based on this
+Non-IID scenarios, though this non-linear clustering method                    defense mechanism, which leverage their low complexity to
+incurs high computational complexity.                                          achieve efficient and robust secure aggregation, providing
+Inference Attack Defenses. To mitigate inference attacks                       both backdoor resistance and protection against inference
+and prevent a compromised server from accessing model                          attacks. This approach harmonizes robustness and efficiency,
+updates directly, many solutions employ cryptographic tech-                    resulting in mutual enhancement. In addition, PBFL [38]
+niques for encrypting these updates, facilitating secure ag-                   and FLEDGE [11] combine blockchain with robust defense
+gregation on the server side. Bonawitz et al. utilize the                      strategies, with the former using similarity detection tech-
+Diffie-Hellman algorithm [14], allowing clients to exchange                    niques and the latter incorporating clustering techniques to
+paired additive masks to blind their model updates [6].                        filter poisoned updates. However, the decentralized structure
+During aggregation, these masks cancel each other out, re-                     is not friendly to edge client nodes with poor computational
+vealing the aggregated result. However, this extensive mask                    resources and the consensus algorithm requires significant
+exchange incurs significant communication overhead. Aono                       network resources. In contrast, we focuses on more realistic
+et al. employ homomorphic encryption (HE) to encrypt                           resource-constrained scenarios. Therefore, in this work, we
+model updates, enabling the server to perform additive                         do not compare with blockchain-based schemes.
+aggregation directly on the homomorphic ciphertexts [2].
+Nonetheless, HE causes ciphertext expansion, which limits                      8. Conclusion
+communication efficiency. Additionally, secure multi-party
+computation (MPC) can be adapted for secure aggregation                            In this paper, we first analyze the vulnerability of pFL to
+scenarios [12], [1]. Unlike the previous methods, MPC-                         backdoor attacks and reveal that current robust secure aggre-
+based secure aggregation requires multiple servers as ag-                      gation methods fail to provide effective backdoor robustness
+gregators. Clients secret-share their model updates during                     for pFL while maintaining high aggregation efficiency. Con-
+the upload phase, and aggregators execute MPC protocols to                     sequently, we propose FLIGHT, a robust secure aggregation
+compute the aggregated result. Since MPC supports complex                      method for pFL. FLIGHT provides an efficient and privacy-
+non-linear operations, it is possible to design protocols that                 preserving backdoor defense through its two-stage defense
+incorporate robust defense methods, achieving robust secure                    mechanism and communication-efficient 2PC protocols. Ex-
+aggregation.                                                                   tensive experiments validate these improvements.
+Robust Secure Aggregation (Hybrid Defenses). With the                          Limitations and Future Work. While FLIGHT provides
+aim to preserve model update privacy and resist poisoning                      strong security guarantees under the semi-honest adversary
+attacks from malicious clients, some works combine robust                      As , under the assumption of a malicious adversary setting,
+defense mechanism and cryptographic tools to propose the                       the adversary As can arbitrarily deviate from the robust
+robust secure aggregation [36]. Earlier, MLGuard [27] com-                     secure aggregation protocol, including altering the protocol’s
+bines naive Krum [5] with MPC to achieve robust secure                         inputs and aggregation results, thereby fully controlling
+aggregation. Recently, SecureFL [25] employ Secure Two-                        the output of the global model. To counter such advanced
+party Computation (2PC) protocols with linear complexity                       adversary, verification schemes such as Homomorphic Hash
+to implement the FLTrust [9] defense strategy, assuming that                   Function (HHF) [19] and Message Authentication Code
+the server possesses a fixed validation dataset. However,                      (MAC) [3], [22] can be employed to verify the aggregation
+like the defense methods on which these approaches are                         results, detect malicious activities, and abort the protocol
+based, they fail to provide sufficient backdoor resistance                     in a timely manner, ensuring correctness during the aggre-
+in the Non-IID setting. RoFL [35] sets an L2 -norm bound                       gation process. However, applying these methods to robust
+for model updates to exclude large norm poisoned updates.                      detection algorithms requires significant precomputation and
+Furthermore, each client generates a ZKP proof regard-                         communication overhead with ciphertexts. Therefore, bal-
+ing its L2 -norm and uploads it to the server along with                       ancing the efficiency of aggregation with verification while
+HE-encrypted model updates. The server verifies the ZKP                        defending against backdoor attacks is a direction for future
+proofs, and model updates satisfying the bound condition                       expansion in FLIGHT.
+are aggregated under HE ciphertext. Similarly, ELSA [47]
+implements the L2 -norm bound detection protocol using                         Acknowledgements
+MPC. However, like RoFL, the overly strict norm bound-
+aries restrict backdoor injections but lead to a significant                      We are grateful to the anonymous reviewers and shep-
+drop in MA. In contrast, FLAME [41] designs 2PC protocols                      herd for their valuable feedback and constructive comments.
+to implement HDBSCAN clustering [7] with the aim of                            This work is supported by the Beijing Municipal Science &
+effectively defending against both poisoning and inference                     Technology Commission (Z231100005923047).
+
+
+
+
+                                                                         821
+
+  Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+References                                                                              [19] D. M. Freeman, “Improved security for linearly homomorphic signa-
+                                                                                             tures: A generic framework,” in Public Key Cryptography–PKC 2012:
+                                                                                             15th International Conference on Practice and Theory in Public Key
+[1]     S. Addanki, K. Garbe, E. Jaffe, R. Ostrovsky, and A. Polychroniadou,                 Cryptography, Darmstadt, Germany, May 21-23, 2012. Proceedings
+        “Prio+: Privacy preserving aggregate statistics via boolean shares,” in              15. Springer, 2012, pp. 697–714.
+        International Conference on Security and Cryptography for Networks.
+        Springer, 2022, pp. 516–539.                                                    [20] J. Geiping, H. Bauermeister, H. Dröge, and M. Moeller, “Inverting
+                                                                                             gradients-how easy is it to break privacy in federated learning?”
+[2]     Y. Aono, T. Hayashi, L. Wang, S. Moriai et al., “Privacy-preserving                  Advances in neural information processing systems, vol. 33, pp.
+        deep learning via additively homomorphic encryption,” IEEE trans-                    16 937–16 947, 2020.
+        actions on information forensics and security, vol. 13, no. 5, pp.
+        1333–1345, 2017.                                                                [21] O. Goldreich, S. Micali, and A. Wigderson, “How to play any mental
+                                                                                             game, or a completeness theorem for protocols with honest majority,”
+[3]     T. Araki, A. Barak, J. Furukawa, T. Lichter, Y. Lindell, A. Nof,                     in Providing Sound Foundations for Cryptography: On the Work of
+        K. Ohara, A. Watzman, and O. Weinstein, “Optimized honest-                           Shafi Goldwasser and Silvio Micali, 2019, pp. 307–328.
+        majority mpc for malicious adversaries—breaking the 1 billion-gate
+        per second barrier,” in 2017 IEEE Symposium on Security and Privacy             [22] V. Goyal and Y. Song, “Malicious security comes free in honest-
+        (SP). IEEE, 2017, pp. 843–862.                                                       majority mpc,” Cryptology ePrint Archive, 2020.
+[4]     E. Bagdasaryan, A. Veit, Y. Hua, D. Estrin, and V. Shmatikov,                   [23] T. Gu, K. Liu, B. Dolan-Gavitt, and S. Garg, “Badnets: Evaluating
+        “How to backdoor federated learning,” in International conference on                 backdooring attacks on deep neural networks,” IEEE Access, vol. 7,
+        artificial intelligence and statistics. PMLR, 2020, pp. 2938–2948.                   pp. 47 230–47 244, 2019.
+[5]     P. Blanchard, E. M. El Mhamdi, R. Guerraoui, and J. Stainer, “Ma-               [24] M. Hao, H. Li, H. Chen, P. Xing, G. Xu, and T. Zhang, “Iron:
+        chine learning with adversaries: Byzantine tolerant gradient descent,”               Private inference on transformers,” Advances in neural information
+        Advances in neural information processing systems, vol. 30, 2017.                    processing systems, vol. 35, pp. 15 718–15 731, 2022.
+[6]     K. Bonawitz, V. Ivanov, B. Kreuter, A. Marcedone, H. B. McMahan,                [25] M. Hao, H. Li, G. Xu, H. Chen, and T. Zhang, “Efficient, private
+        S. Patel, D. Ramage, A. Segal, and K. Seth, “Practical secure aggre-                 and robust federated learning,” in Proceedings of the 37th Annual
+        gation for privacy-preserving machine learning,” in proceedings of the               Computer Security Applications Conference, 2021, pp. 45–60.
+        2017 ACM SIGSAC Conference on Computer and Communications                       [26] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning
+        Security, 2017, pp. 1175–1191.                                                       for image recognition,” in Proceedings of the IEEE conference on
+[7]     R. J. Campello, D. Moulavi, and J. Sander, “Density-based clustering                 computer vision and pattern recognition, 2016, pp. 770–778.
+        based on hierarchical density estimates,” in Pacific-Asia conference            [27] Y. Khazbak, T. Tan, and G. Cao, “Mlguard: Mitigating poisoning
+        on knowledge discovery and data mining. Springer, 2013, pp. 160–                     attacks in privacy preserving distributed collaborative learning,” in
+        172.                                                                                 2020 29th international conference on computer communications and
+[8]     R. Canetti, “Security and composition of multiparty cryptographic                    networks (ICCCN). IEEE, 2020, pp. 1–9.
+        protocols,” Journal of CRYPTOLOGY, vol. 13, pp. 143–202, 2000.                  [28] A. Krizhevsky, G. Hinton et al., “Learning multiple layers of features
+[9]     X. Cao, M. Fang, J. Liu, and N. Z. Gong, “Fltrust: Byzantine-                        from tiny images,” 2009.
+        robust federated learning via trust bootstrapping,” arXiv preprint              [29] Y. LeCun, B. Boser, J. S. Denker, D. Henderson, R. E. Howard,
+        arXiv:2012.13995, 2020.                                                              W. Hubbard, and L. D. Jackel, “Backpropagation applied to hand-
+[10] N. Carlini, F. Tramer, E. Wallace, M. Jagielski, A. Herbert-Voss,                       written zip code recognition,” Neural computation, vol. 1, no. 4, pp.
+     K. Lee, A. Roberts, T. Brown, D. Song, U. Erlingsson et al., “Ex-                       541–551, 1989.
+     tracting training data from large language models,” in 30th USENIX                 [30] Y. LeCun, L. Bottou, Y. Bengio, and P. Haffner, “Gradient-based
+     Security Symposium (USENIX Security 21), 2021, pp. 2633–2650.                           learning applied to document recognition,” Proceedings of the IEEE,
+[11] J. Castillo, P. Rieger, H. Fereidooni, Q. Chen, and A. Sadeghi,                         vol. 86, no. 11, pp. 2278–2324, 1998.
+     “Fledge: Ledger-based federated learning resilient to inference and                [31] D. Li, H. Wang, R. Shao, H. Guo, E. Xing, and H. Zhang, “Mpc-
+     backdoor attacks,” in Proceedings of the 39th Annual Computer                           former: Fast, performant and private transformer inference with mpc,”
+     Security Applications Conference, 2023, pp. 647–661.                                    in The Eleventh International Conference on Learning Representa-
+[12] H. Corrigan-Gibbs and D. Boneh, “Prio: Private, robust, and scalable                    tions, 2022.
+     computation of aggregate statistics,” in 14th USENIX symposium on                  [32] T. Li, S. Hu, A. Beirami, and V. Smith, “Ditto: Fair and robust fed-
+     networked systems design and implementation (NSDI 17), 2017, pp.                        erated learning through personalization,” in International conference
+     259–282.                                                                                on machine learning. PMLR, 2021, pp. 6357–6368.
+[13] D. Demmler, T. Schneider, and M. Zohner, “Aby-a framework for                      [33] X. Li, M. Jiang, X. Zhang, M. Kamp, and Q. Dou, “Fedbn: Federated
+     efficient mixed-protocol secure two-party computation.” in NDSS,                        learning on non-iid features via local batch normalization,” arXiv
+     2015.                                                                                   preprint arXiv:2102.07623, 2021.
+[14] W. Diffie and M. E. Hellman, “New directions in cryptography,” IEEE                [34] P. P. Liang, T. Liu, L. Ziyin, N. B. Allen, R. P. Auerbach, D. Brent,
+     Transactions on Information Theory, vol. 22, no. 6, 1976.                               R. Salakhutdinov, and L.-P. Morency, “Think locally, act globally:
+[15] Y. Dong, X. Chen, K. Li, D. Wang, and S. Zeng, “Flod: Oblivious de-                     Federated learning with local and global representations,” arXiv
+     fender for private byzantine-robust federated learning with dishonest-                  preprint arXiv:2001.01523, 2020.
+     majority,” in European Symposium on Research in Computer Security.                 [35] H. Lycklama, L. Burkhalter, A. Viand, N. Küchler, and A. Hithnawi,
+     Springer, 2021, pp. 497–518.                                                            “Rofl: Robustness of secure federated learning,” in 2023 IEEE Sym-
+[16] J. Fan and F. Vercauteren, “Somewhat practical fully homomorphic                        posium on Security and Privacy (SP). IEEE, 2023, pp. 453–476.
+     encryption,” Cryptology ePrint Archive, 2012.                                      [36] M. Mansouri, M. Önen, W. B. Jaballah, and M. Conti, “Sok: Secure
+[17] M. Fang, X. Cao, J. Jia, and N. Gong, “Local model poisoning attacks                    aggregation based on cryptographic schemes for federated learning,”
+     to {Byzantine-Robust} federated learning,” in 29th USENIX security                      Proceedings on Privacy Enhancing Technologies, 2023.
+     symposium (USENIX Security 20), 2020, pp. 1605–1622.                               [37] B. McMahan, E. Moore, D. Ramage, S. Hampson, and B. A. y Arcas,
+[18] U. Fiege, A. Fiat, and A. Shamir, “Zero knowledge proofs of identity,”                  “Communication-efficient learning of deep networks from decentral-
+     in Proceedings of the nineteenth annual ACM symposium on Theory                         ized data,” in Artificial intelligence and statistics. PMLR, 2017, pp.
+     of computing, 1987, pp. 210–217.                                                        1273–1282.
+
+
+
+
+                                                                                  822
+
+      Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+[38] Y. Miao, Z. Liu, H. Li, K.-K. R. Choo, and R. H. Deng, “Privacy-                 [55] H. Yan, W. Zhang, Q. Chen, X. Li, W. Sun, H. Li, and X. Lin,
+     preserving byzantine-robust federated learning via blockchain sys-                    “Recess vaccine for federated learning: Proactive defense against
+     tems,” IEEE Transactions on Information Forensics and Security,                       model poisoning attacks,” Advances in Neural Information Processing
+     vol. 17, pp. 2848–2861, 2022.                                                         Systems, vol. 36, 2024.
+[39] P. Mohassel and Y. Zhang, “Secureml: A system for scalable privacy-              [56] D. Yin, Y. Chen, R. Kannan, and P. Bartlett, “Byzantine-robust dis-
+     preserving machine learning,” in 2017 IEEE symposium on security                      tributed learning: Towards optimal statistical rates,” in International
+     and privacy (SP). IEEE, 2017, pp. 19–38.                                              conference on machine learning. Pmlr, 2018, pp. 5650–5659.
+[40] T. D. Nguyen, S. Marchal, M. Miettinen, H. Fereidooni, N. Asokan,
+     and A.-R. Sadeghi, “Dı̈ot: A federated self-learning anomaly detection           Appendix A.
+     system for iot,” in 2019 IEEE 39th International conference on
+     distributed computing systems (ICDCS). IEEE, 2019, pp. 756–767.                  Notations
+[41] T. D. Nguyen, P. Rieger, R. De Viti, H. Chen, B. B. Brandenburg,
+     H. Yalame, H. Möllering, H. Fereidooni, S. Marchal, M. Miettinen                    The Table 3 displays the notations used in this paper.
+     et al., “{FLAME}: Taming backdoors in federated learning,” in 31st
+     USENIX Security Symposium (USENIX Security 22), 2022, pp. 1415–                                       TABLE 3: Notation table.
+     1432.
+[42] M. S. Ozdayi, M. Kantarcioglu, and Y. R. Gel, “Defending against                              Ci                  Client i ∈ [1, n]
+     backdoors in federated learning with robust learning rate,” in Pro-                           Sj                  Server j ∈ [1, 2]
+     ceedings of the AAAI Conference on Artificial Intelligence, vol. 35,                           x          Lowercase letter denotes scalar
+     no. 10, 2021, pp. 9268–9276.                                                                   x        Lowercase bold letter denotes vector
+                                                                                                   J·K            Additional secret sharing
+[43] K. Pillutla, K. Malik, A.-R. Mohamed, M. Rabbat, M. Sanjabi, and                             Z2ℓ        Discrete ring modulo 2ℓ with ℓ-bits
+     L. Xiao, “Federated learning with partial model personalization,” in                           n              Number of total clients
+     International Conference on Machine Learning. PMLR, 2022, pp.                                 m             Number of malicious clients
+     17 716–17 758.                                                                                 η                    Learning rate
+[44] S. R. Pokhrel and J. Choi, “Federated learning with blockchain                                θp      Threshold of validation model upgrading
+     for autonomous vehicles: Analysis and design challenges,” IEEE                               θexp          Threshold of negExp function
+     Transactions on Communications, vol. 68, no. 8, pp. 4734–4746,
+     2020.
+[45] Z. Qin, L. Yao, D. Chen, Y. Li, B. Ding, and M. Cheng, “Revis-                   Appendix B.
+     iting personalized federated learning: Robustness against backdoor               Details of Protocol ΠNT and ΠSoftmax
+     attacks,” in Proceedings of the 29th ACM SIGKDD Conference on
+     Knowledge Discovery and Data Mining, 2023, pp. 4743–4755.
+                                                                                          Protocol 1 and 2 show the details of ΠNT (Norm Tem-
+[46] D. Rathee, M. Rathee, R. K. K. Goli, D. Gupta, R. Sharma, N. Chan-
+     dran, and A. Rastogi, “Sirnn: A math library for secure rnn inference,”          perature) and ΠSoftmax (Softmax):
+     in 2021 IEEE Symposium on Security and Privacy (SP). IEEE, 2021,
+     pp. 1003–1020.
+                                                                                        Protocol 1: Norm temperature ΠNT
+[47] M. Rathee, C. Shen, S. Wagh, and R. A. Popa, “Elsa: Secure
+     aggregation for federated learning with malicious actors,” in 2023
+                                                                                          Input: Sj , j ∈ [1, 2] holds Jcosi Kj , Jli Kj for
+     IEEE Symposium on Security and Privacy (SP). IEEE, 2023, pp.                                  i ∈ [1, n].
+     1961–1979.                                                                           Output: Sj gets JTi Kj , where
+[48] N. Rieke, J. Hancox, W. Li, F. Milletari, H. R. Roth, S. Albarqouni,                            Ti = (Mean(li )/li )sgn(cosi ) .
+     S. Bakas, M. N. Galtier, B. A. Landman, K. Maier-Hein et al., “The                 1 JmK = ΠMean (Jli∈[1,n] K).
+     future of digital health with federated learning,” NPJ digital medicine,           2 J1/mK = ΠRecip (JmK).
+     vol. 3, no. 1, pp. 1–7, 2020.
+                                                                                        3 for client i ∈ [1, n] in parallel do
+[49] Z. Sun, P. Kairouz, A. T. Suresh, and H. B. McMahan, “Can you re-                  4     J1/li K = ΠRecip (Jli K).
+     ally backdoor federated learning?” arXiv preprint arXiv:1911.07963,
+     2019.
+                                                                                        5     Jbi KB = ΠCmp (Jcosi K).
+                                                                                        6     Jli /mK = ΠMul (Jli K, J1/mK),
+[50] C. T Dinh, N. Tran, and J. Nguyen, “Personalized federated learning                       Jm/li K = ΠMul (JmK, J1/li K).
+     with moreau envelopes,” Advances in Neural Information Processing
+     Systems, vol. 33, pp. 21 394–21 405, 2020.                                         7     JTi K =
+                                                                                               ΠMulAB ((Jm/li K − Jli /mK), Jbi KB ) + Jli /mK.
+[51] J.-L. Watson, S. Wagh, and R. A. Popa, “Piranha: A {GPU} plat-
+                                                                                        8 end
+     form for secure computation,” in 31st USENIX Security Symposium
+     (USENIX Security 22), 2022, pp. 827–844.                                           9 return JTi K.
+
+[52] H. Xiao, K. Rasul, and R. Vollgraf, “Fashion-mnist: a novel im-
+     age dataset for benchmarking machine learning algorithms,” arXiv                     In the protocol ΠNT , given the cosine similarity vector
+     preprint arXiv:1708.07747, 2017.
+                                                                                      Jcosi∈[1,n] K and the norm vector Jli∈[1,n] K as inputs, we first
+[53] C. Xie, K. Huang, P.-Y. Chen, and B. Li, “Dba: Distributed backdoor              use protocol ΠMean (Jli∈[1,n] K) to compute the mean JmK of
+     attacks against federated learning,” in International conference on
+     learning representations, 2019.                                                  the norm vector, followed by using protocol ΠRecip (JmK)
+                                                                                      to compute its reciprocal J1/mK. Next, we apply protocol
+[54] Y. Xie, Z. Wang, D. Gao, D. Chen, L. Yao, W. Kuang, Y. Li, B. Ding,
+     and J. Zhou, “Federatedscope: A flexible federated learning platform
+                                                                                      ΠRecip (Jli∈[1,n] K) to calculate the reciprocal of each value in
+     for heterogeneity,” Proceedings of the VLDB Endowment, vol. 16,                  the norm vector and use protocol ΠCmp (Jcosi K) to determine
+     no. 5, pp. 1059–1072, 2023.                                                      whether cosi ≥ 0. If it is, returns bi = 1; otherwise, returns
+
+
+
+
+                                                                                823
+
+   Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+bi = 0. Then, we use multiplication protocol ΠMul to com-                      protocol. Given that the protocol ΠMul is secure, the view
+pute values Jli /mK and Jm/li K, and finally, the multiplexer                  of Sj in the real world is computationally indistinguishable
+constructed by protocol ΠMulAB ((Jm/li K − Jli /mK), Jbi KB ) +                from that in the ideal world.
+Jli /mK determines the output norm temperature JTi K: if                           Security of ΠNT : The security of ΠNT relies on the ideal
+bi = 1, it returns Jm/li K; if bi = 0, it returns Jli /mK.                     (ΠMean , ΠRecip , ΠCmp , ΠMul , ΠMulAB )-hybrid model. In the
+                                                                               real-world, we black-box access the hybrid model. In the
+ Protocol 2: Softmax ΠSoftmax                                                  ideal-world, the output of Sim for Sj is randomly chosen
+                                                                               from Z2ℓ . Thus, Sj ’s view in real-world is computationally
+   Input: Sj , j ∈ [1, 2] holds Jpsi Kj for i ∈ [1, n],
+                                                                               indistinguishable from that in ideal-world.
+            where psi = cosi · Ti .
+   Output: Sj gets JSoftmax(γi )Kj .                                               Security of ΠSoftmax : In the real-world, we black-box
+ 1 Jpsmax K = ΠMax (Jpsi∈[1,n] K).
+                                                                               access ideal ΠMax , ΠRecip , ΠCmp , ΠMul , ΠMulAB to get Jγi K.
+                                                                               While, Sim samples a random number r ∈R Z2ℓ in the
+ 2 for client i ∈ [1, n] in parallel do
+                                                                               ideal-world, and sends it to Sj as the sharing of Jγi K.
+ 3     Jbi KB = ΠCmp (JpsK − θexp ).
+                                                                               As the (ΠMax , ΠRecip , ΠCmp , ΠMul , ΠMulAB )-hybrid model is
+ 4     Jzi K = 1 + Jpsi − psmax K.
+                                                                               secure, the view of Sj in real-world is also computationally
+ 5     Jzi K = ΠMulAB (Jzi K, Jbi KB ).
+                                                                               indistinguishable from that in ideal-world.
+ 6     Jzi2 K = ΠMulP(Jzi K, Jzi K).
+          2           n                                                            Therefore, we guarantee that the adversary As infers
+ 7     Jzsum    K = i=1 (Jzi2 K).                                              nothing beyond the aggregation result wg .
+              2                   2
+ 8     J1/zsum    K = ΠRecip (Jzsum   K).
+ 9
+                2
+       Jzi2 /zsum                         2
+                   K = ΠMul (Jzi2 K, J1/zsum K).
+10
+                   2  2
+       Jγi K = Jzi /zsum K.                                                    C.2. Proof of Theorem 2
+11 end
+12 return Jγi K.
+                                                                               Proof. To demonstrate that the ciphertext operations yield
+                                                                               the same backdoor-resistant effectiveness as plaintext oper-
+                                                                               ations, we need to verify the correctness of FLIGHT:
+     In the protocol ΠSoftmax , given the personalized                              The correctness of FLIGHT relies on the J·K-sharing se-
+score vector Jpsi∈[1,n] K as input, we first use protocol                      mantics and the cryptographic protocols ΠCos , ΠNT , ΠSoftmax ,
+ΠMax (Jpsi∈[1,n] K) to compute the maximum value Jpsmax K                      which are based on ideal protocols defined in SIRNN [46].
+in the vector. Next, for each value Jpsi K in the vector,                      The correctness of J·K-sharing is evident [13], [39], and sim-
+we compare it with the threshold θexp : if it exceeds the                      ilarly, the ideal protocols ΠMul , ΠMulAB , ΠMean , ΠRecip , ΠCmp ,
+threshold, we set bi = 1; otherwise bi = 0. We then calculate                  and ΠMax are also correct. Furthermore, 1) ΠCos correctly
+1 + Jpsi − psmax K, multiply it by Jbi KB , and use this as                    computes the cosine similarity based on ΠMul . 2) (ΠMean ,
+the input Jzi K for the softmax computation. For each input                    ΠRecip , ΠCmp , ΠMul , ΠMulAB )-hybrid protocol ensures Sj
+Jzi K, we approximate its softmax output using the 2Quad                       gets the result JTi Kj , Ti = (Mean(li∈[1,n] )/li )sgn(cosi ) , since
+method: protocol ΠMul (Jzi K, Jzi K) is used to compute the                    the J·K-sharing is correct, the protocol ΠNT can correctly
+square Jzi2 K of each input, followed by summing the squared                   compute the norm temperature of li . 3) ΠSoftmax correctly
+                                            2
+results and calculating its reciprocal J1/zsum K. Finally, the                 computes the softmax based on (ΠMax , ΠRecip , ΠCmp , ΠMul ,
+                                   2      2
+multiplication protocol ΠMul (Jzi K, J1/zsum K) is applied to                  ΠMulAB )-hybrid protocol.
+obtain the final output Jγi K.
+
+Appendix C.                                                                    Appendix D.
+Proof of Security and Correctness                                              Supplementary Materials for Aggregation Cost
+
+C.1. Proof of Theorem 1                                                        D.1. Details of FLIGHT’s Aggregation Cost
+
+Proof. We analyze FLIGHT securely realize the protocols                            Table 4 presents the total aggregation cost of FLIGHT
+ΠCos , ΠNT , and ΠSoftmax against the semi-honest As , en-                     under various inputs, including a wide range of models and
+suring As cannot infer anything beyond wg . Given the                          client numbers, consistent with the total costs depicted in
+ideal protocols ΠMul , ΠMulAB , ΠMean , ΠRecip , ΠCmp , and ΠMax               Figure 6. For different neural network models, we ensure
+defined in [46], we now outline the security proof of ΠCos ,                   that 10% of the 100 clients are selected for aggregation in
+ΠNT , and ΠSoftmax in the stand-alone model under sequential                   each round. When varying the number of clients partici-
+composition [8], and show that the view of Sj corrupted                        pating in the aggregation, we consistently use the MNIST
+by adversary As in the real-world is computational indis-                      training task for evaluation.
+tinguishable of to the ideal-world simulation of adversary                         Table 5 shows the relationship between the execution
+(simulator) Sim:                                                               efficiency of various protocols in FLIGHT-Stage2 and the
+    Security of ΠCos : Since ΠCos relies solely on the un-                     number of clients n. We observe that the communication and
+derlying ΠMul , we faithfully executes ΠMul to achieve ΠCos                    run-time of each protocol increase linearly with n. The main
+and the security of ΠCos also stems from this underlying                       communication overhead arises from the weight uploads and
+
+
+
+
+                                                                         824
+
+  Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+TABLE 4: Communication cost (GB) and Run-time (Min) of total aggregation cost of FLIGHT on varying inputs. For
+different network models, the number of clients selected to participate in aggregation is fixed as 10. For different number
+of clients, the training task is fixed as MNIST (62k).
+
+                                                                                     Network Models                                 Number of Clients
+                            Efficiency Metrics
+                                                                        MNIST           CIFAR-10S     CIFAR-10L           25 clients    50 clients     100 clients
+                                    Comm                                    42.58        142.83          679.02             58.31        159.79          452.67
+                                   Run-time                                 36.50         63.79          158.15             49.82         73.52          139.96
+
+TABLE 5: Communication cost (GB) and Run-time (Min) of each protocol of FLIGHT-Stage2. The model parameter is
+fixed as 50k and each row represents the number of clients selected to participate in the aggregation.
+
+                                     C-S Phase (WAN)                                                                          S-S Phase (LAN)
+Client (n)                      Upload                              Download               Cosine Similarity      Norm Temperature            Softmax                Aggregation
+                          Comm      Run-time         Comm                     Run-time     Comm      Run-time     Comm       Run-time    Comm        Run-time   Comm      Run-time
+       50                  18.37      7.51                 9.18                  4.62       9.40       1.75        0.42        21.45      0.02        16.50       9.41      1.06
+     100                   36.74     14.27              18.37                    8.33      18.62       2.29        0.84        31.35      0.03        19.80       18.65     1.67
+     150                   55.59     21.53              27.55                   10.80      27.84       2.74        1.26        42.07      0.04        24.75       27.87     2.49
+
+
+
+                        FLAME         RoFL                          SecureFL              FLIGHT             run-time. In contrast, the cosine similarity and aggregation
+                 80                                                                                          operations are based on matrix multiplication. FLIGHT
+                                                                   80
+                                                Backdoor Acc (%)
+
+
+
+
+                                                                                                             leverages GPU-accelerated ciphertext matrix operations to
+  Main Acc (%)
+
+
+
+
+                 78                                                60                                        speed up these operations, thereby reducing the overall run-
+                 76                                                40                                        time.
+                 74                                                20
+                 72 0 500 1000 1500 2000 2500                       0                                        D.2. Additional Robustness-Efficiency Trade-off
+                                                                        0 500 1000 1500 2000 2500
+                         Run-time (Min)                                       Run-time (Min)                 Experiment
+                                      (a) CIFAR-10S                                                              Figure 9 shows the additional Robustness-Efficiency
+                        FLAME         RoFL                          SecureFL              FLIGHT             trade-off for different robust secure aggregation methods
+                 82                                                80
+                                                                                                             in defending against Badnet Attack on CIFAR-10S and
+                                                Backdoor Acc (%)
+
+
+
+
+                                                                                                             CIFAR-10L training tasks. For these tasks, we find that
+  Main Acc (%)
+
+
+
+
+                 80                                                60                                        FLIGHT also achieves backdoor defense capability compa-
+                 78                                                40                                        rable to FLAME without sacrificing MA, while significantly
+                 76                                                20                                        reducing run-time by approximately 7-64×. The trade-off
+                                                                    0                                        performance of the other approaches is consistent with that
+                 74 0    2500 5000 7500 10000                           0     2500 5000 7500 10000           observed in the MNIST task, struggling to balance efficiency
+                         Run-time (Min)                                       Run-time (Min)
+                                                                                                             and robustness. Therefore, as the scale of the task increases,
+                                      (b) CIFAR-10L                                                          FLIGHT increasingly balances efficiency and robustness,
+                                                                                                             leading to superior outcomes in both.
+Figure 9: Robustness-Efficiency trade-off for various robust
+secure aggregation methods after 500 training rounds on
+training task CIFAR-10S and CIFAR-10L. The x-axis rep-
+resents the run-time and the y -axis represents the MA (↑)
+and BA (↓) after training.
+
+
+downloads in the C-S phase, and from the cosine similarity
+and aggregation in the S-S phase. The primary run-time
+overhead comes from the Norm Temperature (NT) and
+Softmax operations in the S-S phase. This is because NT
+and Softmax require numerous MPC non-linear operations,
+resulting in a significant number of low-communication in-
+teractions. The increase in interaction rounds leads to longer
+
+
+
+
+                                                                                                       825
+
+  Authorized licensed use limited to: Shanghai Jiaotong University. Downloaded on April 16,2026 at 16:11:07 UTC from IEEE Xplore. Restrictions apply.
+

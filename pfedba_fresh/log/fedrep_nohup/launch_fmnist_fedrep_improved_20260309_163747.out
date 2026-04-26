@@ -1,0 +1,10 @@
+============================================================
+Launching PFedBA FedRep with nohup
+GPU=0 DATASET=FashionMnist ROUNDS=200
+LOG=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/fedrep_nohup/fedrep_FashionMnist_20260309_163747.log
+============================================================
+Started. PID=2965518
+Tail log:
+  tail -f "/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/fedrep_nohup/fedrep_FashionMnist_20260309_163747.log"
+Stop:
+  kill 2965518

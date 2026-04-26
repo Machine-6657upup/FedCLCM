@@ -1,0 +1,6 @@
+track,tag,dataset,model,algorithm,num_clients,join_ratio,lr,lr_head,local_epochs,plocal_epochs,rounds,batch_size,num_adv_clients,notes
+legacy_resnet100_static,fedrep_old100_badnet,Cifar10_dir0.5_bdoor0.5_nclient_100_badnet_adv2,ResNet18,FedRep,100,0.1,0.1,0.1,1,1,1000,64,1,old_100_client_baseline
+legacy_resnet100_static,fedrep_old100_blend,Cifar10_dir0.5_bdoor0.5_nclient_100_blend_adv2,ResNet18,FedRep,100,0.1,0.1,0.1,1,1,1000,64,1,old_100_client_blend_baseline
+legacy_resnetp40_static,fedrep_old40_badnet,Cifar10_dir0.5_bdoor0.2_nclient_40_badnet_adv5,ResNetP,FedRep,40,0.25,0.1,0.05,1,1,600,64,5,old_strong_root_baseline
+chapter4_current_static,fedrep_ch4_badnet,Cifar10_dir0.5_bdoor0.2_nclient_40_badnet_adv5,ResNetP,FedRep,40,1.0,0.003,0.01,1,1,800,64,5,current_weak_static_baseline
+chapter4_current_static,fedclcm_ch4_badnet,Cifar10_dir0.5_bdoor0.2_nclient_40_badnet_adv5,ResNetP,FedCLCM,40,1.0,0.003,0.01,1,1,800,64,5,current_weak_static_fedclcm_baseline

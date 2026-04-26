@@ -1,0 +1,11 @@
+PFEDBA_ROOT=/home/huangtu/PFL_Backdoor_Defense/PFedBA
+RUN_TS=20260418_162817
+LOGDIR=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/localepoch22_20260418_162817
+STATUS_DIR=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/localepoch22_20260418_162817/status
+WORKER_SCRIPT=/home/huangtu/PFL_clean_workspace/root_static/scripts/pfedba_localepoch22_worker.sh
+REUSE_BASELINES=FedRep(local_epochs=20),FedRT(local_epochs=20)
+queue	pid
+gpu0	673365
+gpu1	673366
+gpu2	673367
+gpu3	673368

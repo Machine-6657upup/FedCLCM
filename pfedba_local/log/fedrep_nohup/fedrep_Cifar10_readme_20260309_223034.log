@@ -1,0 +1,50 @@
+================================================================================
+Summary of training process:
+Algorithm: FedRep
+Attack method:attackall
+Defense method:none
+Attack goal:attackall
+Start attack iteration:30
+Batch size: 64
+Learing rate       : 0.1
+Average Moving       : 1.0
+Subset of users      : 10
+Number of global rounds       : 150
+Number of local rounds       : 20
+Dataset       : Cifar10
+Local Model       : cnn
+Per_local epoch:1
+one shot:0
+scale rate:0
+================================================================================
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+---------------Running time:------------ 0
+Files already downloaded and verified
+Files already downloaded and verified
+  0%|          | 0/10 [00:00<?, ?it/s] 50%|█████     | 5/10 [00:00<00:00, 47.05it/s]100%|██████████| 10/10 [00:00<00:00, 45.58it/s]100%|██████████| 10/10 [00:00<00:00, 45.75it/s]
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:00<00:04,  2.22it/s] 20%|██        | 2/10 [00:00<00:02,  2.92it/s] 30%|███       | 3/10 [00:01<00:03,  2.25it/s] 40%|████      | 4/10 [00:01<00:02,  2.67it/s] 50%|█████     | 5/10 [00:02<00:02,  2.15it/s] 60%|██████    | 6/10 [00:02<00:01,  2.55it/s] 70%|███████   | 7/10 [00:02<00:00,  3.02it/s] 80%|████████  | 8/10 [00:03<00:00,  2.53it/s] 90%|█████████ | 9/10 [00:03<00:00,  2.80it/s]100%|██████████| 10/10 [00:03<00:00,  2.59it/s]100%|██████████| 10/10 [00:03<00:00,  2.57it/s]
+Number of users / total users: 10  /  10
+Finished creating FedAvg server.
+Files already downloaded and verified
+Files already downloaded and verified
+  0%|          | 0/10 [00:00<?, ?it/s] 70%|███████   | 7/10 [00:00<00:00, 62.93it/s]100%|██████████| 10/10 [00:00<00:00, 55.04it/s]
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:00<00:03,  2.43it/s] 20%|██        | 2/10 [00:00<00:02,  3.09it/s] 30%|███       | 3/10 [00:01<00:03,  2.30it/s] 40%|████      | 4/10 [00:01<00:02,  2.74it/s] 50%|█████     | 5/10 [00:02<00:02,  2.19it/s] 60%|██████    | 6/10 [00:02<00:01,  2.61it/s] 70%|███████   | 7/10 [00:02<00:00,  3.08it/s] 80%|████████  | 8/10 [00:03<00:00,  2.52it/s] 90%|█████████ | 9/10 [00:03<00:00,  2.81it/s]100%|██████████| 10/10 [00:03<00:00,  2.57it/s]100%|██████████| 10/10 [00:03<00:00,  2.60it/s]
+Finished creating FedRep server.
+-------------Round number:  0  -------------
+Evaluate global model
+Average Global Accurancy:  0.07059874888293119
+Average Global Trainning Accurancy:  0.07254259176476431
+
+Traceback (most recent call last):
+  File "/home/huangtu/PFL_Backdoor_Defense/PFedBA/main.py", line 187, in <module>
+    main(
+  File "/home/huangtu/PFL_Backdoor_Defense/PFedBA/main.py", line 107, in main
+    final_trigger_list = server.train(pattern=trigger_patten, trigger=trigger_list, per_epoch=per_epoch,
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/huangtu/PFL_Backdoor_Defense/PFedBA/FLAlgorithms/servers/serveravg.py", line 57, in train
+    globaltestacc, globaltrainacc, globaltrainaccloss, global_test_mean_benign_acc, global_test_mean_mal_acc = self.evaluate()  # 分发了模型，当前用户的模型是全局模型， 输出所有本地数据在全局模型上测试的准确率
+                                                                                                               ^^^^^^^^^^^^^^^
+  File "/home/huangtu/PFL_Backdoor_Defense/PFedBA/FLAlgorithms/servers/serverbase.py", line 446, in evaluate
+    sum(ben_person_acc) / len(ben_person_acc)))
+    ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+ZeroDivisionError: division by zero

@@ -1,0 +1,10 @@
+==================================================
+[START] E05
+RUN_TS=20260418_162933
+GPU=0
+ALGORITHM=FedRT
+LOCAL_EPOCHS=5
+VARIANT=baseline
+TIME=2026-04-18 17:38:07
+LOG=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/localepoch22_20260418_162933/E05.log
+==================================================

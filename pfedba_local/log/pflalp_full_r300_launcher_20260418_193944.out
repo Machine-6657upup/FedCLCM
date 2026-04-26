@@ -1,0 +1,19 @@
+PFEDBA_ROOT=/home/huangtu/PFL_Backdoor_Defense/PFedBA
+PYTHON_BIN=/home/huangtu/miniconda3/envs/torch/bin/python
+RUN_TS=20260418_193944
+GPU=0
+LOGDIR=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/pflalp_full_r300_20260418_193944
+TAG=PFLALP_FULL
+LOCAL_EPOCHS=10
+GLOBAL_ITERS=300
+PLOCAL_EPOCHS=1
+PURIFY_BETA=1500
+PURIFY_ROUNDS=1
+CLUSTER_MAX_K=4
+==================================================
+[START] PFLALP_FULL
+TIME=2026-04-18 19:39:44
+GPU=0
+LOG=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/pflalp_full_r300_20260418_193944/PFLALP_FULL.log
+CMD=/home/huangtu/miniconda3/envs/torch/bin/python CMD=-u CMD=/home/huangtu/PFL_Backdoor_Defense/PFedBA/main.py CMD=--dataset CMD=Cifar10 CMD=--model CMD=resnet CMD=--resnet_pretrained CMD=0 CMD=--algorithm CMD=PFLALP CMD=--learning_rate CMD=0.1 CMD=--lr_head CMD=0.1 CMD=--plocal_epochs CMD=1 CMD=--local_epochs CMD=10 CMD=--num_global_iters CMD=300 CMD=--numusers CMD=10 CMD=--batch_size CMD=64 CMD=--attack_start CMD=30 CMD=--attack_method CMD=attackall CMD=--poisoning_per_batch CMD=5 CMD=--defense CMD=none CMD=--per_epoch CMD=1 CMD=--malclient CMD=10 CMD=--times CMD=1 CMD=--purify_beta CMD=1500 CMD=--purify_rounds CMD=1 CMD=--cluster_max_k CMD=4 
+==================================================

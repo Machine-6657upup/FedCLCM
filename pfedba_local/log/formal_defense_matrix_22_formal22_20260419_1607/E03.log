@@ -1,0 +1,28 @@
+================================================================================
+Summary of training process:
+Algorithm: FedRepBDPFL
+Attack method:attackall
+Defense method:none
+Attack goal:attackall
+Start attack iteration:30
+Batch size: 64
+Learing rate       : 0.1
+Average Moving       : 1.0
+Subset of users      : 10
+Number of global rounds       : 400
+Number of local rounds       : 10
+Dataset       : Cifar10
+Local Model       : resnet
+ResNet Pretrained : 0
+FedRepBDPFL bd_lambda=1.0 bd_tau=1.0 bd_gamma=1.0 bd_use_inter=1 bd_use_em=0
+Per_local epoch:1
+one shot:0
+scale rate:0
+================================================================================
+['f_00007', 'f_00001', 'f_00062', 'f_00020', 'f_00096', 'f_00085', 'f_00051', 'f_00043', 'f_00037', 'f_00058']
+---------------Running time:------------ 0
+Loaded cached CIFAR10 Dirichlet split from data/Cifar10/dirichlet_a0.5_u100_v1.pkl
+Number of users / total users: 10  /  100
+Finished creating FedRep + BDPFL-submodule server.
+-------------Round number:  0  -------------
+Evaluate global model

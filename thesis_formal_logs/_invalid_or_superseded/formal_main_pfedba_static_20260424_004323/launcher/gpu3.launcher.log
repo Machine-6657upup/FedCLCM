@@ -1,0 +1,2 @@
+nohup: ignoring input
+/home/huangtu/PFL_clean_workspace/root_static/scripts/run_formal_pfedba_static_main_4gpu.sh: line 228: 785669 Killed                  "$@" > "${log_file}" 2>&1

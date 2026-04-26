@@ -1,0 +1,12 @@
+==================================================
+[START] E03
+RUN_TS=20260418_162933
+GPU=2
+ALGORITHM=FedRep
+LOCAL_EPOCHS=10
+VARIANT=baseline
+TIME=2026-04-18 16:29:33
+LOG=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/localepoch22_20260418_162933/E03.log
+==================================================
+[END] E03 RC=0 TIME=2026-04-18 17:39:56
+==================================================

@@ -1,0 +1,37 @@
++ echo ==================================================
+==================================================
++ echo '[START] P05_fedrt'
+[START] P05_fedrt
+++ date '+%F %T'
++ echo 'TIME=2026-04-24 16:22:00'
+TIME=2026-04-24 16:22:00
++ echo GPU=0
+GPU=0
++ echo FAMILY=pfedba
+FAMILY=pfedba
++ echo WORKDIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local
+WORKDIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local
++ echo LOG=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/formal_main_pfedba_static_dryrun_evalfix/pfedba/P05_fedrt.log
+LOG=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/formal_main_pfedba_static_dryrun_evalfix/pfedba/P05_fedrt.log
++ printf 'CMD=%q ' /home/huangtu/miniconda3/envs/torch/bin/python -u /home/huangtu/PFL_clean_workspace/root_static/pfedba_local/main.py --dataset Cifar10 --model resnet --resnet_pretrained 0 --learning_rate 0.1 --lr_head 0.1 --plocal_epochs 1 --numusers 10 --batch_size 64 --attack_start 30 --attack_method attackall --poisoning_per_batch 1 --defense none --malclient 10 --times 3 --seed 1 --eval_gap 10 --personalized_eval_gap 0 --algorithm FedRT --local_epochs 1 --num_global_iters 1000 --per_epoch 1 --rt_beta 0.10 --adv_eps 0.10 --adv_num_iter 5 --aug_strength 0.10
+CMD=/home/huangtu/miniconda3/envs/torch/bin/python CMD=-u CMD=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/main.py CMD=--dataset CMD=Cifar10 CMD=--model CMD=resnet CMD=--resnet_pretrained CMD=0 CMD=--learning_rate CMD=0.1 CMD=--lr_head CMD=0.1 CMD=--plocal_epochs CMD=1 CMD=--numusers CMD=10 CMD=--batch_size CMD=64 CMD=--attack_start CMD=30 CMD=--attack_method CMD=attackall CMD=--poisoning_per_batch CMD=1 CMD=--defense CMD=none CMD=--malclient CMD=10 CMD=--times CMD=3 CMD=--seed CMD=1 CMD=--eval_gap CMD=10 CMD=--personalized_eval_gap CMD=0 CMD=--algorithm CMD=FedRT CMD=--local_epochs CMD=1 CMD=--num_global_iters CMD=1000 CMD=--per_epoch CMD=1 CMD=--rt_beta CMD=0.10 CMD=--adv_eps CMD=0.10 CMD=--adv_num_iter CMD=5 CMD=--aug_strength CMD=0.10 + echo
+
++ echo '[GPU_CHECK]'
+[GPU_CHECK]
++ require_worker_gpu 0
++ local gpu=0
++ local info
++ set +e
+++ nvidia-smi -i 0 --query-gpu=index,name,memory.total --format=csv,noheader
++ info='NVIDIA-SMI has failed because it couldn'\''t communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.'
++ local rc=9
++ set -e
++ printf '%s\n' 'NVIDIA-SMI has failed because it couldn'\''t communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.'
+NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.
++ [[ 9 -ne 0 ]]
++ echo '[FATAL] worker logical gpu 0 is not queryable via nvidia-smi.'
+[FATAL] worker logical gpu 0 is not queryable via nvidia-smi.
++ return 1
++ echo ==================================================
+==================================================
+[DRY_RUN] P05_fedrt

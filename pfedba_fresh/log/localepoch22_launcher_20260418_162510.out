@@ -1,0 +1,7 @@
+PFEDBA_ROOT=/home/huangtu/PFL_Backdoor_Defense/PFedBA
+RUN_TS=20260418_162510
+LOGDIR=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/localepoch22_20260418_162510
+STATUS_DIR=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/localepoch22_20260418_162510/status
+PYTHON_BIN=/home/huangtu/miniconda3/envs/torch/bin/python
+MAIN_PY=/home/huangtu/PFL_Backdoor_Defense/PFedBA/main.py
+REUSE_BASELINES=FedRep(local_epochs=20),FedRT(local_epochs=20)

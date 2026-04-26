@@ -1,0 +1,9 @@
+RUN_TS=smokecheck_20260419_1600
+LOGDIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_smokecheck_20260419_1600
+STATUS_DIR=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_smokecheck_20260419_1600/status
+SCRIPT=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/scripts/run_formal_defense_matrix_22_4gpu.sh
+START_TIME=2026-04-19 16:01:45
+gpu0 PID=7 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_smokecheck_20260419_1600/gpu0.launcher.log
+gpu1 PID=11 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_smokecheck_20260419_1600/gpu1.launcher.log
+gpu2 PID=16 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_smokecheck_20260419_1600/gpu2.launcher.log
+gpu3 PID=22 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_smokecheck_20260419_1600/gpu3.launcher.log

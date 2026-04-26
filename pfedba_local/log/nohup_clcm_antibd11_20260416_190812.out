@@ -1,0 +1,4 @@
+nohup: ignoring input
+LOG_ROOT=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/pfedba_clcm_antibd11_20260416_190812  PFEDBA_GR=150  BATCH_SIZE=32  POISON_PER_BATCH=16
+11 组均为强化抑制后门方向（mask 全开，rt_beta≥0.05）
+已启动 11 个任务（GPU0:2, GPU1:3, GPU2:3, GPU3:3），等待结束 …

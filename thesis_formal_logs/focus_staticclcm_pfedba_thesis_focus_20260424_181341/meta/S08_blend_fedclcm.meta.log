@@ -1,0 +1,13 @@
+==================================================
+[START] S08_blend_fedclcm
+TIME=2026-04-24 18:13:41
+GPU=1
+WORKDIR=/home/huangtu/PFL_clean_workspace/root_static/src
+LOG=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/final_static_main_20260424/static/S08_blend_fedclcm.log
+CMD=/home/huangtu/miniconda3/envs/torch/bin/python CMD=-u CMD=/home/huangtu/PFL_clean_workspace/root_static/src/main.py CMD=-dev CMD=cuda CMD=-m CMD=ResNet18 CMD=-ncl CMD=10 CMD=-nc CMD=100 CMD=-jr CMD=0.1 CMD=-lbs CMD=64 CMD=-lr CMD=0.1 CMD=-ls CMD=1 CMD=-gr CMD=600 CMD=-eg CMD=10 CMD=--num_adv_clients CMD=10 CMD=-did CMD=1 CMD=-data CMD=Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10 CMD=-algo CMD=FedCLCM CMD=-go CMD=S08_blend_fedclcm CMD=-lr_head CMD=0.1 CMD=-pls CMD=1 CMD=--rt_beta CMD=0.2 CMD=--lambda_cl CMD=0.20 CMD=--aug_strength CMD=0.1 CMD=--adv_eps CMD=0 CMD=--adv_num_iter CMD=0 CMD=--mask_tau CMD=12.0 CMD=--mask_alpha CMD=0.70 
+==================================================
+[GPU_CHECK]
+1, NVIDIA GeForce RTX 3090, 24576 MiB
+==================================================
+[END] S08_blend_fedclcm RC=0 TIME=2026-04-24 19:15:15
+==================================================

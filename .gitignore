@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+Thumbs.db
+
+# Large regenerated artifacts that should not be versioned
+data/
+src/dataset/rawdata/
+src/dataset/Cifar10_dir*/
+src/models/
+src/results/*.h5
+pfedba_fresh/data/
+pfedba_fresh/results/
+pfedba_local/data/
+pfedba_local/results/
+
+# Editor / environment noise
+.vscode/
+.idea/
+*.log.tmp

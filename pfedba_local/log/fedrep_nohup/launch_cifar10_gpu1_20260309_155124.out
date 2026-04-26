@@ -1,0 +1,11 @@
+nohup: ignoring input
+============================================================
+Launching PFedBA FedRep with nohup
+GPU=1 DATASET=Cifar10 ROUNDS=800
+LOG=/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/fedrep_nohup/fedrep_Cifar10_20260309_155124.log
+============================================================
+Started. PID=2954352
+Tail log:
+  tail -f "/home/huangtu/PFL_Backdoor_Defense/PFedBA/log/fedrep_nohup/fedrep_Cifar10_20260309_155124.log"
+Stop:
+  kill 2954352

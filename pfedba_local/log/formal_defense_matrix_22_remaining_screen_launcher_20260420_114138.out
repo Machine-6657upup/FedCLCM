@@ -1,0 +1,4 @@
+gpu0 SCREEN=fdm22_20260420_114138_gpu0 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_213225/gpu0.launcher.log
+gpu1 SCREEN=fdm22_20260420_114138_gpu1 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_213225/gpu1.launcher.log
+gpu2 SCREEN=fdm22_20260420_114138_gpu2 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_213225/gpu2.launcher.log
+gpu3 SCREEN=fdm22_20260420_114138_gpu3 LOG=/home/huangtu/PFL_clean_workspace/root_static/pfedba_local/log/formal_defense_matrix_22_20260419_213225/gpu3.launcher.log

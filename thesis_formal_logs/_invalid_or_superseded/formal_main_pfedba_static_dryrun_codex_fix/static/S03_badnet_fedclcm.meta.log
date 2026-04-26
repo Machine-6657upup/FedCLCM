@@ -1,0 +1,37 @@
++ echo ==================================================
+==================================================
++ echo '[START] S03_badnet_fedclcm'
+[START] S03_badnet_fedclcm
+++ date '+%F %T'
++ echo 'TIME=2026-04-24 14:38:06'
+TIME=2026-04-24 14:38:06
++ echo GPU=2
+GPU=2
++ echo FAMILY=static
+FAMILY=static
++ echo WORKDIR=/home/huangtu/PFL_clean_workspace/root_static/src
+WORKDIR=/home/huangtu/PFL_clean_workspace/root_static/src
++ echo LOG=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/formal_main_pfedba_static_dryrun_codex_fix/static/S03_badnet_fedclcm.log
+LOG=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/formal_main_pfedba_static_dryrun_codex_fix/static/S03_badnet_fedclcm.log
++ printf 'CMD=%q ' /home/huangtu/miniconda3/envs/torch/bin/python -u /home/huangtu/PFL_clean_workspace/root_static/src/main.py -dev cuda -m ResNet18 -ncl 10 -nc 100 -jr 0.1 -lbs 64 -lr 0.1 -ls 1 -gr 600 -eg 1 --num_adv_clients 10 -did 2 --rt_beta 0.2 --lambda_cl 0.5 --aug_strength 0.1 --adv_eps 0.1 --adv_num_iter 5 --mask_tau 2.0 --mask_alpha 0.3 -data Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10 -algo FedCLCM -go formal_static_badnet_fedclcm
+CMD=/home/huangtu/miniconda3/envs/torch/bin/python CMD=-u CMD=/home/huangtu/PFL_clean_workspace/root_static/src/main.py CMD=-dev CMD=cuda CMD=-m CMD=ResNet18 CMD=-ncl CMD=10 CMD=-nc CMD=100 CMD=-jr CMD=0.1 CMD=-lbs CMD=64 CMD=-lr CMD=0.1 CMD=-ls CMD=1 CMD=-gr CMD=600 CMD=-eg CMD=1 CMD=--num_adv_clients CMD=10 CMD=-did CMD=2 CMD=--rt_beta CMD=0.2 CMD=--lambda_cl CMD=0.5 CMD=--aug_strength CMD=0.1 CMD=--adv_eps CMD=0.1 CMD=--adv_num_iter CMD=5 CMD=--mask_tau CMD=2.0 CMD=--mask_alpha CMD=0.3 CMD=-data CMD=Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10 CMD=-algo CMD=FedCLCM CMD=-go CMD=formal_static_badnet_fedclcm + echo
+
++ echo '[GPU_CHECK]'
+[GPU_CHECK]
++ require_worker_gpu 2
++ local gpu=2
++ local info
++ set +e
+++ nvidia-smi -i 2 --query-gpu=index,name,memory.total --format=csv,noheader
++ info='NVIDIA-SMI has failed because it couldn'\''t communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.'
++ local rc=9
++ set -e
++ printf '%s\n' 'NVIDIA-SMI has failed because it couldn'\''t communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.'
+NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.
++ [[ 9 -ne 0 ]]
++ echo '[FATAL] worker logical gpu 2 is not queryable via nvidia-smi.'
+[FATAL] worker logical gpu 2 is not queryable via nvidia-smi.
++ return 1
++ echo ==================================================
+==================================================
+[DRY_RUN] S03_badnet_fedclcm

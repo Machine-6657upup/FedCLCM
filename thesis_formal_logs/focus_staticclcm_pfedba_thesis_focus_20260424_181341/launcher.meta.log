@@ -1,0 +1,15 @@
+RUN_TS=thesis_focus_20260424_181341
+RUN_NAME=focus_staticclcm_pfedba_thesis_focus_20260424_181341
+RUN_ROOT=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/focus_staticclcm_pfedba_thesis_focus_20260424_181341
+STATIC_LOG_DIR=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/final_static_main_20260424/static
+PFEDBA_BATCH_DIR=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/final_pfedba_main_20260424/focus_staticclcm_pfedba_thesis_focus_20260424_181341
+START_TIME=2026-04-24 18:13:41
+LAUNCH_MODE=screen
+DRY_RUN=0
+[LAUNCHER_GPU_CHECK]
+gpu_count=4
+==================================================
+gpu0 SCREEN=focus_staticclcm_pfedba_thesis_focus_20260424_181341_gpu0 LOG=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/focus_staticclcm_pfedba_thesis_focus_20260424_181341/launcher/gpu0.launcher.log
+gpu1 SCREEN=focus_staticclcm_pfedba_thesis_focus_20260424_181341_gpu1 LOG=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/focus_staticclcm_pfedba_thesis_focus_20260424_181341/launcher/gpu1.launcher.log
+gpu2 SCREEN=focus_staticclcm_pfedba_thesis_focus_20260424_181341_gpu2 LOG=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/focus_staticclcm_pfedba_thesis_focus_20260424_181341/launcher/gpu2.launcher.log
+gpu3 SCREEN=focus_staticclcm_pfedba_thesis_focus_20260424_181341_gpu3 LOG=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/focus_staticclcm_pfedba_thesis_focus_20260424_181341/launcher/gpu3.launcher.log

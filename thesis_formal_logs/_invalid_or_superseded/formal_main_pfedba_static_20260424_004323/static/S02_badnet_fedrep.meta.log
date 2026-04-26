@@ -1,0 +1,13 @@
+==================================================
+[START] S02_badnet_fedrep
+TIME=2026-04-24 14:53:37
+GPU=1
+FAMILY=static
+WORKDIR=/home/huangtu/PFL_clean_workspace/root_static/src
+LOG=/home/huangtu/PFL_clean_workspace/root_static/thesis_formal_logs/formal_main_pfedba_static_20260424_004323/static/S02_badnet_fedrep.log
+CMD=/home/huangtu/miniconda3/envs/torch/bin/python CMD=-u CMD=/home/huangtu/PFL_clean_workspace/root_static/src/main.py CMD=-dev CMD=cuda CMD=-did CMD=0 CMD=-m CMD=ResNet18 CMD=-ncl CMD=10 CMD=-nc CMD=100 CMD=-jr CMD=0.1 CMD=-lbs CMD=64 CMD=-lr CMD=0.1 CMD=-ls CMD=1 CMD=-gr CMD=600 CMD=-eg CMD=1 CMD=--num_adv_clients CMD=10 CMD=-lr_head CMD=0.1 CMD=-pls CMD=1 CMD=-data CMD=Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10 CMD=-algo CMD=FedRep CMD=-go CMD=formal_static_badnet_fedrep 
+[GPU_CHECK]
+1, NVIDIA GeForce RTX 3090, 24576 MiB
+==================================================
+[END] S02_badnet_fedrep RC=1 TIME=2026-04-24 15:00:55
+==================================================
