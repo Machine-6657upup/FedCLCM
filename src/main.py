@@ -41,6 +41,19 @@ warnings.simplefilter("ignore")
 torch.manual_seed(0)
 
 
+def str2bool(value):
+    if isinstance(value, bool):
+        return value
+
+    lowered = str(value).strip().lower()
+    if lowered in {"1", "true", "t", "yes", "y", "on"}:
+        return True
+    if lowered in {"0", "false", "f", "no", "n", "off"}:
+        return False
+
+    raise argparse.ArgumentTypeError(f"invalid boolean value: {value}")
+
+
 def run(args):
 
     time_list = []
@@ -301,7 +314,7 @@ if __name__ == "__main__":
     parser.add_argument('-lbs', "--batch_size", type=int, default=64)
     parser.add_argument('-lr', "--local_learning_rate", type=float, default=0.005,
                         help="Local learning rate")
-    parser.add_argument('-ld', "--learning_rate_decay", type=bool, default=False)
+    parser.add_argument('-ld', "--learning_rate_decay", type=str2bool, default=False)
     parser.add_argument('-ldg', "--learning_rate_decay_gamma", type=float, default=0.99)
     parser.add_argument('-gr', "--global_rounds", type=int, default=2000)
     parser.add_argument('-tc', "--top_cnt", type=int, default=100, 
@@ -314,7 +327,7 @@ if __name__ == "__main__":
     parser.add_argument('-eg', "--eval_gap", type=int, default=1,
                         help="Rounds gap for evaluation")
     parser.add_argument('-sfn', "--save_folder_name", type=str, default='items')
-    parser.add_argument('-ab', "--auto_break", type=bool, default=False)
+    parser.add_argument('-ab', "--auto_break", type=str2bool, default=False)
     parser.add_argument('-bnpc', "--batch_num_per_client", type=int, default=2)
     parser.add_argument('-fd', "--feature_dim", type=int, default=512)
     parser.add_argument('-vs', "--vocab_size", type=int, default=32000, 
@@ -323,7 +336,7 @@ if __name__ == "__main__":
     # practical
     parser.add_argument('-cdr', "--client_drop_rate", type=float, default=0.0,
                         help="Rate for clients that train but drop out")
-    parser.add_argument('-ts', "--time_select", type=bool, default=False,
+    parser.add_argument('-ts', "--time_select", type=str2bool, default=False,
                         help="Whether to group and select clients at each round according to time cost")
     parser.add_argument('-tth', "--time_threthold", type=float, default=10000,
                         help="The threthold for droping slow clients")
@@ -367,7 +380,7 @@ if __name__ == "__main__":
     parser.add_argument('-glr', "--generator_learning_rate", type=float, default=0.005)
     parser.add_argument('-hd', "--hidden_dim", type=int, default=512)
     parser.add_argument('-se', "--server_epochs", type=int, default=1000)
-    parser.add_argument('-lf', "--localize_feature_extractor", type=bool, default=False)
+    parser.add_argument('-lf', "--localize_feature_extractor", type=str2bool, default=False)
     # SCAFFOLD / FedGH
     parser.add_argument('-slr', "--server_learning_rate", type=float, default=1.0)
     # FedALA
@@ -419,7 +432,7 @@ if __name__ == "__main__":
                         help='channel mask variance threshold multiplier')
     parser.add_argument('--mask_alpha', type=float, default=0.3,
                         help='channel mask downweight factor for suspicious channels')
-    parser.add_argument('--enable_channel_mask', type=bool, default=True,
+    parser.add_argument('--enable_channel_mask', type=str2bool, default=True,
                         help='whether to enable channel masking')
 
     # FedCLCM - consistency gating & layer-wise trim
