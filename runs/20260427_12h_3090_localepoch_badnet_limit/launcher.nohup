@@ -1,0 +1,40 @@
+[RUN] BN_B07_LE01 attack=badnet gpu=0 rounds=300 le=1 ple=1 purpose=local_epoch_sweep
+[RUN] BN_B07_LE02 attack=badnet gpu=1 rounds=200 le=2 ple=2 purpose=local_epoch_sweep
+[RUN] BN_B07_LE05 attack=badnet gpu=2 rounds=120 le=5 ple=5 purpose=local_epoch_sweep
+Batch running: BN_B07_LE01 BN_B07_LE02 BN_B07_LE05 BN_B07_LE10
+[RUN] BN_B07_LE10 attack=badnet gpu=3 rounds=80 le=10 ple=10 purpose=local_epoch_sweep
+Batch finished: BN_B07_LE01 BN_B07_LE02 BN_B07_LE05 BN_B07_LE10
+[RUN] BN_B07_LE20 attack=badnet gpu=0 rounds=50 le=20 ple=20 purpose=local_epoch_sweep
+[RUN] BL_BL06_LE01 attack=blend gpu=1 rounds=300 le=1 ple=1 purpose=local_epoch_sweep
+[RUN] BL_BL06_LE02 attack=blend gpu=2 rounds=200 le=2 ple=2 purpose=local_epoch_sweep
+Batch running: BN_B07_LE20 BL_BL06_LE01 BL_BL06_LE02 BL_BL06_LE05
+[RUN] BL_BL06_LE05 attack=blend gpu=3 rounds=120 le=5 ple=5 purpose=local_epoch_sweep
+Batch finished: BN_B07_LE20 BL_BL06_LE01 BL_BL06_LE02 BL_BL06_LE05
+[RUN] BL_BL06_LE10 attack=blend gpu=0 rounds=80 le=10 ple=10 purpose=local_epoch_sweep
+[RUN] BL_BL06_LE20 attack=blend gpu=1 rounds=50 le=20 ple=20 purpose=local_epoch_sweep
+[RUN] SG_SG03_LE01 attack=sig gpu=2 rounds=300 le=1 ple=1 purpose=local_epoch_sweep
+Batch running: BL_BL06_LE10 BL_BL06_LE20 SG_SG03_LE01 SG_SG03_LE02
+[RUN] SG_SG03_LE02 attack=sig gpu=3 rounds=200 le=2 ple=2 purpose=local_epoch_sweep
+Batch finished: BL_BL06_LE10 BL_BL06_LE20 SG_SG03_LE01 SG_SG03_LE02
+[RUN] SG_SG03_LE05 attack=sig gpu=0 rounds=120 le=5 ple=5 purpose=local_epoch_sweep
+[RUN] SG_SG03_LE10 attack=sig gpu=1 rounds=80 le=10 ple=10 purpose=local_epoch_sweep
+[RUN] SG_SG03_LE20 attack=sig gpu=2 rounds=50 le=20 ple=20 purpose=local_epoch_sweep
+Batch running: SG_SG03_LE05 SG_SG03_LE10 SG_SG03_LE20 BN_LIM01
+[RUN] BN_LIM01 attack=badnet gpu=3 rounds=300 le=1 ple=1 purpose=badnet_limit
+Batch finished: SG_SG03_LE05 SG_SG03_LE10 SG_SG03_LE20 BN_LIM01
+[RUN] BN_LIM02 attack=badnet gpu=0 rounds=300 le=1 ple=1 purpose=badnet_limit
+[RUN] BN_LIM03 attack=badnet gpu=1 rounds=300 le=1 ple=1 purpose=badnet_limit
+[RUN] BN_LIM04 attack=badnet gpu=2 rounds=300 le=1 ple=1 purpose=badnet_limit
+Batch running: BN_LIM02 BN_LIM03 BN_LIM04 BN_LIM05
+[RUN] BN_LIM05 attack=badnet gpu=3 rounds=300 le=1 ple=1 purpose=badnet_limit
+Batch finished: BN_LIM02 BN_LIM03 BN_LIM04 BN_LIM05
+[RUN] BN_LIM06 attack=badnet gpu=0 rounds=300 le=1 ple=1 purpose=badnet_limit
+[RUN] BN_LIM07 attack=badnet gpu=1 rounds=300 le=1 ple=1 purpose=badnet_limit
+[RUN] BN_LIM08 attack=badnet gpu=2 rounds=300 le=1 ple=1 purpose=badnet_limit
+Batch running: BN_LIM06 BN_LIM07 BN_LIM08 BN_LIM09
+[RUN] BN_LIM09 attack=badnet gpu=3 rounds=300 le=1 ple=1 purpose=badnet_limit_adv_light
+Batch finished: BN_LIM06 BN_LIM07 BN_LIM08 BN_LIM09
+Batch running: BN_LIM10
+[RUN] BN_LIM10 attack=badnet gpu=0 rounds=300 le=1 ple=1 purpose=badnet_limit_adv_light
+Batch finished: BN_LIM10
+[READY] summary=/home/huangtu/PFL_clean_workspace/root_static/runs/20260427_12h_3090_localepoch_badnet_limit/summary.csv

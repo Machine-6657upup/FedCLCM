@@ -1,0 +1,3 @@
+[RUN] B04_600 attack=badnet gpu=0 rounds=600 purpose=final_confirm_low_asr
+[RUN] B07_600 attack=badnet gpu=0 rounds=600 purpose=final_confirm_balanced
+scripts/run_12h_4090_static_final_confirm.sh: line 92: 3390060 Segmentation fault      (core dumped) "${cmd[@]}" > "${log_file}" 2>&1

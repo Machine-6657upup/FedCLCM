@@ -1,0 +1,3 @@
+tag	attack	dataset	rounds	local_epochs	plocal_epochs	rt_beta	lambda_cl	aug_strength	mask_tau	mask_alpha	enable_channel_mask	adv_eps	adv_num_iter	cosine_gate	cosine_gate_threshold	cosine_gate_alpha	purpose
+B04_600	badnet	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	600	1	1	0.20	0.20	0.10	6.0	0.30	true	0.00	0	0	0.30	0.50	final_confirm_low_asr
+B07_600	badnet	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	600	1	1	0.20	0.20	0.20	12.0	0.70	true	0.00	0	0	0.30	0.50	final_confirm_balanced

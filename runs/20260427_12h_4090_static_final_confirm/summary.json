@@ -1,0 +1,32 @@
+[
+  {
+    "tag": "B04_600",
+    "file": "B04_600.log",
+    "rounds_seen": 601,
+    "best_acc": 0.7897359242650722,
+    "best_round": 600,
+    "final_acc": 0.7897,
+    "final_auc": 0.9634,
+    "final_train_loss": 0.3177,
+    "final_asr": 0.2785157382261171,
+    "final_attack_auc": 0.7788642652275414,
+    "mean_acc_last_10": 0.78068,
+    "mean_asr_last_10": 0.299340912120608,
+    "mean_round_time": 3.9205059358561893
+  },
+  {
+    "tag": "B07_600",
+    "file": "B07_600.log",
+    "rounds_seen": 531,
+    "best_acc": 0.7828,
+    "best_round": 400,
+    "final_acc": 0.7749,
+    "final_auc": 0.9628,
+    "final_train_loss": 0.0833,
+    "final_asr": 0.49115136264597414,
+    "final_attack_auc": 0.881003174383022,
+    "mean_acc_last_10": 0.7737,
+    "mean_asr_last_10": 0.4999515308305494,
+    "mean_round_time": 4.003067808381259
+  }
+]
