@@ -26,6 +26,16 @@ class FedCLCM(Server):
         
         print(f"\nJoin ratio / total clients: {self.join_ratio} / {self.num_clients}")
         print("Finished creating server and clients.")
+        if getattr(args, "purify_enable", False):
+            print(
+                "FedCLCM-Purify enabled: "
+                f"beta={getattr(args, 'purify_beta', 0.0)}, "
+                f"feature_beta={getattr(args, 'purify_feature_beta', 0.0)}, "
+                f"logit_beta={getattr(args, 'purify_logit_beta', 0.0)}, "
+                f"layers={getattr(args, 'purify_layers', '')}, "
+                f"start={getattr(args, 'purify_start_round', 1)}, "
+                f"momentum={getattr(args, 'purify_teacher_momentum', 0.9)}"
+            )
         
         self.Budget = []
         self.beta = args.rt_beta  # Trimmed Mean的截断比例

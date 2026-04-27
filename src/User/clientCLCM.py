@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 import time
+import copy
 from User.clientbase import Client
 import torch.nn.functional as F
 
@@ -40,6 +41,154 @@ class clientCLCM(Client):
         self.adv_eps = getattr(args, "adv_eps", 0.0)
         self.adv_num_iter = int(getattr(args, "adv_num_iter", 0))
         self.adv_step = (2 * self.adv_eps / self.adv_num_iter) if (self.adv_num_iter and self.adv_eps > 0) else 0.0
+
+        # BDPFL/PFL-ALP inspired client-side purification. Disabled by default.
+        self.purify_enable = bool(getattr(args, "purify_enable", False))
+        self.purify_beta = float(getattr(args, "purify_beta", 0.0))
+        self.purify_feature_beta = float(getattr(args, "purify_feature_beta", 0.0))
+        self.purify_logit_beta = float(getattr(args, "purify_logit_beta", 0.0))
+        self.purify_temperature = float(getattr(args, "purify_temperature", 2.0))
+        self.purify_start_round = int(getattr(args, "purify_start_round", 1))
+        self.purify_teacher_momentum = float(getattr(args, "purify_teacher_momentum", 0.9))
+        self.purify_teacher_cpu_half = bool(getattr(args, "purify_teacher_cpu_half", True))
+        # Keep the default conservative. Higher layers carry more backdoor
+        # semantics, and old CLCM logs show over-constraining the base can hurt.
+        layers = getattr(args, "purify_layers", "layer4")
+        self.purify_layers = [s.strip() for s in str(layers).split(",") if s.strip()]
+        self.purify_teacher_state = None
+
+    def _pack_teacher_state(self, model):
+        state = {}
+        for name, value in model.state_dict().items():
+            tensor = value.detach().cpu().clone()
+            if self.purify_teacher_cpu_half and torch.is_floating_point(tensor):
+                tensor = tensor.half()
+            state[name] = tensor
+        return state
+
+    def _update_purify_teacher(self):
+        if not self.purify_enable:
+            return
+        new_state = self._pack_teacher_state(self.model)
+        if self.purify_teacher_state is None or self.purify_teacher_momentum <= 0:
+            self.purify_teacher_state = new_state
+            return
+
+        momentum = self.purify_teacher_momentum
+        mixed_state = {}
+        for name, new_tensor in new_state.items():
+            old_tensor = self.purify_teacher_state.get(name)
+            if old_tensor is None or old_tensor.shape != new_tensor.shape:
+                mixed_state[name] = new_tensor
+                continue
+            if torch.is_floating_point(new_tensor):
+                mixed = old_tensor.float().mul(momentum).add(
+                    new_tensor.float(), alpha=(1.0 - momentum)
+                )
+                if self.purify_teacher_cpu_half:
+                    mixed = mixed.half()
+                mixed_state[name] = mixed
+            else:
+                mixed_state[name] = new_tensor
+        self.purify_teacher_state = mixed_state
+
+    def _build_purify_teacher(self, is_benign):
+        if not (
+            self.purify_enable
+            and is_benign
+            and self.purify_teacher_state is not None
+            and self.train_time_cost["num_rounds"] >= self.purify_start_round
+            and (self.purify_beta > 0 or self.purify_feature_beta > 0 or self.purify_logit_beta > 0)
+        ):
+            return None
+        teacher = copy.deepcopy(self.model)
+        teacher.load_state_dict(self.purify_teacher_state, strict=True)
+        teacher.to(self.device)
+        teacher.eval()
+        for param in teacher.parameters():
+            param.requires_grad = False
+        return teacher
+
+    def _forward_base_with_activations(self, base, x, eval_mode=False):
+        modules = dict(base.named_modules())
+        activations = {}
+        handles = []
+        was_training = base.training
+
+        def make_hook(name):
+            def hook(_module, _inputs, output):
+                activations[name] = output
+            return hook
+
+        for name in self.purify_layers:
+            module = modules.get(name)
+            if module is not None:
+                handles.append(module.register_forward_hook(make_hook(name)))
+
+        try:
+            if eval_mode:
+                base.eval()
+            features = base(x)
+        finally:
+            for handle in handles:
+                handle.remove()
+            if eval_mode and was_training:
+                base.train()
+        return features, activations
+
+    def _attention_map(self, feat):
+        if feat.dim() >= 4:
+            att = feat.pow(2).mean(dim=1)
+        else:
+            att = feat
+        att = att.flatten(start_dim=1)
+        return F.normalize(att, p=2, dim=1, eps=1e-6)
+
+    def purification_loss(self, x, teacher):
+        # Use eval-mode BN for both networks in the purification forward.
+        # Otherwise identical weights still produce a large loss because the
+        # student uses batch statistics while the teacher uses running stats.
+        cur_feat, cur_acts = self._forward_base_with_activations(self.model.base, x, eval_mode=True)
+        with torch.no_grad():
+            tea_feat, tea_acts = self._forward_base_with_activations(teacher.base, x, eval_mode=True)
+
+        loss = x.new_tensor(0.0)
+        used_terms = 0
+
+        if self.purify_beta > 0:
+            for name in self.purify_layers:
+                if name not in cur_acts or name not in tea_acts:
+                    continue
+                cur_att = self._attention_map(cur_acts[name])
+                tea_att = self._attention_map(tea_acts[name])
+                loss = loss + self.purify_beta * F.mse_loss(cur_att, tea_att)
+                used_terms += 1
+
+        if self.purify_feature_beta > 0:
+            cur_norm = F.normalize(cur_feat.flatten(start_dim=1), p=2, dim=1, eps=1e-6)
+            tea_norm = F.normalize(tea_feat.flatten(start_dim=1), p=2, dim=1, eps=1e-6)
+            loss = loss + self.purify_feature_beta * F.mse_loss(cur_norm, tea_norm)
+            used_terms += 1
+
+        if self.purify_logit_beta > 0:
+            temp = max(self.purify_temperature, 1e-6)
+            cur_logits = self.model.head(cur_feat)
+            with torch.no_grad():
+                tea_logits = teacher.head(tea_feat)
+            kl = F.kl_div(
+                F.log_softmax(cur_logits / temp, dim=1),
+                F.softmax(tea_logits / temp, dim=1),
+                reduction="batchmean",
+            ) * (temp * temp)
+            loss = loss + self.purify_logit_beta * kl
+            used_terms += 1
+
+        if used_terms == 0:
+            cur_norm = F.normalize(cur_feat.flatten(start_dim=1), p=2, dim=1, eps=1e-6)
+            tea_norm = F.normalize(tea_feat.flatten(start_dim=1), p=2, dim=1, eps=1e-6)
+            loss = loss + self.purify_beta * F.mse_loss(cur_norm, tea_norm)
+
+        return loss
 
     def generate_augmented_views(self, x):
         """
@@ -137,6 +286,7 @@ class clientCLCM(Client):
         self.model.train()
         
         is_benign = self.id >= self.num_adv_clients
+        teacher_model = self._build_purify_teacher(is_benign)
         # ===== 只在 Head 阶段启用 PGD（良性端）=====
         # 目的：在保证一定防御效果的同时，尽量减少鲁棒训练对 Base 学习与 ACC 的压制
         enable_pgd_head = is_benign and (self.adv_eps > 0) and (self.adv_num_iter > 0)
@@ -201,6 +351,8 @@ class clientCLCM(Client):
                     
                     # 总损失 = 分类损失 + 对比损失
                     loss = ce_loss + self.lambda_cl * cl_loss
+                    if teacher_model is not None:
+                        loss = loss + self.purification_loss(x, teacher_model)
                 else:
                     # Malicious客户端：正常训练（可能包含后门数据）
                     output = self.model(x)
@@ -218,6 +370,11 @@ class clientCLCM(Client):
         if self.learning_rate_decay:
             self.learning_rate_scheduler_base.step()
             self.learning_rate_scheduler_head.step()
+
+        if is_benign:
+            self._update_purify_teacher()
+        if teacher_model is not None:
+            del teacher_model
         
         self.train_time_cost['num_rounds'] += 1
         self.train_time_cost['total_cost'] += time.time() - start_time

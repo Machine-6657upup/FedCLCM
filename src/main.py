@@ -265,7 +265,9 @@ def run(args):
         elif args.algorithm == "APPLE":
             server = APPLE(args, i)
        
-        elif args.algorithm == "FedCLCM":
+        elif args.algorithm in ["FedCLCM", "FedCLCMPurify"]:
+            if args.algorithm == "FedCLCMPurify":
+                args.purify_enable = True
             args.head = copy.deepcopy(args.model.fc)
             args.model.fc = nn.Identity()
             args.model = BaseHeadSplit(args.model, args.head)
@@ -447,6 +449,27 @@ if __name__ == "__main__":
                         help='trim beta for high layers (if set)')
     parser.add_argument('--trim_beta_low', type=float, default=None,
                         help='trim beta for low layers (if set)')
+
+    # FedCLCM-Purify: client-side personalized purification inspired by
+    # BDPFL/PFL-ALP. It is opt-in to keep historical FedCLCM runs unchanged.
+    parser.add_argument('--purify_enable', type=str2bool, default=False,
+                        help='enable client-side purification for benign FedCLCM clients')
+    parser.add_argument('--purify_beta', type=float, default=0.0,
+                        help='attention purification loss weight')
+    parser.add_argument('--purify_feature_beta', type=float, default=0.0,
+                        help='base feature purification loss weight')
+    parser.add_argument('--purify_logit_beta', type=float, default=0.0,
+                        help='personalized logit distillation loss weight')
+    parser.add_argument('--purify_temperature', type=float, default=2.0,
+                        help='temperature for logit distillation')
+    parser.add_argument('--purify_start_round', type=int, default=1,
+                        help='client local round index before purification starts')
+    parser.add_argument('--purify_layers', type=str, default='layer4',
+                        help='comma-separated base module names used for attention purification')
+    parser.add_argument('--purify_teacher_momentum', type=float, default=0.9,
+                        help='EMA momentum for each benign client clean teacher')
+    parser.add_argument('--purify_teacher_cpu_half', type=str2bool, default=True,
+                        help='store teacher checkpoints on CPU in fp16 to reduce memory')
 
     # Attack type (orthogonal to defense algorithm)
     parser.add_argument('--attack', type=str, default="none",

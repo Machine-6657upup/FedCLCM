@@ -38,6 +38,7 @@ Read these files in order:
 9. `12_SYSTEM_MAP_AND_PLATFORM_DECISION.md`
 10. `13_PFEDBA_DEFENSE_ROUTE_AND_HEAD_EPOCH.md`
 11. `14_STATIC_FEDCLCM_RESCUE_ANALYSIS.md`
+12. `15_FEDCLCM_PURIFY_DESIGN.md`
 
 ## Current High-Confidence Conclusions
 - The old claim "FedRep was clearly broken by static backdoors before" is real and backed by historical logs.

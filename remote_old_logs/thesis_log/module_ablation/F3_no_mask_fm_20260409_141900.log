@@ -1,0 +1,4586 @@
+==================================================
+goal = F3_no_mask_fm
+device = cuda
+join_ratio = 0.1
+device_id = 3
+dataset = FashionMNIST_dir0.5_bdoor0.0_nclient_100_badnet_adv0
+num_classes = 10
+model = CNN
+batch_size = 64
+local_learning_rate = 0.03
+learning_rate_decay = False
+learning_rate_decay_gamma = 0.99
+global_rounds = 320
+top_cnt = 100
+local_epochs = 20
+algorithm = FedCLCM
+num_clients = 100
+eval_gap = 1
+save_folder_name = items
+auto_break = False
+batch_num_per_client = 2
+feature_dim = 512
+vocab_size = 32000
+max_len = 200
+client_drop_rate = 0.0
+time_select = False
+time_threthold = 10000
+send_slow_rate = 0.0
+beta = 0.0
+lamda = 1.0
+mu = 0.0
+K = 5
+p_learning_rate = 0.01
+M = 5
+itk = 4000
+alphaK = 1.0
+sigma = 1.0
+alpha = 1.0
+plocal_epochs = 1
+lr_head = 0.03
+tau = 1.0
+fine_tuning_epochs = 10
+dr_learning_rate = 0.0
+L = 1.0
+noise_dim = 512
+generator_learning_rate = 0.005
+hidden_dim = 512
+server_epochs = 1000
+localize_feature_extractor = False
+server_learning_rate = 1.0
+eta = 1.0
+rand_percent = 80
+layer_idx = 2
+mentee_learning_rate = 0.005
+T_start = 0.95
+T_end = 0.98
+momentum = 0.1
+kl_weight = 0.0
+disti_epochs = 1
+protect_id = 1
+adv_eps = 0.0
+adv_num_iter = 0
+defense_epochs = 1
+clean_data = 5000
+sdmk_m = 7
+sdmk_k = 5
+delta = 0.5
+sim_threshold = 0.7
+rt_beta = 0.18
+num_adv_clients = 10
+lambda_cl = 0.05
+aug_strength = 0.03
+mask_tau = 1000000000.0
+mask_alpha = 1.0
+enable_channel_mask = True
+cosine_gate = False
+cosine_gate_threshold = 0.3
+cosine_gate_alpha = 0.5
+trim_high_layers = fc1
+trim_beta_high = 0.18
+trim_beta_low = 0.1
+attack = pfedba
+ba_target_label = 0
+ba_poison_rate = 0.2
+ba_trigger_gen_steps = 30
+ba_trigger_gen_lr = 0.01
+ba_pgd_eps = 0.0314
+ba_trigger_scale = 8.0
+pfedba_target_label = 1
+pfedba_poison_rate = 0.25
+pfedba_poison_count = -1
+pfedba_poison_before_start = False
+pfedba_attack_start = 30
+pfedba_trigger_opt_steps = 15
+pfedba_trigger_lr = 0.1
+pfedba_init_value = 0.5
+pfedba_patch_size = 6
+pfedba_patch_position = center
+pfedba_img_c = 1
+pfedba_img_h = 28
+pfedba_img_w = 28
+pfedba_align_grad_weight = 1.0
+pfedba_align_loss_weight = 1.0
+pfedba_attack_loss_weight = 1.0
+pfedba_opt_samples_per_class = 100
+pfedba_opt_batch_size = 64
+pfedba_opt_max_batches_per_client = 20
+logit_analysis = False
+logit_reject_thresholds = 0.5,0.6,0.7,0.8
+logit_entropy_thresholds = 1.0,1.5,2.0
+logit_margin_thresholds = 0.1,0.2,0.3
+==================================================
+
+============= Running time: 0th =============
+Creating server and clients ...
+FedAvgCNN(
+  (conv1): Sequential(
+    (0): Conv2d(1, 32, kernel_size=(5, 5), stride=(1, 1))
+    (1): ReLU(inplace=True)
+    (2): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+  )
+  (conv2): Sequential(
+    (0): Conv2d(32, 64, kernel_size=(5, 5), stride=(1, 1))
+    (1): ReLU(inplace=True)
+    (2): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+  )
+  (fc1): Sequential(
+    (0): Linear(in_features=1024, out_features=512, bias=True)
+    (1): ReLU(inplace=True)
+  )
+  (fc): Linear(in_features=512, out_features=10, bias=True)
+)
+
+Join ratio / total clients: 0.1 / 100
+Finished creating server and clients.
+[PFedBA] Initialized: target=1, patch=6x6 (center), attack_start=30, num_adv=10
+[PFedBA] Attack attached: malicious_clients=10, loss_w=1.0, grad_w=1.0
+
+-------------Round number: 0-------------
+
+Evaluate personalized models
+Averaged Train Loss: 2.3128
+Averaged Test Accurancy: 0.0545
+Averaged Test AUC: 0.4232
+Std Test Accurancy: 0.0590
+Std Test AUC: 0.1200
+ASR: 0.0008112474683809549
+attack_auc: 0.1985367795270488
+------------------------- time cost ------------------------- 8.470407247543335
+
+-------------Round number: 1-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.3993
+Averaged Test Accurancy: 0.4980
+Averaged Test AUC: 0.8984
+Std Test Accurancy: 0.1705
+Std Test AUC: 0.0397
+ASR: 0.16246687968026632
+attack_auc: 0.5585680754001194
+------------------------- time cost ------------------------- 7.463200092315674
+
+-------------Round number: 2-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.1313
+Averaged Test Accurancy: 0.5329
+Averaged Test AUC: 0.9203
+Std Test Accurancy: 0.1842
+Std Test AUC: 0.0342
+ASR: 0.1086321035402188
+attack_auc: 0.5075101225491192
+------------------------- time cost ------------------------- 8.48181962966919
+
+-------------Round number: 3-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.3126
+Averaged Test Accurancy: 0.4989
+Averaged Test AUC: 0.9182
+Std Test Accurancy: 0.2035
+Std Test AUC: 0.0418
+ASR: 0.04420772399614348
+attack_auc: 0.4323540491768351
+------------------------- time cost ------------------------- 7.723574638366699
+
+-------------Round number: 4-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.4827
+Averaged Test Accurancy: 0.5017
+Averaged Test AUC: 0.9221
+Std Test Accurancy: 0.2353
+Std Test AUC: 0.0453
+ASR: 0.04021684373228963
+attack_auc: 0.42028874608100353
+------------------------- time cost ------------------------- 8.299602746963501
+
+-------------Round number: 5-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.5246
+Averaged Test Accurancy: 0.5321
+Averaged Test AUC: 0.9276
+Std Test Accurancy: 0.2436
+Std Test AUC: 0.0461
+ASR: 0.034341403233072124
+attack_auc: 0.40223278266668144
+------------------------- time cost ------------------------- 8.703458547592163
+
+-------------Round number: 6-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.6874
+Averaged Test Accurancy: 0.5324
+Averaged Test AUC: 0.9268
+Std Test Accurancy: 0.2599
+Std Test AUC: 0.0473
+ASR: 0.015971296290480712
+attack_auc: 0.36180330481167555
+------------------------- time cost ------------------------- 7.581063985824585
+
+-------------Round number: 7-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.6782
+Averaged Test Accurancy: 0.5539
+Averaged Test AUC: 0.9322
+Std Test Accurancy: 0.2724
+Std Test AUC: 0.0451
+ASR: 0.006077141062844378
+attack_auc: 0.36141015573506413
+------------------------- time cost ------------------------- 8.372203350067139
+
+-------------Round number: 8-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.6536
+Averaged Test Accurancy: 0.5760
+Averaged Test AUC: 0.9341
+Std Test Accurancy: 0.2787
+Std Test AUC: 0.0470
+ASR: 0.005202292323892505
+attack_auc: 0.3643820968188707
+------------------------- time cost ------------------------- 9.14737319946289
+
+-------------Round number: 9-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.5632
+Averaged Test Accurancy: 0.6152
+Averaged Test AUC: 0.9385
+Std Test Accurancy: 0.2596
+Std Test AUC: 0.0480
+ASR: 0.003527014204770501
+attack_auc: 0.34543434314838667
+------------------------- time cost ------------------------- 6.656351804733276
+
+-------------Round number: 10-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.4978
+Averaged Test Accurancy: 0.6326
+Averaged Test AUC: 0.9453
+Std Test Accurancy: 0.2638
+Std Test AUC: 0.0429
+ASR: 0.0012083285575957882
+attack_auc: 0.3437958034006473
+------------------------- time cost ------------------------- 8.019856214523315
+
+-------------Round number: 11-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.2746
+Averaged Test Accurancy: 0.6668
+Averaged Test AUC: 0.9495
+Std Test Accurancy: 0.2408
+Std Test AUC: 0.0403
+ASR: 0.002512109277889773
+attack_auc: 0.32557116975775136
+------------------------- time cost ------------------------- 8.059412002563477
+
+-------------Round number: 12-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.5647
+Averaged Test Accurancy: 0.6591
+Averaged Test AUC: 0.9501
+Std Test Accurancy: 0.2715
+Std Test AUC: 0.0413
+ASR: 0.0023538670179814917
+attack_auc: 0.3296814806539827
+------------------------- time cost ------------------------- 7.9829161167144775
+
+-------------Round number: 13-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.6032
+Averaged Test Accurancy: 0.6725
+Averaged Test AUC: 0.9522
+Std Test Accurancy: 0.2643
+Std Test AUC: 0.0415
+ASR: 0.0011858420229958308
+attack_auc: 0.32488196593832147
+------------------------- time cost ------------------------- 7.8614726066589355
+
+-------------Round number: 14-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.8266
+Averaged Test Accurancy: 0.6711
+Averaged Test AUC: 0.9504
+Std Test Accurancy: 0.2647
+Std Test AUC: 0.0440
+ASR: 0.002339557664264567
+attack_auc: 0.3271753039586991
+------------------------- time cost ------------------------- 7.261634588241577
+
+-------------Round number: 15-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.8058
+Averaged Test Accurancy: 0.6770
+Averaged Test AUC: 0.9518
+Std Test Accurancy: 0.2561
+Std Test AUC: 0.0429
+ASR: 0.0017645964401462797
+attack_auc: 0.36786666032695353
+------------------------- time cost ------------------------- 8.161962747573853
+
+-------------Round number: 16-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.9895
+Averaged Test Accurancy: 0.6866
+Averaged Test AUC: 0.9523
+Std Test Accurancy: 0.2495
+Std Test AUC: 0.0433
+ASR: 0.0017561307940189964
+attack_auc: 0.3463277161844965
+------------------------- time cost ------------------------- 8.528135776519775
+
+-------------Round number: 17-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.6182
+Averaged Test Accurancy: 0.7140
+Averaged Test AUC: 0.9581
+Std Test Accurancy: 0.2394
+Std Test AUC: 0.0401
+ASR: 0.0005821262910019044
+attack_auc: 0.2988653373240936
+------------------------- time cost ------------------------- 7.186289548873901
+
+-------------Round number: 18-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.4837
+Averaged Test Accurancy: 0.7375
+Averaged Test AUC: 0.9623
+Std Test Accurancy: 0.2349
+Std Test AUC: 0.0362
+ASR: 0.0020780743598605013
+attack_auc: 0.33507933214447777
+------------------------- time cost ------------------------- 8.59630012512207
+
+-------------Round number: 19-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.3833
+Averaged Test Accurancy: 0.7555
+Averaged Test AUC: 0.9646
+Std Test Accurancy: 0.2199
+Std Test AUC: 0.0354
+ASR: 0.0013359273149155908
+attack_auc: 0.32205765728872643
+------------------------- time cost ------------------------- 8.855451107025146
+
+-------------Round number: 20-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.3336
+Averaged Test Accurancy: 0.7656
+Averaged Test AUC: 0.9664
+Std Test Accurancy: 0.1983
+Std Test AUC: 0.0331
+ASR: 0.001609094326046357
+attack_auc: 0.3437298525417492
+------------------------- time cost ------------------------- 8.48182725906372
+
+-------------Round number: 21-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.3540
+Averaged Test Accurancy: 0.7717
+Averaged Test AUC: 0.9670
+Std Test Accurancy: 0.1989
+Std Test AUC: 0.0338
+ASR: 0.0013359273149155908
+attack_auc: 0.3457533115602113
+------------------------- time cost ------------------------- 9.087047815322876
+
+-------------Round number: 22-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.3080
+Averaged Test Accurancy: 0.7750
+Averaged Test AUC: 0.9668
+Std Test Accurancy: 0.2016
+Std Test AUC: 0.0352
+ASR: 0.0018008137534877586
+attack_auc: 0.3367032857125602
+------------------------- time cost ------------------------- 7.786669969558716
+
+-------------Round number: 23-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.2184
+Averaged Test Accurancy: 0.7754
+Averaged Test AUC: 0.9670
+Std Test Accurancy: 0.2037
+Std Test AUC: 0.0355
+ASR: 0.0010395515293423073
+attack_auc: 0.3291776779708573
+------------------------- time cost ------------------------- 8.062077045440674
+
+-------------Round number: 24-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.2814
+Averaged Test Accurancy: 0.7765
+Averaged Test AUC: 0.9658
+Std Test Accurancy: 0.2015
+Std Test AUC: 0.0364
+ASR: 0.0013564995396578188
+attack_auc: 0.31003204746712404
+------------------------- time cost ------------------------- 8.66632342338562
+
+-------------Round number: 25-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.1489
+Averaged Test Accurancy: 0.7943
+Averaged Test AUC: 0.9685
+Std Test Accurancy: 0.1897
+Std Test AUC: 0.0350
+ASR: 0.002481779551297531
+attack_auc: 0.3522342986761784
+------------------------- time cost ------------------------- 8.647236347198486
+
+-------------Round number: 26-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.0201
+Averaged Test Accurancy: 0.8116
+Averaged Test AUC: 0.9704
+Std Test Accurancy: 0.1749
+Std Test AUC: 0.0340
+ASR: 0.0021004111641207274
+attack_auc: 0.34078443654772894
+------------------------- time cost ------------------------- 9.528919219970703
+
+-------------Round number: 27-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.0049
+Averaged Test Accurancy: 0.8148
+Averaged Test AUC: 0.9696
+Std Test Accurancy: 0.1770
+Std Test AUC: 0.0416
+ASR: 0.0028293135512216195
+attack_auc: 0.3432698518639868
+------------------------- time cost ------------------------- 7.079470634460449
+
+-------------Round number: 28-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.0773
+Averaged Test Accurancy: 0.8080
+Averaged Test AUC: 0.9690
+Std Test Accurancy: 0.1820
+Std Test AUC: 0.0422
+ASR: 0.002357158864926764
+attack_auc: 0.35111458416043645
+------------------------- time cost ------------------------- 8.722667217254639
+[PFedBA] Round 30: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=17.0762 grad=0.7950 loss_align=7.4623 attack=8.8189 norm=9.4414
+
+-------------Round number: 29-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.2391
+Averaged Test Accurancy: 0.8178
+Averaged Test AUC: 0.9708
+Std Test Accurancy: 0.1770
+Std Test AUC: 0.0403
+ASR: 0.002805369317810634
+attack_auc: 0.3544941587124922
+------------------------- time cost ------------------------- 10.620357751846313
+[PFedBA] Round 31: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=4.0126 grad=1.1861 loss_align=0.4050 attack=2.4215 norm=9.4873
+
+-------------Round number: 30-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.9709
+Averaged Test Accurancy: 0.8280
+Averaged Test AUC: 0.9741
+Std Test Accurancy: 0.1683
+Std Test AUC: 0.0332
+ASR: 0.0016842956563585044
+attack_auc: 0.3156408741829088
+------------------------- time cost ------------------------- 10.231724500656128
+[PFedBA] Round 32: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=4.8788 grad=1.4593 loss_align=2.0294 attack=1.3901 norm=9.4887
+
+-------------Round number: 31-------------
+
+Evaluate personalized models
+Averaged Train Loss: 1.0522
+Averaged Test Accurancy: 0.8322
+Averaged Test AUC: 0.9744
+Std Test Accurancy: 0.1695
+Std Test AUC: 0.0352
+ASR: 0.005951118713241827
+attack_auc: 0.45961934317590153
+------------------------- time cost ------------------------- 8.354159832000732
+[PFedBA] Round 33: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=5.1971 grad=1.4533 loss_align=2.2734 attack=1.4705 norm=9.4896
+
+-------------Round number: 32-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.9523
+Averaged Test Accurancy: 0.8422
+Averaged Test AUC: 0.9774
+Std Test Accurancy: 0.1431
+Std Test AUC: 0.0254
+ASR: 0.003738313575120178
+attack_auc: 0.4542065826797853
+------------------------- time cost ------------------------- 9.48535704612732
+[PFedBA] Round 34: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=5.3919 grad=1.3752 loss_align=3.2085 attack=0.8081 norm=9.5021
+
+-------------Round number: 33-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.9849
+Averaged Test Accurancy: 0.8419
+Averaged Test AUC: 0.9770
+Std Test Accurancy: 0.1518
+Std Test AUC: 0.0291
+ASR: 0.0026925260172183958
+attack_auc: 0.41310667414075164
+------------------------- time cost ------------------------- 9.690573453903198
+[PFedBA] Round 35: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=4.9548 grad=1.4036 loss_align=2.9642 attack=0.5870 norm=9.5146
+
+-------------Round number: 34-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.8003
+Averaged Test Accurancy: 0.8487
+Averaged Test AUC: 0.9774
+Std Test Accurancy: 0.1372
+Std Test AUC: 0.0272
+ASR: 0.0025938149137824267
+attack_auc: 0.43762005971923446
+------------------------- time cost ------------------------- 8.80664324760437
+[PFedBA] Round 36: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=4.3072 grad=1.5165 loss_align=2.2431 attack=0.5477 norm=9.5265
+
+-------------Round number: 35-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.7394
+Averaged Test Accurancy: 0.8468
+Averaged Test AUC: 0.9767
+Std Test Accurancy: 0.1345
+Std Test AUC: 0.0269
+ASR: 0.002058224889360588
+attack_auc: 0.40806329489572607
+------------------------- time cost ------------------------- 8.977194786071777
+[PFedBA] Round 37: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=4.3031 grad=1.0234 loss_align=0.6154 attack=2.6642 norm=9.6194
+
+-------------Round number: 36-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.7722
+Averaged Test Accurancy: 0.8506
+Averaged Test AUC: 0.9777
+Std Test Accurancy: 0.1257
+Std Test AUC: 0.0256
+ASR: 0.0017959380822030096
+attack_auc: 0.43283217981351324
+------------------------- time cost ------------------------- 8.018815755844116
+[PFedBA] Round 38: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.6965 grad=0.7810 loss_align=0.3531 attack=2.5624 norm=9.8989
+
+-------------Round number: 37-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.7010
+Averaged Test Accurancy: 0.8622
+Averaged Test AUC: 0.9791
+Std Test Accurancy: 0.1021
+Std Test AUC: 0.0248
+ASR: 0.0033354377682697518
+attack_auc: 0.46371187284549775
+------------------------- time cost ------------------------- 9.882062673568726
+[PFedBA] Round 39: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.8245 grad=0.8259 loss_align=0.4809 attack=2.5176 norm=10.0974
+
+-------------Round number: 38-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.7095
+Averaged Test Accurancy: 0.8606
+Averaged Test AUC: 0.9789
+Std Test Accurancy: 0.1062
+Std Test AUC: 0.0244
+ASR: 0.004509891047136321
+attack_auc: 0.46630244857670794
+------------------------- time cost ------------------------- 8.831018209457397
+[PFedBA] Round 40: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=6.4955 grad=0.5791 loss_align=1.5754 attack=4.3410 norm=10.8960
+
+-------------Round number: 39-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.7769
+Averaged Test Accurancy: 0.8569
+Averaged Test AUC: 0.9784
+Std Test Accurancy: 0.1058
+Std Test AUC: 0.0254
+ASR: 0.004561436623808888
+attack_auc: 0.4674146320608907
+------------------------- time cost ------------------------- 8.149258375167847
+[PFedBA] Round 41: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=6.0017 grad=0.6446 loss_align=1.3047 attack=4.0524 norm=11.6095
+
+-------------Round number: 40-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.7345
+Averaged Test Accurancy: 0.8670
+Averaged Test AUC: 0.9796
+Std Test Accurancy: 0.1007
+Std Test AUC: 0.0239
+ASR: 0.0040099120848376005
+attack_auc: 0.4990366952973534
+------------------------- time cost ------------------------- 9.275606632232666
+[PFedBA] Round 42: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=5.6000 grad=0.5858 loss_align=1.1145 attack=3.8997 norm=12.1511
+
+-------------Round number: 41-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6556
+Averaged Test Accurancy: 0.8772
+Averaged Test AUC: 0.9824
+Std Test Accurancy: 0.0827
+Std Test AUC: 0.0189
+ASR: 0.004705879074203426
+attack_auc: 0.51032857429935
+------------------------- time cost ------------------------- 9.825687170028687
+[PFedBA] Round 43: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=6.0073 grad=0.5426 loss_align=1.1574 attack=4.3073 norm=12.6437
+
+-------------Round number: 42-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6757
+Averaged Test Accurancy: 0.8803
+Averaged Test AUC: 0.9826
+Std Test Accurancy: 0.0825
+Std Test AUC: 0.0192
+ASR: 0.00448275333923693
+attack_auc: 0.5083301451984883
+------------------------- time cost ------------------------- 7.984822511672974
+[PFedBA] Round 44: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=5.1912 grad=0.5573 loss_align=0.8862 attack=3.7477 norm=13.0038
+
+-------------Round number: 43-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6965
+Averaged Test Accurancy: 0.8775
+Averaged Test AUC: 0.9821
+Std Test Accurancy: 0.0833
+Std Test AUC: 0.0194
+ASR: 0.006132956108847434
+attack_auc: 0.5321839773838182
+------------------------- time cost ------------------------- 8.95491886138916
+[PFedBA] Round 45: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.5645 grad=0.9648 loss_align=1.1226 attack=1.4771 norm=13.0089
+
+-------------Round number: 44-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6297
+Averaged Test Accurancy: 0.8808
+Averaged Test AUC: 0.9827
+Std Test Accurancy: 0.0792
+Std Test AUC: 0.0188
+ASR: 0.006455409085046481
+attack_auc: 0.5217714093187691
+------------------------- time cost ------------------------- 9.130440950393677
+[PFedBA] Round 46: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.6101 grad=0.9365 loss_align=1.0676 attack=1.6060 norm=13.0377
+
+-------------Round number: 45-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6845
+Averaged Test Accurancy: 0.8789
+Averaged Test AUC: 0.9826
+Std Test Accurancy: 0.0835
+Std Test AUC: 0.0195
+ASR: 0.005601987063275488
+attack_auc: 0.5046860902720975
+------------------------- time cost ------------------------- 8.454903602600098
+[PFedBA] Round 47: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.7084 grad=0.9543 loss_align=1.1077 attack=1.6464 norm=13.0385
+
+-------------Round number: 46-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6891
+Averaged Test Accurancy: 0.8795
+Averaged Test AUC: 0.9827
+Std Test Accurancy: 0.0840
+Std Test AUC: 0.0187
+ASR: 0.005803817667245985
+attack_auc: 0.4828642578264403
+------------------------- time cost ------------------------- 10.012257814407349
+[PFedBA] Round 48: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.8115 grad=1.0291 loss_align=1.0949 attack=1.6875 norm=13.0416
+
+-------------Round number: 47-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6940
+Averaged Test Accurancy: 0.8806
+Averaged Test AUC: 0.9822
+Std Test Accurancy: 0.0837
+Std Test AUC: 0.0213
+ASR: 0.00756434472407718
+attack_auc: 0.47874710782715935
+------------------------- time cost ------------------------- 8.400907039642334
+[PFedBA] Round 49: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.8041 grad=1.0560 loss_align=1.4345 attack=1.3136 norm=13.0426
+
+-------------Round number: 48-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6377
+Averaged Test Accurancy: 0.8802
+Averaged Test AUC: 0.9833
+Std Test Accurancy: 0.0876
+Std Test AUC: 0.0171
+ASR: 0.008596643127478609
+attack_auc: 0.503620924535937
+------------------------- time cost ------------------------- 8.342793703079224
+[PFedBA] Round 50: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.7365 grad=0.9610 loss_align=1.2576 attack=1.5179 norm=13.0630
+
+-------------Round number: 49-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6886
+Averaged Test Accurancy: 0.8761
+Averaged Test AUC: 0.9821
+Std Test Accurancy: 0.0910
+Std Test AUC: 0.0196
+ASR: 0.008887686509002053
+attack_auc: 0.5105116860864014
+------------------------- time cost ------------------------- 8.551799535751343
+[PFedBA] Round 51: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.6313 grad=1.0746 loss_align=1.3269 attack=1.2298 norm=13.0658
+
+-------------Round number: 50-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6018
+Averaged Test Accurancy: 0.8794
+Averaged Test AUC: 0.9827
+Std Test Accurancy: 0.0876
+Std Test AUC: 0.0191
+ASR: 0.012964020212162808
+attack_auc: 0.5437522373655242
+------------------------- time cost ------------------------- 9.310037851333618
+[PFedBA] Round 52: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.9641 grad=1.1126 loss_align=1.8768 attack=0.9746 norm=13.0687
+
+-------------Round number: 51-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6086
+Averaged Test Accurancy: 0.8751
+Averaged Test AUC: 0.9824
+Std Test Accurancy: 0.0903
+Std Test AUC: 0.0192
+ASR: 0.012005182318005042
+attack_auc: 0.5451534523078156
+------------------------- time cost ------------------------- 8.932982206344604
+[PFedBA] Round 53: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=13.3000 grad=0.5119 loss_align=5.2334 attack=7.5547 norm=13.8788
+
+-------------Round number: 52-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6216
+Averaged Test Accurancy: 0.8721
+Averaged Test AUC: 0.9819
+Std Test Accurancy: 0.0878
+Std Test AUC: 0.0206
+ASR: 0.01802464275446205
+attack_auc: 0.5626775802196499
+------------------------- time cost ------------------------- 8.96101427078247
+[PFedBA] Round 54: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=13.4619 grad=0.4834 loss_align=5.2074 attack=7.7712 norm=14.6673
+
+-------------Round number: 53-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6097
+Averaged Test Accurancy: 0.8759
+Averaged Test AUC: 0.9825
+Std Test Accurancy: 0.0873
+Std Test AUC: 0.0196
+ASR: 0.013802004400766966
+attack_auc: 0.5619682339571098
+------------------------- time cost ------------------------- 9.299851417541504
+[PFedBA] Round 55: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=12.6474 grad=0.4828 loss_align=4.7150 attack=7.4496 norm=15.1638
+
+-------------Round number: 54-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6218
+Averaged Test Accurancy: 0.8766
+Averaged Test AUC: 0.9824
+Std Test Accurancy: 0.0868
+Std Test AUC: 0.0206
+ASR: 0.016055886831499205
+attack_auc: 0.5660919981543978
+------------------------- time cost ------------------------- 9.011523008346558
+[PFedBA] Round 56: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.2105 grad=1.2145 loss_align=1.6512 attack=0.3448 norm=15.1635
+
+-------------Round number: 55-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.5895
+Averaged Test Accurancy: 0.8691
+Averaged Test AUC: 0.9816
+Std Test Accurancy: 0.0937
+Std Test AUC: 0.0209
+ASR: 0.0177430129871688
+attack_auc: 0.5573249359386894
+------------------------- time cost ------------------------- 9.017211198806763
+[PFedBA] Round 57: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.3211 grad=1.2025 loss_align=1.7751 attack=0.3435 norm=15.1609
+
+-------------Round number: 56-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6182
+Averaged Test Accurancy: 0.8721
+Averaged Test AUC: 0.9819
+Std Test Accurancy: 0.0944
+Std Test AUC: 0.0213
+ASR: 0.00951278436254396
+attack_auc: 0.5474732956417762
+------------------------- time cost ------------------------- 8.672876358032227
+[PFedBA] Round 58: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.4184 grad=1.1234 loss_align=1.9793 attack=0.3157 norm=15.1562
+
+-------------Round number: 57-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6087
+Averaged Test Accurancy: 0.8749
+Averaged Test AUC: 0.9821
+Std Test Accurancy: 0.0910
+Std Test AUC: 0.0211
+ASR: 0.020402417076015814
+attack_auc: 0.596831649245442
+------------------------- time cost ------------------------- 9.700302362442017
+[PFedBA] Round 59: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.6492 grad=1.1415 loss_align=2.2404 attack=0.2673 norm=15.1600
+
+-------------Round number: 58-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6157
+Averaged Test Accurancy: 0.8742
+Averaged Test AUC: 0.9821
+Std Test Accurancy: 0.0912
+Std Test AUC: 0.0208
+ASR: 0.02121438592045853
+attack_auc: 0.5956059036973025
+------------------------- time cost ------------------------- 8.72025752067566
+[PFedBA] Round 60: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.4233 grad=1.0856 loss_align=2.0373 attack=0.3004 norm=15.1616
+
+-------------Round number: 59-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6079
+Averaged Test Accurancy: 0.8743
+Averaged Test AUC: 0.9823
+Std Test Accurancy: 0.0913
+Std Test AUC: 0.0207
+ASR: 0.02045012139747527
+attack_auc: 0.596771440214291
+------------------------- time cost ------------------------- 9.851754426956177
+[PFedBA] Round 61: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.0484 grad=1.3158 loss_align=1.6380 attack=0.0946 norm=15.1669
+
+-------------Round number: 60-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.5451
+Averaged Test Accurancy: 0.8763
+Averaged Test AUC: 0.9829
+Std Test Accurancy: 0.0903
+Std Test AUC: 0.0200
+ASR: 0.01959553840875768
+attack_auc: 0.5890925405572262
+------------------------- time cost ------------------------- 9.284300804138184
+[PFedBA] Round 62: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.0871 grad=1.3215 loss_align=1.6991 attack=0.0664 norm=15.1683
+
+-------------Round number: 61-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.5249
+Averaged Test Accurancy: 0.8847
+Averaged Test AUC: 0.9832
+Std Test Accurancy: 0.0848
+Std Test AUC: 0.0203
+ASR: 0.02400310956084327
+attack_auc: 0.6087298506895322
+------------------------- time cost ------------------------- 9.182164192199707
+[PFedBA] Round 63: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.3805 grad=1.3169 loss_align=1.9795 attack=0.0841 norm=15.1747
+
+-------------Round number: 62-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.5600
+Averaged Test Accurancy: 0.8817
+Averaged Test AUC: 0.9829
+Std Test Accurancy: 0.0885
+Std Test AUC: 0.0207
+ASR: 0.022267483556708278
+attack_auc: 0.596701131765155
+------------------------- time cost ------------------------- 8.742535591125488
+[PFedBA] Round 64: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.3320 grad=1.3380 loss_align=1.8928 attack=0.1011 norm=15.1712
+
+-------------Round number: 63-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.5914
+Averaged Test Accurancy: 0.8801
+Averaged Test AUC: 0.9822
+Std Test Accurancy: 0.0883
+Std Test AUC: 0.0227
+ASR: 0.023823069604867665
+attack_auc: 0.6026166110162348
+------------------------- time cost ------------------------- 9.815134763717651
+[PFedBA] Round 65: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.1036 grad=1.2729 loss_align=1.7709 attack=0.0599 norm=15.1647
+
+-------------Round number: 64-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.5656
+Averaged Test Accurancy: 0.8852
+Averaged Test AUC: 0.9822
+Std Test Accurancy: 0.0847
+Std Test AUC: 0.0241
+ASR: 0.02612090557678165
+attack_auc: 0.6098945137904564
+------------------------- time cost ------------------------- 8.676093578338623
+[PFedBA] Round 66: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.4456 grad=1.2071 loss_align=2.1631 attack=0.0753 norm=15.1415
+
+-------------Round number: 65-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.5608
+Averaged Test Accurancy: 0.8799
+Averaged Test AUC: 0.9812
+Std Test Accurancy: 0.0922
+Std Test AUC: 0.0261
+ASR: 0.02262846413266137
+attack_auc: 0.5962809177687332
+------------------------- time cost ------------------------- 9.086683988571167
+[PFedBA] Round 67: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.1912 grad=1.1366 loss_align=1.9329 attack=0.1216 norm=15.1403
+
+-------------Round number: 66-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.6023
+Averaged Test Accurancy: 0.8812
+Averaged Test AUC: 0.9815
+Std Test Accurancy: 0.0926
+Std Test AUC: 0.0266
+ASR: 0.018458067817701766
+attack_auc: 0.5841843347283328
+------------------------- time cost ------------------------- 9.952649354934692
+[PFedBA] Round 68: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.2632 grad=1.1809 loss_align=1.9708 attack=0.1114 norm=15.1293
+
+-------------Round number: 67-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.5373
+Averaged Test Accurancy: 0.8828
+Averaged Test AUC: 0.9816
+Std Test Accurancy: 0.0903
+Std Test AUC: 0.0258
+ASR: 0.020711819259800986
+attack_auc: 0.5922384045817201
+------------------------- time cost ------------------------- 8.317702531814575
+[PFedBA] Round 69: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.2306 grad=1.2454 loss_align=1.8974 attack=0.0878 norm=15.1329
+
+-------------Round number: 68-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.5191
+Averaged Test Accurancy: 0.8852
+Averaged Test AUC: 0.9812
+Std Test Accurancy: 0.0905
+Std Test AUC: 0.0272
+ASR: 0.01856248208559047
+attack_auc: 0.5896785925455973
+------------------------- time cost ------------------------- 8.617523431777954
+[PFedBA] Round 70: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.9960 grad=1.1644 loss_align=1.7184 attack=0.1132 norm=15.1129
+
+-------------Round number: 69-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4653
+Averaged Test Accurancy: 0.8907
+Averaged Test AUC: 0.9825
+Std Test Accurancy: 0.0814
+Std Test AUC: 0.0241
+ASR: 0.014612098271014931
+attack_auc: 0.5775024225860739
+------------------------- time cost ------------------------- 9.248646259307861
+[PFedBA] Round 71: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.9250 grad=1.1904 loss_align=1.6298 attack=0.1048 norm=15.0936
+
+-------------Round number: 70-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4599
+Averaged Test Accurancy: 0.8938
+Averaged Test AUC: 0.9825
+Std Test Accurancy: 0.0721
+Std Test AUC: 0.0258
+ASR: 0.0159553560577132
+attack_auc: 0.5773993472376563
+------------------------- time cost ------------------------- 10.007776975631714
+[PFedBA] Round 72: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.1852 grad=1.2253 loss_align=1.8843 attack=0.0755 norm=15.0608
+
+-------------Round number: 71-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4783
+Averaged Test Accurancy: 0.8905
+Averaged Test AUC: 0.9827
+Std Test Accurancy: 0.0744
+Std Test AUC: 0.0236
+ASR: 0.017810260943799686
+attack_auc: 0.5910981272399435
+------------------------- time cost ------------------------- 9.657514095306396
+[PFedBA] Round 73: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.0546 grad=1.2262 loss_align=1.6726 attack=0.1558 norm=15.0669
+
+-------------Round number: 72-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4234
+Averaged Test Accurancy: 0.8919
+Averaged Test AUC: 0.9834
+Std Test Accurancy: 0.0747
+Std Test AUC: 0.0190
+ASR: 0.01746643589128788
+attack_auc: 0.5935690049298991
+------------------------- time cost ------------------------- 8.940264225006104
+[PFedBA] Round 74: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.4455 grad=1.2211 loss_align=2.0886 attack=0.1358 norm=15.0698
+
+-------------Round number: 73-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4528
+Averaged Test Accurancy: 0.8849
+Averaged Test AUC: 0.9837
+Std Test Accurancy: 0.0826
+Std Test AUC: 0.0171
+ASR: 0.020287537401171545
+attack_auc: 0.5983551712200916
+------------------------- time cost ------------------------- 8.86279010772705
+[PFedBA] Round 75: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.2678 grad=1.2334 loss_align=1.9569 attack=0.0776 norm=15.0973
+
+-------------Round number: 74-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4557
+Averaged Test Accurancy: 0.8853
+Averaged Test AUC: 0.9837
+Std Test Accurancy: 0.0786
+Std Test AUC: 0.0163
+ASR: 0.02731927597798304
+attack_auc: 0.6256580203274106
+------------------------- time cost ------------------------- 8.750017642974854
+[PFedBA] Round 76: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.3921 grad=1.1915 loss_align=2.1030 attack=0.0977 norm=15.0940
+
+-------------Round number: 75-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4520
+Averaged Test Accurancy: 0.8864
+Averaged Test AUC: 0.9840
+Std Test Accurancy: 0.0787
+Std Test AUC: 0.0136
+ASR: 0.026489399496783486
+attack_auc: 0.6199810742171226
+------------------------- time cost ------------------------- 8.69049859046936
+[PFedBA] Round 77: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.4126 grad=1.2350 loss_align=2.1081 attack=0.0695 norm=15.1010
+
+-------------Round number: 76-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4634
+Averaged Test Accurancy: 0.8894
+Averaged Test AUC: 0.9836
+Std Test Accurancy: 0.0691
+Std Test AUC: 0.0156
+ASR: 0.025575143500558926
+attack_auc: 0.6379942696592966
+------------------------- time cost ------------------------- 8.598302125930786
+[PFedBA] Round 78: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.3299 grad=1.2623 loss_align=2.0261 attack=0.0416 norm=15.0875
+
+-------------Round number: 77-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4204
+Averaged Test Accurancy: 0.8934
+Averaged Test AUC: 0.9842
+Std Test Accurancy: 0.0659
+Std Test AUC: 0.0145
+ASR: 0.028326234705095595
+attack_auc: 0.6496218844437209
+------------------------- time cost ------------------------- 9.344174146652222
+[PFedBA] Round 79: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.3156 grad=1.2334 loss_align=2.0205 attack=0.0616 norm=15.1169
+
+-------------Round number: 78-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4462
+Averaged Test Accurancy: 0.8926
+Averaged Test AUC: 0.9843
+Std Test Accurancy: 0.0644
+Std Test AUC: 0.0144
+ASR: 0.025899961806014307
+attack_auc: 0.6421462451267439
+------------------------- time cost ------------------------- 9.475524663925171
+[PFedBA] Round 80: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.8348 grad=1.2315 loss_align=1.5466 attack=0.0567 norm=15.1303
+
+-------------Round number: 79-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3858
+Averaged Test Accurancy: 0.8966
+Averaged Test AUC: 0.9838
+Std Test Accurancy: 0.0643
+Std Test AUC: 0.0156
+ASR: 0.027865571342267713
+attack_auc: 0.6505868073643414
+------------------------- time cost ------------------------- 9.366174459457397
+[PFedBA] Round 81: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.1317 grad=1.2792 loss_align=1.7816 attack=0.0708 norm=15.1312
+
+-------------Round number: 80-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3986
+Averaged Test Accurancy: 0.8968
+Averaged Test AUC: 0.9845
+Std Test Accurancy: 0.0654
+Std Test AUC: 0.0147
+ASR: 0.027838052871922234
+attack_auc: 0.6444940615267404
+------------------------- time cost ------------------------- 9.089792728424072
+[PFedBA] Round 82: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.1326 grad=1.2392 loss_align=1.8249 attack=0.0685 norm=15.1266
+
+-------------Round number: 81-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3707
+Averaged Test Accurancy: 0.8953
+Averaged Test AUC: 0.9847
+Std Test Accurancy: 0.0666
+Std Test AUC: 0.0145
+ASR: 0.027969620170826267
+attack_auc: 0.6352416846218769
+------------------------- time cost ------------------------- 8.82795262336731
+[PFedBA] Round 83: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.2496 grad=1.2348 loss_align=1.9748 attack=0.0400 norm=15.1204
+
+-------------Round number: 82-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3561
+Averaged Test Accurancy: 0.8944
+Averaged Test AUC: 0.9848
+Std Test Accurancy: 0.0695
+Std Test AUC: 0.0146
+ASR: 0.026352924810121008
+attack_auc: 0.6428653164453634
+------------------------- time cost ------------------------- 9.541323184967041
+[PFedBA] Round 84: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.1477 grad=1.2470 loss_align=1.8610 attack=0.0397 norm=15.1041
+
+-------------Round number: 83-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3610
+Averaged Test Accurancy: 0.8963
+Averaged Test AUC: 0.9847
+Std Test Accurancy: 0.0681
+Std Test AUC: 0.0145
+ASR: 0.028998932907959206
+attack_auc: 0.6480150378112174
+------------------------- time cost ------------------------- 8.410304546356201
+[PFedBA] Round 85: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.1771 grad=1.1252 loss_align=1.9798 attack=0.0721 norm=15.1064
+
+-------------Round number: 84-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3343
+Averaged Test Accurancy: 0.8991
+Averaged Test AUC: 0.9854
+Std Test Accurancy: 0.0657
+Std Test AUC: 0.0137
+ASR: 0.02810832109111435
+attack_auc: 0.6433836891007354
+------------------------- time cost ------------------------- 9.705318927764893
+[PFedBA] Round 86: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.0298 grad=1.2049 loss_align=1.7653 attack=0.0596 norm=15.1121
+
+-------------Round number: 85-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3556
+Averaged Test Accurancy: 0.8988
+Averaged Test AUC: 0.9857
+Std Test Accurancy: 0.0654
+Std Test AUC: 0.0131
+ASR: 0.02589902972178029
+attack_auc: 0.6319990277431392
+------------------------- time cost ------------------------- 9.555763483047485
+[PFedBA] Round 87: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.9044 grad=1.1859 loss_align=1.6430 attack=0.0756 norm=15.1014
+
+-------------Round number: 86-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3277
+Averaged Test Accurancy: 0.8969
+Averaged Test AUC: 0.9853
+Std Test Accurancy: 0.0650
+Std Test AUC: 0.0126
+ASR: 0.02881714447141432
+attack_auc: 0.6393957967568143
+------------------------- time cost ------------------------- 8.960492372512817
+[PFedBA] Round 88: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4286 grad=0.9922 loss_align=1.1968 attack=0.2396 norm=15.1092
+
+-------------Round number: 87-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3526
+Averaged Test Accurancy: 0.8949
+Averaged Test AUC: 0.9854
+Std Test Accurancy: 0.0664
+Std Test AUC: 0.0123
+ASR: 0.029505097950439502
+attack_auc: 0.6474134220818077
+------------------------- time cost ------------------------- 9.679258346557617
+[PFedBA] Round 89: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5417 grad=0.9673 loss_align=1.2700 attack=0.3044 norm=15.1126
+
+-------------Round number: 88-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3591
+Averaged Test Accurancy: 0.8972
+Averaged Test AUC: 0.9857
+Std Test Accurancy: 0.0633
+Std Test AUC: 0.0126
+ASR: 0.026880105613307833
+attack_auc: 0.6416830782840697
+------------------------- time cost ------------------------- 9.83128833770752
+[PFedBA] Round 90: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5740 grad=1.0276 loss_align=1.2911 attack=0.2553 norm=15.1000
+
+-------------Round number: 89-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3748
+Averaged Test Accurancy: 0.8939
+Averaged Test AUC: 0.9848
+Std Test Accurancy: 0.0737
+Std Test AUC: 0.0162
+ASR: 0.02747831743574614
+attack_auc: 0.6349688565053168
+------------------------- time cost ------------------------- 9.211142778396606
+[PFedBA] Round 91: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4788 grad=0.9635 loss_align=1.3030 attack=0.2122 norm=15.1054
+
+-------------Round number: 90-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3325
+Averaged Test Accurancy: 0.8983
+Averaged Test AUC: 0.9851
+Std Test Accurancy: 0.0724
+Std Test AUC: 0.0164
+ASR: 0.026813847081020855
+attack_auc: 0.6500366333578129
+------------------------- time cost ------------------------- 10.04683518409729
+[PFedBA] Round 92: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3128 grad=0.9982 loss_align=1.1272 attack=0.1874 norm=15.1043
+
+-------------Round number: 91-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3404
+Averaged Test Accurancy: 0.9008
+Averaged Test AUC: 0.9846
+Std Test Accurancy: 0.0708
+Std Test AUC: 0.0189
+ASR: 0.026427364354658693
+attack_auc: 0.6405992088962645
+------------------------- time cost ------------------------- 9.511844635009766
+[PFedBA] Round 93: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3654 grad=0.9744 loss_align=1.2247 attack=0.1663 norm=15.1004
+
+-------------Round number: 92-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3236
+Averaged Test Accurancy: 0.9002
+Averaged Test AUC: 0.9857
+Std Test Accurancy: 0.0639
+Std Test AUC: 0.0129
+ASR: 0.025226959330646725
+attack_auc: 0.6443048782124196
+------------------------- time cost ------------------------- 9.660189390182495
+[PFedBA] Round 94: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3656 grad=0.9210 loss_align=1.2138 attack=0.2308 norm=15.0891
+
+-------------Round number: 93-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3363
+Averaged Test Accurancy: 0.9000
+Averaged Test AUC: 0.9857
+Std Test Accurancy: 0.0626
+Std Test AUC: 0.0139
+ASR: 0.024794841485172067
+attack_auc: 0.6327371039536367
+------------------------- time cost ------------------------- 8.558186769485474
+[PFedBA] Round 95: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2970 grad=0.9376 loss_align=1.1855 attack=0.1739 norm=15.0768
+
+-------------Round number: 94-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3312
+Averaged Test Accurancy: 0.8976
+Averaged Test AUC: 0.9848
+Std Test Accurancy: 0.0661
+Std Test AUC: 0.0154
+ASR: 0.02725556363771292
+attack_auc: 0.6495779635047463
+------------------------- time cost ------------------------- 8.639710426330566
+[PFedBA] Round 96: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3531 grad=0.9557 loss_align=1.2349 attack=0.1625 norm=15.0533
+
+-------------Round number: 95-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3534
+Averaged Test Accurancy: 0.8975
+Averaged Test AUC: 0.9847
+Std Test Accurancy: 0.0681
+Std Test AUC: 0.0159
+ASR: 0.029877547854721253
+attack_auc: 0.6570378936781693
+------------------------- time cost ------------------------- 9.320905208587646
+[PFedBA] Round 97: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5674 grad=0.9655 loss_align=1.3745 attack=0.2274 norm=15.0510
+
+-------------Round number: 96-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3858
+Averaged Test Accurancy: 0.8934
+Averaged Test AUC: 0.9842
+Std Test Accurancy: 0.0715
+Std Test AUC: 0.0180
+ASR: 0.025895333871794952
+attack_auc: 0.6476642475978813
+------------------------- time cost ------------------------- 8.747744798660278
+[PFedBA] Round 98: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6764 grad=0.8432 loss_align=1.4163 attack=0.4169 norm=15.0672
+
+-------------Round number: 97-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.4359
+Averaged Test Accurancy: 0.8895
+Averaged Test AUC: 0.9839
+Std Test Accurancy: 0.0753
+Std Test AUC: 0.0191
+ASR: 0.02974255099559289
+attack_auc: 0.6531924787675102
+------------------------- time cost ------------------------- 8.661841869354248
+[PFedBA] Round 99: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6230 grad=0.8671 loss_align=1.4951 attack=0.2609 norm=15.0935
+
+-------------Round number: 98-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3433
+Averaged Test Accurancy: 0.8937
+Averaged Test AUC: 0.9858
+Std Test Accurancy: 0.0674
+Std Test AUC: 0.0112
+ASR: 0.028974091232881794
+attack_auc: 0.6579565468652486
+------------------------- time cost ------------------------- 9.296841144561768
+[PFedBA] Round 100: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4167 grad=1.0073 loss_align=1.2367 attack=0.1727 norm=15.0832
+
+-------------Round number: 99-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3498
+Averaged Test Accurancy: 0.8965
+Averaged Test AUC: 0.9848
+Std Test Accurancy: 0.0639
+Std Test AUC: 0.0176
+ASR: 0.026443462860737618
+attack_auc: 0.6468293619071899
+------------------------- time cost ------------------------- 9.517318725585938
+[PFedBA] Round 101: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3869 grad=0.8902 loss_align=1.3304 attack=0.1662 norm=15.0679
+
+-------------Round number: 100-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3553
+Averaged Test Accurancy: 0.8997
+Averaged Test AUC: 0.9850
+Std Test Accurancy: 0.0638
+Std Test AUC: 0.0179
+ASR: 0.026629568875075484
+attack_auc: 0.6515194473747058
+------------------------- time cost ------------------------- 9.826462984085083
+[PFedBA] Round 102: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3394 grad=0.8844 loss_align=1.2808 attack=0.1742 norm=15.0681
+
+-------------Round number: 101-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3700
+Averaged Test Accurancy: 0.8987
+Averaged Test AUC: 0.9849
+Std Test Accurancy: 0.0635
+Std Test AUC: 0.0181
+ASR: 0.028166002900817222
+attack_auc: 0.6431619463730087
+------------------------- time cost ------------------------- 9.208287715911865
+[PFedBA] Round 103: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3626 grad=0.8849 loss_align=1.3178 attack=0.1599 norm=15.0633
+
+-------------Round number: 102-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3655
+Averaged Test Accurancy: 0.8949
+Averaged Test AUC: 0.9841
+Std Test Accurancy: 0.0665
+Std Test AUC: 0.0180
+ASR: 0.03158519336441124
+attack_auc: 0.643554528031196
+------------------------- time cost ------------------------- 9.308672904968262
+[PFedBA] Round 104: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4088 grad=0.8367 loss_align=1.3275 attack=0.2446 norm=15.0584
+
+-------------Round number: 103-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3502
+Averaged Test Accurancy: 0.8990
+Averaged Test AUC: 0.9847
+Std Test Accurancy: 0.0609
+Std Test AUC: 0.0178
+ASR: 0.029946913793872904
+attack_auc: 0.6390495483999753
+------------------------- time cost ------------------------- 9.604394912719727
+[PFedBA] Round 105: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4640 grad=0.8777 loss_align=1.3641 attack=0.2222 norm=15.0484
+
+-------------Round number: 104-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3091
+Averaged Test Accurancy: 0.8997
+Averaged Test AUC: 0.9850
+Std Test Accurancy: 0.0604
+Std Test AUC: 0.0179
+ASR: 0.027333314128233414
+attack_auc: 0.6335883666910062
+------------------------- time cost ------------------------- 8.559289455413818
+[PFedBA] Round 106: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3494 grad=0.9339 loss_align=1.2742 attack=0.1413 norm=15.0339
+
+-------------Round number: 105-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3042
+Averaged Test Accurancy: 0.8982
+Averaged Test AUC: 0.9850
+Std Test Accurancy: 0.0659
+Std Test AUC: 0.0183
+ASR: 0.028765506656568792
+attack_auc: 0.6423399856628348
+------------------------- time cost ------------------------- 8.37208604812622
+[PFedBA] Round 107: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7378 grad=0.8631 loss_align=1.6007 attack=0.2741 norm=15.0065
+
+-------------Round number: 106-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3038
+Averaged Test Accurancy: 0.8984
+Averaged Test AUC: 0.9849
+Std Test Accurancy: 0.0660
+Std Test AUC: 0.0184
+ASR: 0.030218669769053363
+attack_auc: 0.6484370063910215
+------------------------- time cost ------------------------- 8.481424331665039
+[PFedBA] Round 108: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7671 grad=0.8468 loss_align=1.6277 attack=0.2926 norm=14.9712
+
+-------------Round number: 107-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3040
+Averaged Test Accurancy: 0.8993
+Averaged Test AUC: 0.9854
+Std Test Accurancy: 0.0652
+Std Test AUC: 0.0184
+ASR: 0.031159580114771837
+attack_auc: 0.6520233728962167
+------------------------- time cost ------------------------- 8.063763856887817
+[PFedBA] Round 109: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7274 grad=0.8604 loss_align=1.5845 attack=0.2825 norm=14.9132
+
+-------------Round number: 108-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3193
+Averaged Test Accurancy: 0.8973
+Averaged Test AUC: 0.9846
+Std Test Accurancy: 0.0701
+Std Test AUC: 0.0194
+ASR: 0.03198266170219322
+attack_auc: 0.6581864932953485
+------------------------- time cost ------------------------- 9.457831144332886
+[PFedBA] Round 110: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6861 grad=0.9488 loss_align=1.4619 attack=0.2754 norm=14.8623
+
+-------------Round number: 109-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3021
+Averaged Test Accurancy: 0.9011
+Averaged Test AUC: 0.9850
+Std Test Accurancy: 0.0687
+Std Test AUC: 0.0193
+ASR: 0.03815522506789217
+attack_auc: 0.6758654741492148
+------------------------- time cost ------------------------- 9.774643182754517
+[PFedBA] Round 111: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6810 grad=0.8373 loss_align=1.5117 attack=0.3320 norm=14.8223
+
+-------------Round number: 110-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2987
+Averaged Test Accurancy: 0.9028
+Averaged Test AUC: 0.9852
+Std Test Accurancy: 0.0663
+Std Test AUC: 0.0192
+ASR: 0.03136001327465961
+attack_auc: 0.6616464423798456
+------------------------- time cost ------------------------- 10.07728123664856
+[PFedBA] Round 112: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7695 grad=0.8400 loss_align=1.5301 attack=0.3994 norm=14.7959
+
+-------------Round number: 111-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3068
+Averaged Test Accurancy: 0.9013
+Averaged Test AUC: 0.9853
+Std Test Accurancy: 0.0650
+Std Test AUC: 0.0186
+ASR: 0.03173974973064265
+attack_auc: 0.663858308237265
+------------------------- time cost ------------------------- 8.767407178878784
+[PFedBA] Round 113: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5792 grad=0.9376 loss_align=1.4050 attack=0.2366 norm=14.8101
+
+-------------Round number: 112-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3181
+Averaged Test Accurancy: 0.8966
+Averaged Test AUC: 0.9844
+Std Test Accurancy: 0.0691
+Std Test AUC: 0.0195
+ASR: 0.030960822638717814
+attack_auc: 0.6679679885767099
+------------------------- time cost ------------------------- 9.31135106086731
+[PFedBA] Round 114: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4583 grad=0.8958 loss_align=1.3315 attack=0.2310 norm=14.8332
+
+-------------Round number: 113-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3048
+Averaged Test Accurancy: 0.9036
+Averaged Test AUC: 0.9849
+Std Test Accurancy: 0.0588
+Std Test AUC: 0.0189
+ASR: 0.03345054835243956
+attack_auc: 0.6794959387640515
+------------------------- time cost ------------------------- 10.448197603225708
+[PFedBA] Round 115: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5961 grad=0.9680 loss_align=1.4392 attack=0.1889 norm=14.8531
+
+-------------Round number: 114-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2896
+Averaged Test Accurancy: 0.9039
+Averaged Test AUC: 0.9854
+Std Test Accurancy: 0.0553
+Std Test AUC: 0.0182
+ASR: 0.0342602380953986
+attack_auc: 0.6758056614414925
+------------------------- time cost ------------------------- 9.12835955619812
+[PFedBA] Round 116: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6907 grad=0.8543 loss_align=1.6151 attack=0.2212 norm=14.8638
+
+-------------Round number: 115-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2739
+Averaged Test Accurancy: 0.9057
+Averaged Test AUC: 0.9857
+Std Test Accurancy: 0.0534
+Std Test AUC: 0.0180
+ASR: 0.031695286060888374
+attack_auc: 0.6744050342401728
+------------------------- time cost ------------------------- 8.512659788131714
+[PFedBA] Round 117: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.8332 grad=0.8548 loss_align=1.7328 attack=0.2456 norm=14.8648
+
+-------------Round number: 116-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2574
+Averaged Test Accurancy: 0.9060
+Averaged Test AUC: 0.9861
+Std Test Accurancy: 0.0534
+Std Test AUC: 0.0173
+ASR: 0.030970021940608734
+attack_auc: 0.6728180563333056
+------------------------- time cost ------------------------- 8.867406606674194
+[PFedBA] Round 118: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.2720 grad=0.7711 loss_align=2.1611 attack=0.3398 norm=14.8650
+
+-------------Round number: 117-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2516
+Averaged Test Accurancy: 0.9041
+Averaged Test AUC: 0.9870
+Std Test Accurancy: 0.0547
+Std Test AUC: 0.0099
+ASR: 0.02925397228454428
+attack_auc: 0.6642447565430786
+------------------------- time cost ------------------------- 9.432600498199463
+[PFedBA] Round 119: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.0045 grad=0.8260 loss_align=1.8782 attack=0.3003 norm=14.8663
+
+-------------Round number: 118-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2908
+Averaged Test Accurancy: 0.9043
+Averaged Test AUC: 0.9866
+Std Test Accurancy: 0.0541
+Std Test AUC: 0.0097
+ASR: 0.027663473324320027
+attack_auc: 0.656619042122738
+------------------------- time cost ------------------------- 9.238751888275146
+[PFedBA] Round 120: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.2027 grad=0.8478 loss_align=2.0633 attack=0.2917 norm=14.8625
+
+-------------Round number: 119-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2983
+Averaged Test Accurancy: 0.9008
+Averaged Test AUC: 0.9861
+Std Test Accurancy: 0.0594
+Std Test AUC: 0.0119
+ASR: 0.027527495120027338
+attack_auc: 0.657648496132836
+------------------------- time cost ------------------------- 8.940059423446655
+[PFedBA] Round 121: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.2352 grad=0.8068 loss_align=2.1159 attack=0.3125 norm=14.8542
+
+-------------Round number: 120-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3020
+Averaged Test Accurancy: 0.9008
+Averaged Test AUC: 0.9857
+Std Test Accurancy: 0.0574
+Std Test AUC: 0.0120
+ASR: 0.02930504913910614
+attack_auc: 0.6665162625388842
+------------------------- time cost ------------------------- 10.29378056526184
+[PFedBA] Round 122: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.2622 grad=0.8056 loss_align=2.1557 attack=0.3008 norm=14.8570
+
+-------------Round number: 121-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2372
+Averaged Test Accurancy: 0.9042
+Averaged Test AUC: 0.9865
+Std Test Accurancy: 0.0533
+Std Test AUC: 0.0106
+ASR: 0.027599884036761037
+attack_auc: 0.6551361130035479
+------------------------- time cost ------------------------- 9.507998943328857
+[PFedBA] Round 123: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.0121 grad=0.7827 loss_align=1.8591 attack=0.3703 norm=14.8590
+
+-------------Round number: 122-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2291
+Averaged Test Accurancy: 0.9016
+Averaged Test AUC: 0.9862
+Std Test Accurancy: 0.0533
+Std Test AUC: 0.0100
+ASR: 0.03227211572454387
+attack_auc: 0.6716496058907683
+------------------------- time cost ------------------------- 9.400280475616455
+[PFedBA] Round 124: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7990 grad=0.8174 loss_align=1.6921 attack=0.2895 norm=14.8617
+
+-------------Round number: 123-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2432
+Averaged Test Accurancy: 0.8991
+Averaged Test AUC: 0.9858
+Std Test Accurancy: 0.0559
+Std Test AUC: 0.0099
+ASR: 0.03354907779727252
+attack_auc: 0.6768009189534719
+------------------------- time cost ------------------------- 9.20299220085144
+[PFedBA] Round 125: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.8760 grad=0.8045 loss_align=1.7744 attack=0.2971 norm=14.8618
+
+-------------Round number: 124-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2499
+Averaged Test Accurancy: 0.8995
+Averaged Test AUC: 0.9857
+Std Test Accurancy: 0.0563
+Std Test AUC: 0.0103
+ASR: 0.032967647632662314
+attack_auc: 0.6812381514392596
+------------------------- time cost ------------------------- 9.444374561309814
+[PFedBA] Round 126: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.0938 grad=0.8287 loss_align=1.9503 attack=0.3148 norm=14.8625
+
+-------------Round number: 125-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2401
+Averaged Test Accurancy: 0.9020
+Averaged Test AUC: 0.9863
+Std Test Accurancy: 0.0550
+Std Test AUC: 0.0101
+ASR: 0.032423111653306046
+attack_auc: 0.6789866233760077
+------------------------- time cost ------------------------- 8.950560331344604
+[PFedBA] Round 127: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.0767 grad=0.8346 loss_align=2.0047 attack=0.2374 norm=14.8612
+
+-------------Round number: 126-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2382
+Averaged Test Accurancy: 0.9020
+Averaged Test AUC: 0.9864
+Std Test Accurancy: 0.0537
+Std Test AUC: 0.0101
+ASR: 0.03205728355656163
+attack_auc: 0.6752128108682974
+------------------------- time cost ------------------------- 9.194947004318237
+[PFedBA] Round 128: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.9464 grad=0.7824 loss_align=1.8603 attack=0.3037 norm=14.8559
+
+-------------Round number: 127-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2303
+Averaged Test Accurancy: 0.9048
+Averaged Test AUC: 0.9867
+Std Test Accurancy: 0.0525
+Std Test AUC: 0.0098
+ASR: 0.03294305181483385
+attack_auc: 0.6746233743872624
+------------------------- time cost ------------------------- 9.625056982040405
+[PFedBA] Round 129: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.8972 grad=0.8135 loss_align=1.8108 attack=0.2729 norm=14.8589
+
+-------------Round number: 128-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2863
+Averaged Test Accurancy: 0.9030
+Averaged Test AUC: 0.9860
+Std Test Accurancy: 0.0540
+Std Test AUC: 0.0109
+ASR: 0.036695236371078487
+attack_auc: 0.6885782841222696
+------------------------- time cost ------------------------- 10.333048582077026
+[PFedBA] Round 130: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.9673 grad=0.7778 loss_align=1.8157 attack=0.3737 norm=14.8681
+
+-------------Round number: 129-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2878
+Averaged Test Accurancy: 0.9048
+Averaged Test AUC: 0.9854
+Std Test Accurancy: 0.0535
+Std Test AUC: 0.0112
+ASR: 0.037577633290265644
+attack_auc: 0.6822859813713481
+------------------------- time cost ------------------------- 9.805590629577637
+[PFedBA] Round 131: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.0205 grad=0.7077 loss_align=1.8761 attack=0.4367 norm=14.8701
+
+-------------Round number: 130-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2977
+Averaged Test Accurancy: 0.9050
+Averaged Test AUC: 0.9856
+Std Test Accurancy: 0.0520
+Std Test AUC: 0.0112
+ASR: 0.033823235246807616
+attack_auc: 0.6777463246352334
+------------------------- time cost ------------------------- 8.875999689102173
+[PFedBA] Round 132: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.0571 grad=0.8134 loss_align=1.9142 attack=0.3295 norm=14.8770
+
+-------------Round number: 131-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2906
+Averaged Test Accurancy: 0.9059
+Averaged Test AUC: 0.9856
+Std Test Accurancy: 0.0521
+Std Test AUC: 0.0113
+ASR: 0.03437277886311213
+attack_auc: 0.6764509474835425
+------------------------- time cost ------------------------- 9.004109144210815
+[PFedBA] Round 133: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.1779 grad=0.7767 loss_align=2.0176 attack=0.3836 norm=14.8713
+
+-------------Round number: 132-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2885
+Averaged Test Accurancy: 0.9069
+Averaged Test AUC: 0.9856
+Std Test Accurancy: 0.0503
+Std Test AUC: 0.0113
+ASR: 0.03233437596125221
+attack_auc: 0.672033139702641
+------------------------- time cost ------------------------- 8.256472826004028
+[PFedBA] Round 134: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.9285 grad=0.8091 loss_align=1.8845 attack=0.2348 norm=14.8594
+
+-------------Round number: 133-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2911
+Averaged Test Accurancy: 0.9062
+Averaged Test AUC: 0.9858
+Std Test Accurancy: 0.0539
+Std Test AUC: 0.0114
+ASR: 0.0328485965607512
+attack_auc: 0.6702916934496591
+------------------------- time cost ------------------------- 8.876925945281982
+[PFedBA] Round 135: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6264 grad=0.7635 loss_align=1.4250 attack=0.4378 norm=14.8629
+
+-------------Round number: 134-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3044
+Averaged Test Accurancy: 0.9047
+Averaged Test AUC: 0.9857
+Std Test Accurancy: 0.0537
+Std Test AUC: 0.0115
+ASR: 0.032662516962946746
+attack_auc: 0.6678869373375952
+------------------------- time cost ------------------------- 9.89788031578064
+[PFedBA] Round 136: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7183 grad=0.8239 loss_align=1.5477 attack=0.3466 norm=14.8578
+
+-------------Round number: 135-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2999
+Averaged Test Accurancy: 0.9044
+Averaged Test AUC: 0.9851
+Std Test Accurancy: 0.0527
+Std Test AUC: 0.0121
+ASR: 0.03834755568941083
+attack_auc: 0.6834567162406646
+------------------------- time cost ------------------------- 10.082687854766846
+[PFedBA] Round 137: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2524 grad=0.8199 loss_align=1.2287 attack=0.2038 norm=14.8365
+
+-------------Round number: 136-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2864
+Averaged Test Accurancy: 0.9027
+Averaged Test AUC: 0.9848
+Std Test Accurancy: 0.0530
+Std Test AUC: 0.0123
+ASR: 0.043960171941122596
+attack_auc: 0.7055912717724706
+------------------------- time cost ------------------------- 9.697269201278687
+[PFedBA] Round 138: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3575 grad=0.8732 loss_align=1.2615 attack=0.2228 norm=14.8317
+
+-------------Round number: 137-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2797
+Averaged Test Accurancy: 0.9060
+Averaged Test AUC: 0.9854
+Std Test Accurancy: 0.0538
+Std Test AUC: 0.0119
+ASR: 0.042161938910340147
+attack_auc: 0.6993771947410379
+------------------------- time cost ------------------------- 9.748756170272827
+[PFedBA] Round 139: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2399 grad=0.8360 loss_align=1.1732 attack=0.2307 norm=14.8318
+
+-------------Round number: 138-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2585
+Averaged Test Accurancy: 0.9065
+Averaged Test AUC: 0.9852
+Std Test Accurancy: 0.0509
+Std Test AUC: 0.0118
+ASR: 0.041333470407267744
+attack_auc: 0.6954460885878531
+------------------------- time cost ------------------------- 9.17759394645691
+[PFedBA] Round 140: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2375 grad=0.8078 loss_align=1.1401 attack=0.2895 norm=14.8257
+
+-------------Round number: 139-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2540
+Averaged Test Accurancy: 0.9065
+Averaged Test AUC: 0.9859
+Std Test Accurancy: 0.0502
+Std Test AUC: 0.0113
+ASR: 0.036810651639466695
+attack_auc: 0.6889644215673483
+------------------------- time cost ------------------------- 9.353662490844727
+[PFedBA] Round 141: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2270 grad=0.7998 loss_align=1.1469 attack=0.2802 norm=14.8197
+
+-------------Round number: 140-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2548
+Averaged Test Accurancy: 0.9082
+Averaged Test AUC: 0.9861
+Std Test Accurancy: 0.0508
+Std Test AUC: 0.0111
+ASR: 0.03649804922238796
+attack_auc: 0.687062091143866
+------------------------- time cost ------------------------- 10.03368330001831
+[PFedBA] Round 142: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5931 grad=0.7913 loss_align=1.5379 attack=0.2639 norm=14.7433
+
+-------------Round number: 141-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2679
+Averaged Test Accurancy: 0.9072
+Averaged Test AUC: 0.9861
+Std Test Accurancy: 0.0526
+Std Test AUC: 0.0112
+ASR: 0.035638985867468345
+attack_auc: 0.6859411007254514
+------------------------- time cost ------------------------- 9.175512790679932
+[PFedBA] Round 143: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.0935 grad=0.8503 loss_align=1.9266 attack=0.3166 norm=14.7397
+
+-------------Round number: 142-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2517
+Averaged Test Accurancy: 0.9092
+Averaged Test AUC: 0.9862
+Std Test Accurancy: 0.0540
+Std Test AUC: 0.0111
+ASR: 0.036737165781968506
+attack_auc: 0.6848382707131322
+------------------------- time cost ------------------------- 9.008610725402832
+[PFedBA] Round 144: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2942 grad=0.8493 loss_align=1.2955 attack=0.1493 norm=14.7374
+
+-------------Round number: 143-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2866
+Averaged Test Accurancy: 0.9053
+Averaged Test AUC: 0.9851
+Std Test Accurancy: 0.0578
+Std Test AUC: 0.0161
+ASR: 0.0436581535612574
+attack_auc: 0.7120413510203639
+------------------------- time cost ------------------------- 9.533945798873901
+[PFedBA] Round 145: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3144 grad=0.8765 loss_align=1.3000 attack=0.1379 norm=14.7278
+
+-------------Round number: 144-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3069
+Averaged Test Accurancy: 0.9066
+Averaged Test AUC: 0.9854
+Std Test Accurancy: 0.0565
+Std Test AUC: 0.0162
+ASR: 0.0376782085749785
+attack_auc: 0.6968582687322508
+------------------------- time cost ------------------------- 8.23673963546753
+[PFedBA] Round 146: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.9270 grad=0.9353 loss_align=1.7943 attack=0.1974 norm=14.7201
+
+-------------Round number: 145-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3105
+Averaged Test Accurancy: 0.9060
+Averaged Test AUC: 0.9853
+Std Test Accurancy: 0.0580
+Std Test AUC: 0.0168
+ASR: 0.03690133126088263
+attack_auc: 0.6952437740004461
+------------------------- time cost ------------------------- 9.055812358856201
+[PFedBA] Round 147: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7957 grad=0.8681 loss_align=1.7223 attack=0.2053 norm=14.7167
+
+-------------Round number: 146-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2335
+Averaged Test Accurancy: 0.9097
+Averaged Test AUC: 0.9864
+Std Test Accurancy: 0.0530
+Std Test AUC: 0.0105
+ASR: 0.03834728484238947
+attack_auc: 0.7018720883943594
+------------------------- time cost ------------------------- 9.74970531463623
+[PFedBA] Round 148: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4890 grad=0.7240 loss_align=1.3425 attack=0.4225 norm=14.7192
+
+-------------Round number: 147-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2305
+Averaged Test Accurancy: 0.9097
+Averaged Test AUC: 0.9865
+Std Test Accurancy: 0.0517
+Std Test AUC: 0.0105
+ASR: 0.03336364728286395
+attack_auc: 0.6865913869859452
+------------------------- time cost ------------------------- 8.936092138290405
+[PFedBA] Round 149: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.8269 grad=0.7833 loss_align=1.7015 attack=0.3422 norm=14.7232
+
+-------------Round number: 148-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2621
+Averaged Test Accurancy: 0.9070
+Averaged Test AUC: 0.9864
+Std Test Accurancy: 0.0531
+Std Test AUC: 0.0108
+ASR: 0.03369227964050384
+attack_auc: 0.6893608112117338
+------------------------- time cost ------------------------- 9.068321704864502
+[PFedBA] Round 150: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.8943 grad=0.7742 loss_align=1.6462 attack=0.4739 norm=14.7213
+
+-------------Round number: 149-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2806
+Averaged Test Accurancy: 0.9073
+Averaged Test AUC: 0.9863
+Std Test Accurancy: 0.0539
+Std Test AUC: 0.0110
+ASR: 0.034479566167675
+attack_auc: 0.6890472106307576
+------------------------- time cost ------------------------- 9.784571170806885
+[PFedBA] Round 151: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5131 grad=0.7738 loss_align=1.3958 attack=0.3435 norm=14.7249
+
+-------------Round number: 150-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2835
+Averaged Test Accurancy: 0.9047
+Averaged Test AUC: 0.9853
+Std Test Accurancy: 0.0623
+Std Test AUC: 0.0126
+ASR: 0.037652047075153156
+attack_auc: 0.699217335557893
+------------------------- time cost ------------------------- 8.412798881530762
+[PFedBA] Round 152: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5152 grad=0.8099 loss_align=1.3440 attack=0.3613 norm=14.7198
+
+-------------Round number: 151-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2964
+Averaged Test Accurancy: 0.9044
+Averaged Test AUC: 0.9852
+Std Test Accurancy: 0.0612
+Std Test AUC: 0.0130
+ASR: 0.035375711048432894
+attack_auc: 0.7028142086997894
+------------------------- time cost ------------------------- 8.954558610916138
+[PFedBA] Round 153: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5474 grad=0.8495 loss_align=1.4153 attack=0.2826 norm=14.7186
+
+-------------Round number: 152-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3105
+Averaged Test Accurancy: 0.9050
+Averaged Test AUC: 0.9854
+Std Test Accurancy: 0.0619
+Std Test AUC: 0.0130
+ASR: 0.034775876308487816
+attack_auc: 0.6981385657689912
+------------------------- time cost ------------------------- 9.679787874221802
+[PFedBA] Round 154: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7713 grad=0.8478 loss_align=1.5907 attack=0.3328 norm=14.7144
+
+-------------Round number: 153-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3102
+Averaged Test Accurancy: 0.9040
+Averaged Test AUC: 0.9856
+Std Test Accurancy: 0.0618
+Std Test AUC: 0.0128
+ASR: 0.03607133088130879
+attack_auc: 0.7029920410164077
+------------------------- time cost ------------------------- 8.137449026107788
+[PFedBA] Round 155: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.9819 grad=0.8840 loss_align=1.7600 attack=0.3379 norm=14.7113
+
+-------------Round number: 154-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3124
+Averaged Test Accurancy: 0.9032
+Averaged Test AUC: 0.9856
+Std Test Accurancy: 0.0607
+Std Test AUC: 0.0125
+ASR: 0.038675026600259864
+attack_auc: 0.7080153380043306
+------------------------- time cost ------------------------- 8.662811040878296
+[PFedBA] Round 156: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.8711 grad=0.8632 loss_align=1.7550 attack=0.2529 norm=14.7045
+
+-------------Round number: 155-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3386
+Averaged Test Accurancy: 0.9008
+Averaged Test AUC: 0.9853
+Std Test Accurancy: 0.0657
+Std Test AUC: 0.0123
+ASR: 0.03648161890386982
+attack_auc: 0.7042835691954654
+------------------------- time cost ------------------------- 9.200876951217651
+[PFedBA] Round 157: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.8996 grad=0.8328 loss_align=1.7268 attack=0.3401 norm=14.6998
+
+-------------Round number: 156-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3318
+Averaged Test Accurancy: 0.9019
+Averaged Test AUC: 0.9855
+Std Test Accurancy: 0.0660
+Std Test AUC: 0.0123
+ASR: 0.03770630898742661
+attack_auc: 0.6998030429407716
+------------------------- time cost ------------------------- 8.497106790542603
+[PFedBA] Round 158: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7902 grad=0.8548 loss_align=1.6657 attack=0.2697 norm=14.6976
+
+-------------Round number: 157-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3266
+Averaged Test Accurancy: 0.9040
+Averaged Test AUC: 0.9857
+Std Test Accurancy: 0.0624
+Std Test AUC: 0.0118
+ASR: 0.03948116264584572
+attack_auc: 0.7115269529270659
+------------------------- time cost ------------------------- 9.388149738311768
+[PFedBA] Round 159: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.8502 grad=0.8753 loss_align=1.6680 attack=0.3069 norm=14.6913
+
+-------------Round number: 158-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3309
+Averaged Test Accurancy: 0.9039
+Averaged Test AUC: 0.9854
+Std Test Accurancy: 0.0612
+Std Test AUC: 0.0122
+ASR: 0.042086888238148684
+attack_auc: 0.7136345833479824
+------------------------- time cost ------------------------- 8.691835403442383
+[PFedBA] Round 160: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.8487 grad=0.8628 loss_align=1.6929 attack=0.2931 norm=14.6906
+
+-------------Round number: 159-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3280
+Averaged Test Accurancy: 0.9038
+Averaged Test AUC: 0.9853
+Std Test Accurancy: 0.0590
+Std Test AUC: 0.0123
+ASR: 0.04144463257526512
+attack_auc: 0.7072601715140219
+------------------------- time cost ------------------------- 9.737319707870483
+[PFedBA] Round 161: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7844 grad=0.8744 loss_align=1.6043 attack=0.3056 norm=14.6829
+
+-------------Round number: 160-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3467
+Averaged Test Accurancy: 0.8986
+Averaged Test AUC: 0.9847
+Std Test Accurancy: 0.0594
+Std Test AUC: 0.0122
+ASR: 0.04044087376722955
+attack_auc: 0.7049251899901862
+------------------------- time cost ------------------------- 8.978862762451172
+[PFedBA] Round 162: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6346 grad=0.8380 loss_align=1.5390 attack=0.2576 norm=14.6899
+
+-------------Round number: 161-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3194
+Averaged Test Accurancy: 0.8991
+Averaged Test AUC: 0.9845
+Std Test Accurancy: 0.0578
+Std Test AUC: 0.0119
+ASR: 0.0521771515371271
+attack_auc: 0.7348577820271871
+------------------------- time cost ------------------------- 9.505737066268921
+[PFedBA] Round 163: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.9764 grad=0.8950 loss_align=1.8017 attack=0.2797 norm=14.6890
+
+-------------Round number: 162-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3017
+Averaged Test Accurancy: 0.9019
+Averaged Test AUC: 0.9852
+Std Test Accurancy: 0.0564
+Std Test AUC: 0.0117
+ASR: 0.046216526094225656
+attack_auc: 0.7276511795180555
+------------------------- time cost ------------------------- 8.19865894317627
+[PFedBA] Round 164: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6486 grad=0.8636 loss_align=1.4587 attack=0.3263 norm=14.6858
+
+-------------Round number: 163-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.3032
+Averaged Test Accurancy: 0.9023
+Averaged Test AUC: 0.9852
+Std Test Accurancy: 0.0564
+Std Test AUC: 0.0117
+ASR: 0.04276370086235992
+attack_auc: 0.7202637938579177
+------------------------- time cost ------------------------- 8.38041353225708
+[PFedBA] Round 165: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5302 grad=0.8668 loss_align=1.3488 attack=0.3146 norm=14.6776
+
+-------------Round number: 164-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2875
+Averaged Test Accurancy: 0.9040
+Averaged Test AUC: 0.9854
+Std Test Accurancy: 0.0558
+Std Test AUC: 0.0118
+ASR: 0.039877784659684376
+attack_auc: 0.7081290148789029
+------------------------- time cost ------------------------- 9.40289306640625
+[PFedBA] Round 166: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6273 grad=0.8244 loss_align=1.3956 attack=0.4073 norm=14.6696
+
+-------------Round number: 165-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2285
+Averaged Test Accurancy: 0.9072
+Averaged Test AUC: 0.9868
+Std Test Accurancy: 0.0553
+Std Test AUC: 0.0102
+ASR: 0.03370675470644017
+attack_auc: 0.7025791830621348
+------------------------- time cost ------------------------- 8.971895456314087
+[PFedBA] Round 167: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6559 grad=0.8954 loss_align=1.3720 attack=0.3885 norm=14.6676
+
+-------------Round number: 166-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2263
+Averaged Test Accurancy: 0.9090
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0542
+Std Test AUC: 0.0099
+ASR: 0.03471826979830704
+attack_auc: 0.7050394526479856
+------------------------- time cost ------------------------- 9.582297801971436
+[PFedBA] Round 168: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6113 grad=0.7448 loss_align=1.4644 attack=0.4021 norm=14.6669
+
+-------------Round number: 167-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2277
+Averaged Test Accurancy: 0.9072
+Averaged Test AUC: 0.9867
+Std Test Accurancy: 0.0554
+Std Test AUC: 0.0103
+ASR: 0.03194846610691303
+attack_auc: 0.6992757398193836
+------------------------- time cost ------------------------- 8.283621311187744
+[PFedBA] Round 169: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7808 grad=0.8306 loss_align=1.5309 attack=0.4193 norm=14.6631
+
+-------------Round number: 168-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2174
+Averaged Test Accurancy: 0.9073
+Averaged Test AUC: 0.9866
+Std Test Accurancy: 0.0547
+Std Test AUC: 0.0101
+ASR: 0.03346705372978304
+attack_auc: 0.7033898591001619
+------------------------- time cost ------------------------- 8.60278058052063
+[PFedBA] Round 170: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7903 grad=0.8050 loss_align=1.5781 attack=0.4072 norm=14.6638
+
+-------------Round number: 169-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2135
+Averaged Test Accurancy: 0.9093
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0533
+Std Test AUC: 0.0100
+ASR: 0.03251790522485625
+attack_auc: 0.7009444494655882
+------------------------- time cost ------------------------- 8.650936365127563
+[PFedBA] Round 171: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6963 grad=0.8357 loss_align=1.5531 attack=0.3075 norm=14.6598
+
+-------------Round number: 170-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2062
+Averaged Test Accurancy: 0.9082
+Averaged Test AUC: 0.9866
+Std Test Accurancy: 0.0549
+Std Test AUC: 0.0103
+ASR: 0.035305709219661474
+attack_auc: 0.7100802023988758
+------------------------- time cost ------------------------- 9.401429891586304
+[PFedBA] Round 172: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.8513 grad=0.8730 loss_align=1.6550 attack=0.3233 norm=14.6602
+
+-------------Round number: 171-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2328
+Averaged Test Accurancy: 0.9080
+Averaged Test AUC: 0.9866
+Std Test Accurancy: 0.0556
+Std Test AUC: 0.0105
+ASR: 0.032414977104929035
+attack_auc: 0.7026738383268776
+------------------------- time cost ------------------------- 8.487580299377441
+[PFedBA] Round 173: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6813 grad=0.8488 loss_align=1.5123 attack=0.3202 norm=14.6587
+
+-------------Round number: 172-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2347
+Averaged Test Accurancy: 0.9080
+Averaged Test AUC: 0.9864
+Std Test Accurancy: 0.0571
+Std Test AUC: 0.0104
+ASR: 0.033328173900281505
+attack_auc: 0.7023209660484416
+------------------------- time cost ------------------------- 8.928921699523926
+[PFedBA] Round 174: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6718 grad=0.8691 loss_align=1.4508 attack=0.3519 norm=14.6414
+
+-------------Round number: 173-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2249
+Averaged Test Accurancy: 0.9081
+Averaged Test AUC: 0.9866
+Std Test Accurancy: 0.0574
+Std Test AUC: 0.0107
+ASR: 0.0320381913461534
+attack_auc: 0.7019406186044971
+------------------------- time cost ------------------------- 9.821240425109863
+[PFedBA] Round 175: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5887 grad=0.8468 loss_align=1.4138 attack=0.3281 norm=14.6392
+
+-------------Round number: 174-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2315
+Averaged Test Accurancy: 0.9072
+Averaged Test AUC: 0.9867
+Std Test Accurancy: 0.0566
+Std Test AUC: 0.0108
+ASR: 0.03311537122022772
+attack_auc: 0.704477001107855
+------------------------- time cost ------------------------- 8.435520887374878
+[PFedBA] Round 176: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.9913 grad=0.8471 loss_align=1.7956 attack=0.3486 norm=14.6381
+
+-------------Round number: 175-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2327
+Averaged Test Accurancy: 0.9050
+Averaged Test AUC: 0.9865
+Std Test Accurancy: 0.0564
+Std Test AUC: 0.0107
+ASR: 0.033520834917582724
+attack_auc: 0.7049394311394102
+------------------------- time cost ------------------------- 9.258785963058472
+[PFedBA] Round 177: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5225 grad=0.8572 loss_align=1.4313 attack=0.2340 norm=14.6368
+
+-------------Round number: 176-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2029
+Averaged Test Accurancy: 0.9075
+Averaged Test AUC: 0.9865
+Std Test Accurancy: 0.0548
+Std Test AUC: 0.0103
+ASR: 0.03679414716220439
+attack_auc: 0.715485066864269
+------------------------- time cost ------------------------- 9.416524171829224
+[PFedBA] Round 178: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.8330 grad=0.8823 loss_align=1.6549 attack=0.2957 norm=14.6327
+
+-------------Round number: 177-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1888
+Averaged Test Accurancy: 0.9089
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0529
+Std Test AUC: 0.0101
+ASR: 0.03376783752785788
+attack_auc: 0.7073719868173403
+------------------------- time cost ------------------------- 9.166812181472778
+[PFedBA] Round 179: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7175 grad=0.9208 loss_align=1.5636 attack=0.2330 norm=14.6287
+
+-------------Round number: 178-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1886
+Averaged Test Accurancy: 0.9086
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0533
+Std Test AUC: 0.0100
+ASR: 0.03404809455463518
+attack_auc: 0.7063260285403986
+------------------------- time cost ------------------------- 9.928005695343018
+[PFedBA] Round 180: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6406 grad=0.7868 loss_align=1.4977 attack=0.3562 norm=14.6236
+
+-------------Round number: 179-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1844
+Averaged Test Accurancy: 0.9070
+Averaged Test AUC: 0.9867
+Std Test Accurancy: 0.0526
+Std Test AUC: 0.0096
+ASR: 0.03455243750288282
+attack_auc: 0.7044813187597531
+------------------------- time cost ------------------------- 9.632884740829468
+[PFedBA] Round 181: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2721 grad=0.7008 loss_align=1.1599 attack=0.4114 norm=14.6259
+
+-------------Round number: 180-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1865
+Averaged Test Accurancy: 0.9082
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0509
+Std Test AUC: 0.0095
+ASR: 0.031548977249758726
+attack_auc: 0.6989863598128675
+------------------------- time cost ------------------------- 9.087605237960815
+[PFedBA] Round 182: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2489 grad=0.7075 loss_align=1.1284 attack=0.4130 norm=14.6100
+
+-------------Round number: 181-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1843
+Averaged Test Accurancy: 0.9087
+Averaged Test AUC: 0.9868
+Std Test Accurancy: 0.0504
+Std Test AUC: 0.0096
+ASR: 0.03202955705221724
+attack_auc: 0.6967529986436319
+------------------------- time cost ------------------------- 9.340898036956787
+[PFedBA] Round 183: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.1553 grad=0.6256 loss_align=1.0388 attack=0.4910 norm=14.6104
+
+-------------Round number: 182-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1781
+Averaged Test Accurancy: 0.9077
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0507
+Std Test AUC: 0.0095
+ASR: 0.03208902568595517
+attack_auc: 0.699842410347247
+------------------------- time cost ------------------------- 9.228371858596802
+[PFedBA] Round 184: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3649 grad=0.6674 loss_align=1.2007 attack=0.4969 norm=14.6129
+
+-------------Round number: 183-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1982
+Averaged Test Accurancy: 0.9072
+Averaged Test AUC: 0.9865
+Std Test Accurancy: 0.0527
+Std Test AUC: 0.0103
+ASR: 0.032507003108774316
+attack_auc: 0.7098803691754778
+------------------------- time cost ------------------------- 10.05495309829712
+[PFedBA] Round 185: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2957 grad=0.6673 loss_align=1.2135 attack=0.4149 norm=14.6126
+
+-------------Round number: 184-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1934
+Averaged Test Accurancy: 0.9075
+Averaged Test AUC: 0.9866
+Std Test Accurancy: 0.0522
+Std Test AUC: 0.0103
+ASR: 0.03474732177954582
+attack_auc: 0.7110518260089589
+------------------------- time cost ------------------------- 9.679593086242676
+[PFedBA] Round 186: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.1900 grad=0.6646 loss_align=1.0764 attack=0.4489 norm=14.6164
+
+-------------Round number: 185-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1968
+Averaged Test Accurancy: 0.9070
+Averaged Test AUC: 0.9867
+Std Test Accurancy: 0.0520
+Std Test AUC: 0.0103
+ASR: 0.03508268368410654
+attack_auc: 0.7113976821831981
+------------------------- time cost ------------------------- 8.789772748947144
+[PFedBA] Round 187: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4448 grad=0.7046 loss_align=1.2762 attack=0.4641 norm=14.6178
+
+-------------Round number: 186-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1686
+Averaged Test Accurancy: 0.9082
+Averaged Test AUC: 0.9873
+Std Test Accurancy: 0.0513
+Std Test AUC: 0.0092
+ASR: 0.035226898312815426
+attack_auc: 0.7134032277264508
+------------------------- time cost ------------------------- 9.549050092697144
+[PFedBA] Round 188: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3925 grad=0.6851 loss_align=1.2036 attack=0.5037 norm=14.6156
+
+-------------Round number: 187-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1732
+Averaged Test Accurancy: 0.9080
+Averaged Test AUC: 0.9871
+Std Test Accurancy: 0.0500
+Std Test AUC: 0.0093
+ASR: 0.03628171067085402
+attack_auc: 0.7175095635249714
+------------------------- time cost ------------------------- 9.163029670715332
+[PFedBA] Round 189: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3675 grad=0.6969 loss_align=1.1552 attack=0.5154 norm=14.6022
+
+-------------Round number: 188-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1728
+Averaged Test Accurancy: 0.9080
+Averaged Test AUC: 0.9870
+Std Test Accurancy: 0.0518
+Std Test AUC: 0.0095
+ASR: 0.0370256043587305
+attack_auc: 0.716042691753722
+------------------------- time cost ------------------------- 8.113850355148315
+[PFedBA] Round 190: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3854 grad=0.6750 loss_align=1.2470 attack=0.4635 norm=14.5992
+
+-------------Round number: 189-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1771
+Averaged Test Accurancy: 0.9067
+Averaged Test AUC: 0.9871
+Std Test Accurancy: 0.0515
+Std Test AUC: 0.0089
+ASR: 0.03941859915179975
+attack_auc: 0.7199321748932931
+------------------------- time cost ------------------------- 10.023781299591064
+[PFedBA] Round 191: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5080 grad=0.7180 loss_align=1.3710 attack=0.4190 norm=14.5983
+
+-------------Round number: 190-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1813
+Averaged Test Accurancy: 0.9045
+Averaged Test AUC: 0.9868
+Std Test Accurancy: 0.0527
+Std Test AUC: 0.0092
+ASR: 0.04258142927570612
+attack_auc: 0.7256608339304236
+------------------------- time cost ------------------------- 9.317445755004883
+[PFedBA] Round 192: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.7018 grad=0.7116 loss_align=1.5255 attack=0.4648 norm=14.5976
+
+-------------Round number: 191-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1821
+Averaged Test Accurancy: 0.9046
+Averaged Test AUC: 0.9871
+Std Test Accurancy: 0.0531
+Std Test AUC: 0.0091
+ASR: 0.03869900441620403
+attack_auc: 0.7243217353901547
+------------------------- time cost ------------------------- 9.28553581237793
+[PFedBA] Round 193: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=3.0234 grad=0.7898 loss_align=1.8261 attack=0.4075 norm=14.5959
+
+-------------Round number: 192-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1943
+Averaged Test Accurancy: 0.9057
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0545
+Std Test AUC: 0.0097
+ASR: 0.03506621458219978
+attack_auc: 0.7133584145981319
+------------------------- time cost ------------------------- 9.034310340881348
+[PFedBA] Round 194: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4140 grad=0.7766 loss_align=1.2644 attack=0.3730 norm=14.5891
+
+-------------Round number: 193-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1942
+Averaged Test Accurancy: 0.9024
+Averaged Test AUC: 0.9864
+Std Test Accurancy: 0.0578
+Std Test AUC: 0.0101
+ASR: 0.0348795393095865
+attack_auc: 0.7088507277134664
+------------------------- time cost ------------------------- 9.159740686416626
+[PFedBA] Round 195: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5644 grad=0.7477 loss_align=1.4539 attack=0.3628 norm=14.5885
+
+-------------Round number: 194-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1932
+Averaged Test Accurancy: 0.9033
+Averaged Test AUC: 0.9864
+Std Test Accurancy: 0.0570
+Std Test AUC: 0.0105
+ASR: 0.03464198727831333
+attack_auc: 0.7088437713578244
+------------------------- time cost ------------------------- 9.654703140258789
+[PFedBA] Round 196: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4920 grad=0.8192 loss_align=1.3010 attack=0.3718 norm=14.5853
+
+-------------Round number: 195-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2170
+Averaged Test Accurancy: 0.9026
+Averaged Test AUC: 0.9862
+Std Test Accurancy: 0.0581
+Std Test AUC: 0.0111
+ASR: 0.035460766218976196
+attack_auc: 0.707370405717291
+------------------------- time cost ------------------------- 9.047329902648926
+[PFedBA] Round 197: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6670 grad=0.8070 loss_align=1.4856 attack=0.3744 norm=14.5793
+
+-------------Round number: 196-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2186
+Averaged Test Accurancy: 0.9018
+Averaged Test AUC: 0.9863
+Std Test Accurancy: 0.0579
+Std Test AUC: 0.0110
+ASR: 0.03195732107644276
+attack_auc: 0.7048710345109092
+------------------------- time cost ------------------------- 9.649870157241821
+[PFedBA] Round 198: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2375 grad=0.7694 loss_align=1.0827 attack=0.3854 norm=14.5810
+
+-------------Round number: 197-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2146
+Averaged Test Accurancy: 0.9037
+Averaged Test AUC: 0.9864
+Std Test Accurancy: 0.0554
+Std Test AUC: 0.0107
+ASR: 0.03221231534531473
+attack_auc: 0.7058532302879633
+------------------------- time cost ------------------------- 10.538728952407837
+[PFedBA] Round 199: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4907 grad=0.7356 loss_align=1.3693 attack=0.3859 norm=14.5822
+
+-------------Round number: 198-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1875
+Averaged Test Accurancy: 0.9050
+Averaged Test AUC: 0.9866
+Std Test Accurancy: 0.0546
+Std Test AUC: 0.0104
+ASR: 0.03439856002011924
+attack_auc: 0.7159776276586459
+------------------------- time cost ------------------------- 9.354819297790527
+[PFedBA] Round 200: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3026 grad=0.7715 loss_align=1.2112 attack=0.3199 norm=14.5843
+
+-------------Round number: 199-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1932
+Averaged Test Accurancy: 0.9059
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0538
+Std Test AUC: 0.0101
+ASR: 0.03125798016709642
+attack_auc: 0.7108134571616463
+------------------------- time cost ------------------------- 9.845876932144165
+[PFedBA] Round 201: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5377 grad=0.6593 loss_align=1.2995 attack=0.5789 norm=14.5829
+
+-------------Round number: 200-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1945
+Averaged Test Accurancy: 0.9077
+Averaged Test AUC: 0.9870
+Std Test Accurancy: 0.0528
+Std Test AUC: 0.0100
+ASR: 0.030592117818522134
+attack_auc: 0.7086345179351924
+------------------------- time cost ------------------------- 9.584013223648071
+[PFedBA] Round 202: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5537 grad=0.7698 loss_align=1.4137 attack=0.3702 norm=14.5831
+
+-------------Round number: 201-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1902
+Averaged Test Accurancy: 0.9065
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0529
+Std Test AUC: 0.0101
+ASR: 0.03337095968637293
+attack_auc: 0.7163642318527716
+------------------------- time cost ------------------------- 9.761807441711426
+[PFedBA] Round 203: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6776 grad=0.7639 loss_align=1.4720 attack=0.4417 norm=14.5834
+
+-------------Round number: 202-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2199
+Averaged Test Accurancy: 0.9062
+Averaged Test AUC: 0.9862
+Std Test Accurancy: 0.0580
+Std Test AUC: 0.0124
+ASR: 0.029727856957634025
+attack_auc: 0.7106435390045169
+------------------------- time cost ------------------------- 8.69005537033081
+[PFedBA] Round 204: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6774 grad=0.7194 loss_align=1.4799 attack=0.4780 norm=14.5809
+
+-------------Round number: 203-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2381
+Averaged Test Accurancy: 0.9050
+Averaged Test AUC: 0.9861
+Std Test Accurancy: 0.0592
+Std Test AUC: 0.0127
+ASR: 0.029496258002324572
+attack_auc: 0.7097228731281626
+------------------------- time cost ------------------------- 8.869243383407593
+[PFedBA] Round 205: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5518 grad=0.6976 loss_align=1.4003 attack=0.4540 norm=14.5813
+
+-------------Round number: 204-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1849
+Averaged Test Accurancy: 0.9075
+Averaged Test AUC: 0.9865
+Std Test Accurancy: 0.0576
+Std Test AUC: 0.0121
+ASR: 0.03229129932587174
+attack_auc: 0.7148825786568432
+------------------------- time cost ------------------------- 9.273711204528809
+[PFedBA] Round 206: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.1529 grad=0.7238 loss_align=1.0928 attack=0.3364 norm=14.5814
+
+-------------Round number: 205-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1604
+Averaged Test Accurancy: 0.9085
+Averaged Test AUC: 0.9861
+Std Test Accurancy: 0.0547
+Std Test AUC: 0.0120
+ASR: 0.032777402676276685
+attack_auc: 0.7140390275121785
+------------------------- time cost ------------------------- 9.80637502670288
+[PFedBA] Round 207: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3073 grad=0.6870 loss_align=1.2273 attack=0.3930 norm=14.5791
+
+-------------Round number: 206-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1664
+Averaged Test Accurancy: 0.9088
+Averaged Test AUC: 0.9865
+Std Test Accurancy: 0.0551
+Std Test AUC: 0.0121
+ASR: 0.0317308048337089
+attack_auc: 0.712376684266861
+------------------------- time cost ------------------------- 9.346034526824951
+[PFedBA] Round 208: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4143 grad=0.7194 loss_align=1.3147 attack=0.3801 norm=14.5748
+
+-------------Round number: 207-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1562
+Averaged Test Accurancy: 0.9110
+Averaged Test AUC: 0.9871
+Std Test Accurancy: 0.0535
+Std Test AUC: 0.0114
+ASR: 0.03152447686234204
+attack_auc: 0.7066215837498256
+------------------------- time cost ------------------------- 8.919938325881958
+[PFedBA] Round 209: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3832 grad=0.7259 loss_align=1.2856 attack=0.3718 norm=14.5737
+
+-------------Round number: 208-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1597
+Averaged Test Accurancy: 0.9104
+Averaged Test AUC: 0.9872
+Std Test Accurancy: 0.0537
+Std Test AUC: 0.0112
+ASR: 0.029627715566337823
+attack_auc: 0.7060571247835303
+------------------------- time cost ------------------------- 9.636288404464722
+[PFedBA] Round 210: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4478 grad=0.6777 loss_align=1.3100 attack=0.4602 norm=14.5730
+
+-------------Round number: 209-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1557
+Averaged Test Accurancy: 0.9120
+Averaged Test AUC: 0.9872
+Std Test Accurancy: 0.0520
+Std Test AUC: 0.0111
+ASR: 0.03210696419609368
+attack_auc: 0.7088807329254735
+------------------------- time cost ------------------------- 8.892265558242798
+[PFedBA] Round 211: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2556 grad=0.7235 loss_align=1.1554 attack=0.3767 norm=14.5661
+
+-------------Round number: 210-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1497
+Averaged Test Accurancy: 0.9097
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0547
+Std Test AUC: 0.0114
+ASR: 0.034306729862469
+attack_auc: 0.7138514979314776
+------------------------- time cost ------------------------- 9.590646743774414
+[PFedBA] Round 212: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2297 grad=0.6514 loss_align=1.1020 attack=0.4763 norm=14.5648
+
+-------------Round number: 211-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1334
+Averaged Test Accurancy: 0.9107
+Averaged Test AUC: 0.9872
+Std Test Accurancy: 0.0526
+Std Test AUC: 0.0112
+ASR: 0.03331202664396464
+attack_auc: 0.7159878333865469
+------------------------- time cost ------------------------- 8.027204990386963
+[PFedBA] Round 213: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2362 grad=0.6240 loss_align=1.1262 attack=0.4860 norm=14.5622
+
+-------------Round number: 212-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1360
+Averaged Test Accurancy: 0.9115
+Averaged Test AUC: 0.9874
+Std Test Accurancy: 0.0526
+Std Test AUC: 0.0112
+ASR: 0.03227690879932613
+attack_auc: 0.7130862199905474
+------------------------- time cost ------------------------- 10.141870021820068
+[PFedBA] Round 214: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3749 grad=0.6643 loss_align=1.3405 attack=0.3701 norm=14.5610
+
+-------------Round number: 213-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1373
+Averaged Test Accurancy: 0.9119
+Averaged Test AUC: 0.9874
+Std Test Accurancy: 0.0510
+Std Test AUC: 0.0111
+ASR: 0.031222422013229816
+attack_auc: 0.7091676712420495
+------------------------- time cost ------------------------- 9.334964036941528
+[PFedBA] Round 215: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4119 grad=0.6478 loss_align=1.2959 attack=0.4682 norm=14.5602
+
+-------------Round number: 214-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1428
+Averaged Test Accurancy: 0.9123
+Averaged Test AUC: 0.9876
+Std Test Accurancy: 0.0509
+Std Test AUC: 0.0112
+ASR: 0.030026736968400247
+attack_auc: 0.7095467122673276
+------------------------- time cost ------------------------- 8.949153184890747
+[PFedBA] Round 216: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3092 grad=0.6424 loss_align=1.2190 attack=0.4477 norm=14.5583
+
+-------------Round number: 215-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1409
+Averaged Test Accurancy: 0.9119
+Averaged Test AUC: 0.9876
+Std Test Accurancy: 0.0500
+Std Test AUC: 0.0112
+ASR: 0.029989313000994267
+attack_auc: 0.7064423359280122
+------------------------- time cost ------------------------- 9.622230529785156
+[PFedBA] Round 217: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4388 grad=0.6918 loss_align=1.3093 attack=0.4377 norm=14.5595
+
+-------------Round number: 216-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1434
+Averaged Test Accurancy: 0.9132
+Averaged Test AUC: 0.9876
+Std Test Accurancy: 0.0484
+Std Test AUC: 0.0108
+ASR: 0.03677800423961135
+attack_auc: 0.7170637293383101
+------------------------- time cost ------------------------- 9.300575494766235
+[PFedBA] Round 218: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3422 grad=0.6578 loss_align=1.2811 attack=0.4034 norm=14.5593
+
+-------------Round number: 217-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1372
+Averaged Test Accurancy: 0.9139
+Averaged Test AUC: 0.9875
+Std Test Accurancy: 0.0480
+Std Test AUC: 0.0107
+ASR: 0.03361078492036197
+attack_auc: 0.7133900544324728
+------------------------- time cost ------------------------- 9.26958179473877
+[PFedBA] Round 219: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2566 grad=0.6520 loss_align=1.1960 attack=0.4087 norm=14.5559
+
+-------------Round number: 218-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1349
+Averaged Test Accurancy: 0.9121
+Averaged Test AUC: 0.9874
+Std Test Accurancy: 0.0495
+Std Test AUC: 0.0104
+ASR: 0.03479674485489787
+attack_auc: 0.7139255599974659
+------------------------- time cost ------------------------- 9.670870304107666
+[PFedBA] Round 220: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5026 grad=0.6564 loss_align=1.4085 attack=0.4377 norm=14.5541
+
+-------------Round number: 219-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1401
+Averaged Test Accurancy: 0.9105
+Averaged Test AUC: 0.9872
+Std Test Accurancy: 0.0511
+Std Test AUC: 0.0106
+ASR: 0.03609990107784743
+attack_auc: 0.7160596232172919
+------------------------- time cost ------------------------- 9.269248723983765
+[PFedBA] Round 221: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3868 grad=0.6962 loss_align=1.2663 attack=0.4243 norm=14.5548
+
+-------------Round number: 220-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1401
+Averaged Test Accurancy: 0.9114
+Averaged Test AUC: 0.9873
+Std Test Accurancy: 0.0504
+Std Test AUC: 0.0107
+ASR: 0.03280482923815716
+attack_auc: 0.7137564738631806
+------------------------- time cost ------------------------- 9.713416576385498
+[PFedBA] Round 222: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5326 grad=0.6636 loss_align=1.3770 attack=0.4920 norm=14.5549
+
+-------------Round number: 221-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1402
+Averaged Test Accurancy: 0.9122
+Averaged Test AUC: 0.9874
+Std Test Accurancy: 0.0506
+Std Test AUC: 0.0105
+ASR: 0.032175022593274434
+attack_auc: 0.7129705579930713
+------------------------- time cost ------------------------- 9.406231164932251
+[PFedBA] Round 223: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5359 grad=0.7237 loss_align=1.3993 attack=0.4129 norm=14.5456
+
+-------------Round number: 222-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1415
+Averaged Test Accurancy: 0.9115
+Averaged Test AUC: 0.9874
+Std Test Accurancy: 0.0513
+Std Test AUC: 0.0106
+ASR: 0.0337955246355308
+attack_auc: 0.7135440302199596
+------------------------- time cost ------------------------- 10.688276052474976
+[PFedBA] Round 224: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4511 grad=0.7356 loss_align=1.3229 attack=0.3926 norm=14.5472
+
+-------------Round number: 223-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1307
+Averaged Test Accurancy: 0.9124
+Averaged Test AUC: 0.9873
+Std Test Accurancy: 0.0494
+Std Test AUC: 0.0104
+ASR: 0.03676864892910918
+attack_auc: 0.7193110962487433
+------------------------- time cost ------------------------- 9.14998173713684
+[PFedBA] Round 225: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3952 grad=0.7005 loss_align=1.3082 attack=0.3865 norm=14.5488
+
+-------------Round number: 224-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1319
+Averaged Test Accurancy: 0.9125
+Averaged Test AUC: 0.9873
+Std Test Accurancy: 0.0494
+Std Test AUC: 0.0108
+ASR: 0.03433943297563811
+attack_auc: 0.716641870235136
+------------------------- time cost ------------------------- 9.429653406143188
+[PFedBA] Round 226: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5767 grad=0.6910 loss_align=1.4612 attack=0.4244 norm=14.5493
+
+-------------Round number: 225-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1308
+Averaged Test Accurancy: 0.9128
+Averaged Test AUC: 0.9873
+Std Test Accurancy: 0.0481
+Std Test AUC: 0.0107
+ASR: 0.034276708710187793
+attack_auc: 0.7168016779193055
+------------------------- time cost ------------------------- 9.234730958938599
+[PFedBA] Round 227: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3510 grad=0.6931 loss_align=1.1961 attack=0.4617 norm=14.5500
+
+-------------Round number: 226-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1306
+Averaged Test Accurancy: 0.9126
+Averaged Test AUC: 0.9872
+Std Test Accurancy: 0.0480
+Std Test AUC: 0.0109
+ASR: 0.03715518910517915
+attack_auc: 0.7217894670239818
+------------------------- time cost ------------------------- 9.074794054031372
+[PFedBA] Round 228: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2504 grad=0.6654 loss_align=1.2468 attack=0.3382 norm=14.5489
+
+-------------Round number: 227-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1186
+Averaged Test Accurancy: 0.9109
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0489
+Std Test AUC: 0.0110
+ASR: 0.03854336607953771
+attack_auc: 0.723236675454439
+------------------------- time cost ------------------------- 8.627000570297241
+[PFedBA] Round 229: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2958 grad=0.6710 loss_align=1.2866 attack=0.3383 norm=14.5479
+
+-------------Round number: 228-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1433
+Averaged Test Accurancy: 0.9102
+Averaged Test AUC: 0.9863
+Std Test Accurancy: 0.0542
+Std Test AUC: 0.0125
+ASR: 0.04104341575026603
+attack_auc: 0.7318663523191021
+------------------------- time cost ------------------------- 9.53808856010437
+[PFedBA] Round 230: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2767 grad=0.7101 loss_align=1.2577 attack=0.3088 norm=14.5472
+
+-------------Round number: 229-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1129
+Averaged Test Accurancy: 0.9136
+Averaged Test AUC: 0.9873
+Std Test Accurancy: 0.0478
+Std Test AUC: 0.0103
+ASR: 0.03697705451965904
+attack_auc: 0.7223648782882829
+------------------------- time cost ------------------------- 9.546751260757446
+[PFedBA] Round 231: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.0325 grad=0.6793 loss_align=1.0651 attack=0.2882 norm=14.5477
+
+-------------Round number: 230-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1364
+Averaged Test Accurancy: 0.9139
+Averaged Test AUC: 0.9877
+Std Test Accurancy: 0.0457
+Std Test AUC: 0.0072
+ASR: 0.038198256179817605
+attack_auc: 0.7242035273280054
+------------------------- time cost ------------------------- 9.661918640136719
+[PFedBA] Round 232: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.0719 grad=0.6470 loss_align=1.1385 attack=0.2864 norm=14.5445
+
+-------------Round number: 231-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1376
+Averaged Test Accurancy: 0.9154
+Averaged Test AUC: 0.9879
+Std Test Accurancy: 0.0441
+Std Test AUC: 0.0071
+ASR: 0.03577039752225153
+attack_auc: 0.7226831876309254
+------------------------- time cost ------------------------- 9.016393899917603
+[PFedBA] Round 233: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.1321 grad=0.7395 loss_align=1.1315 attack=0.2610 norm=14.5429
+
+-------------Round number: 232-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1344
+Averaged Test Accurancy: 0.9145
+Averaged Test AUC: 0.9878
+Std Test Accurancy: 0.0459
+Std Test AUC: 0.0075
+ASR: 0.03554465184893854
+attack_auc: 0.7251653003074695
+------------------------- time cost ------------------------- 9.754033088684082
+[PFedBA] Round 234: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.1871 grad=0.7061 loss_align=1.1783 attack=0.3027 norm=14.5420
+
+-------------Round number: 233-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1339
+Averaged Test Accurancy: 0.9149
+Averaged Test AUC: 0.9880
+Std Test Accurancy: 0.0460
+Std Test AUC: 0.0074
+ASR: 0.03497073429927489
+attack_auc: 0.7240972798119125
+------------------------- time cost ------------------------- 8.399233341217041
+[PFedBA] Round 235: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2348 grad=0.7319 loss_align=1.2324 attack=0.2705 norm=14.5434
+
+-------------Round number: 234-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1411
+Averaged Test Accurancy: 0.9141
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0467
+Std Test AUC: 0.0072
+ASR: 0.033169177951934865
+attack_auc: 0.7214567325088734
+------------------------- time cost ------------------------- 9.503621339797974
+[PFedBA] Round 236: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2350 grad=0.7139 loss_align=1.2209 attack=0.3002 norm=14.5466
+
+-------------Round number: 235-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1384
+Averaged Test Accurancy: 0.9144
+Averaged Test AUC: 0.9883
+Std Test Accurancy: 0.0465
+Std Test AUC: 0.0071
+ASR: 0.034629270543640706
+attack_auc: 0.7200059607411274
+------------------------- time cost ------------------------- 9.171910047531128
+[PFedBA] Round 237: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.1879 grad=0.6922 loss_align=1.1850 attack=0.3106 norm=14.5477
+
+-------------Round number: 236-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1413
+Averaged Test Accurancy: 0.9141
+Averaged Test AUC: 0.9880
+Std Test Accurancy: 0.0470
+Std Test AUC: 0.0074
+ASR: 0.034587376926880284
+attack_auc: 0.7192798819958888
+------------------------- time cost ------------------------- 9.701523065567017
+[PFedBA] Round 238: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.1786 grad=0.7277 loss_align=1.1755 attack=0.2754 norm=14.5481
+
+-------------Round number: 237-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1273
+Averaged Test Accurancy: 0.9131
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0476
+Std Test AUC: 0.0072
+ASR: 0.03685185095324651
+attack_auc: 0.7248232406699011
+------------------------- time cost ------------------------- 8.403278827667236
+[PFedBA] Round 239: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4838 grad=0.6802 loss_align=1.4506 attack=0.3530 norm=14.5434
+
+-------------Round number: 238-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1311
+Averaged Test Accurancy: 0.9146
+Averaged Test AUC: 0.9884
+Std Test Accurancy: 0.0479
+Std Test AUC: 0.0071
+ASR: 0.03485674241020224
+attack_auc: 0.7217690456025411
+------------------------- time cost ------------------------- 9.310267210006714
+[PFedBA] Round 240: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2198 grad=0.7569 loss_align=1.1736 attack=0.2893 norm=14.5417
+
+-------------Round number: 239-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1213
+Averaged Test Accurancy: 0.9132
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0484
+Std Test AUC: 0.0072
+ASR: 0.036610907985512905
+attack_auc: 0.7223039350985341
+------------------------- time cost ------------------------- 9.488602638244629
+[PFedBA] Round 241: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5008 grad=0.7259 loss_align=1.3602 attack=0.4147 norm=14.5427
+
+-------------Round number: 240-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0843
+Averaged Test Accurancy: 0.9152
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0453
+Std Test AUC: 0.0089
+ASR: 0.03574274376360692
+attack_auc: 0.7220604679255849
+------------------------- time cost ------------------------- 8.572597026824951
+[PFedBA] Round 242: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5494 grad=0.6812 loss_align=1.4905 attack=0.3776 norm=14.5364
+
+-------------Round number: 241-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0865
+Averaged Test Accurancy: 0.9154
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0454
+Std Test AUC: 0.0090
+ASR: 0.03456057596360524
+attack_auc: 0.7197330896557587
+------------------------- time cost ------------------------- 9.639357805252075
+[PFedBA] Round 243: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4663 grad=0.7057 loss_align=1.4163 attack=0.3443 norm=14.5346
+
+-------------Round number: 242-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0882
+Averaged Test Accurancy: 0.9155
+Averaged Test AUC: 0.9883
+Std Test Accurancy: 0.0455
+Std Test AUC: 0.0089
+ASR: 0.03466259684702441
+attack_auc: 0.7220229204938472
+------------------------- time cost ------------------------- 8.261227369308472
+[PFedBA] Round 244: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6964 grad=0.7184 loss_align=1.5896 attack=0.3884 norm=14.5364
+
+-------------Round number: 243-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0907
+Averaged Test Accurancy: 0.9164
+Averaged Test AUC: 0.9884
+Std Test Accurancy: 0.0455
+Std Test AUC: 0.0089
+ASR: 0.034662042733439986
+attack_auc: 0.7230313942786305
+------------------------- time cost ------------------------- 9.888357162475586
+[PFedBA] Round 245: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3710 grad=0.7318 loss_align=1.3087 attack=0.3305 norm=14.5321
+
+-------------Round number: 244-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0950
+Averaged Test Accurancy: 0.9160
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0457
+Std Test AUC: 0.0091
+ASR: 0.034874222708941895
+attack_auc: 0.7219476688216552
+------------------------- time cost ------------------------- 10.025073766708374
+[PFedBA] Round 246: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2292 grad=0.7547 loss_align=1.1886 attack=0.2859 norm=14.5337
+
+-------------Round number: 245-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0947
+Averaged Test Accurancy: 0.9136
+Averaged Test AUC: 0.9880
+Std Test Accurancy: 0.0474
+Std Test AUC: 0.0094
+ASR: 0.035923631235876295
+attack_auc: 0.7198646206861887
+------------------------- time cost ------------------------- 8.65029239654541
+[PFedBA] Round 247: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4159 grad=0.8175 loss_align=1.2757 attack=0.3227 norm=14.5398
+
+-------------Round number: 246-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0838
+Averaged Test Accurancy: 0.9139
+Averaged Test AUC: 0.9880
+Std Test Accurancy: 0.0473
+Std Test AUC: 0.0093
+ASR: 0.0341813977343262
+attack_auc: 0.7203639141392887
+------------------------- time cost ------------------------- 9.973550796508789
+[PFedBA] Round 248: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2628 grad=0.7758 loss_align=1.1832 attack=0.3037 norm=14.5370
+
+-------------Round number: 247-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0675
+Averaged Test Accurancy: 0.9141
+Averaged Test AUC: 0.9885
+Std Test Accurancy: 0.0474
+Std Test AUC: 0.0074
+ASR: 0.031191644491284184
+attack_auc: 0.7156305575789277
+------------------------- time cost ------------------------- 9.443209409713745
+[PFedBA] Round 249: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2534 grad=0.7529 loss_align=1.1356 attack=0.3649 norm=14.5346
+
+-------------Round number: 248-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0848
+Averaged Test Accurancy: 0.9119
+Averaged Test AUC: 0.9880
+Std Test Accurancy: 0.0513
+Std Test AUC: 0.0086
+ASR: 0.03532469438678652
+attack_auc: 0.7223949446672562
+------------------------- time cost ------------------------- 8.804440259933472
+[PFedBA] Round 250: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3102 grad=0.7435 loss_align=1.2396 attack=0.3272 norm=14.5353
+
+-------------Round number: 249-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0828
+Averaged Test Accurancy: 0.9126
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0508
+Std Test AUC: 0.0084
+ASR: 0.03398182987597056
+attack_auc: 0.7205627845257386
+------------------------- time cost ------------------------- 9.499346017837524
+[PFedBA] Round 251: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3555 grad=0.8220 loss_align=1.2738 attack=0.2597 norm=14.5301
+
+-------------Round number: 250-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0853
+Averaged Test Accurancy: 0.9139
+Averaged Test AUC: 0.9883
+Std Test Accurancy: 0.0500
+Std Test AUC: 0.0084
+ASR: 0.032495299044172705
+attack_auc: 0.7189236897031942
+------------------------- time cost ------------------------- 9.136422395706177
+[PFedBA] Round 252: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.1511 grad=0.7165 loss_align=1.1360 attack=0.2987 norm=14.5287
+
+-------------Round number: 251-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0821
+Averaged Test Accurancy: 0.9132
+Averaged Test AUC: 0.9875
+Std Test Accurancy: 0.0501
+Std Test AUC: 0.0093
+ASR: 0.040726196738311876
+attack_auc: 0.7307533772050825
+------------------------- time cost ------------------------- 8.671734094619751
+[PFedBA] Round 253: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.0342 grad=0.7327 loss_align=1.0468 attack=0.2547 norm=14.5290
+
+-------------Round number: 252-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0787
+Averaged Test Accurancy: 0.9132
+Averaged Test AUC: 0.9877
+Std Test Accurancy: 0.0498
+Std Test AUC: 0.0090
+ASR: 0.03728183888825746
+attack_auc: 0.728171708700063
+------------------------- time cost ------------------------- 10.354413986206055
+[PFedBA] Round 254: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.1147 grad=0.7717 loss_align=1.0674 attack=0.2756 norm=14.5278
+
+-------------Round number: 253-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0796
+Averaged Test Accurancy: 0.9133
+Averaged Test AUC: 0.9879
+Std Test Accurancy: 0.0504
+Std Test AUC: 0.0091
+ASR: 0.03776568400346105
+attack_auc: 0.7283600390470729
+------------------------- time cost ------------------------- 9.551187992095947
+[PFedBA] Round 255: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2645 grad=0.7471 loss_align=1.2175 attack=0.2999 norm=14.5252
+
+-------------Round number: 254-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0828
+Averaged Test Accurancy: 0.9126
+Averaged Test AUC: 0.9879
+Std Test Accurancy: 0.0517
+Std Test AUC: 0.0092
+ASR: 0.03644608433145456
+attack_auc: 0.7281510795872196
+------------------------- time cost ------------------------- 9.123857736587524
+[PFedBA] Round 256: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3548 grad=0.7354 loss_align=1.3057 attack=0.3137 norm=14.5258
+
+-------------Round number: 255-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0876
+Averaged Test Accurancy: 0.9119
+Averaged Test AUC: 0.9881
+Std Test Accurancy: 0.0511
+Std Test AUC: 0.0091
+ASR: 0.035248353205740116
+attack_auc: 0.7257153393298538
+------------------------- time cost ------------------------- 8.587881326675415
+[PFedBA] Round 257: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3405 grad=0.7042 loss_align=1.2880 attack=0.3483 norm=14.5217
+
+-------------Round number: 256-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0875
+Averaged Test Accurancy: 0.9118
+Averaged Test AUC: 0.9879
+Std Test Accurancy: 0.0522
+Std Test AUC: 0.0091
+ASR: 0.034523573741545924
+attack_auc: 0.7209663200882453
+------------------------- time cost ------------------------- 10.251078605651855
+[PFedBA] Round 258: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.1819 grad=0.7665 loss_align=1.1796 attack=0.2358 norm=14.5220
+
+-------------Round number: 257-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0765
+Averaged Test Accurancy: 0.9128
+Averaged Test AUC: 0.9881
+Std Test Accurancy: 0.0507
+Std Test AUC: 0.0084
+ASR: 0.03566738449821032
+attack_auc: 0.724084549230154
+------------------------- time cost ------------------------- 8.800979614257812
+[PFedBA] Round 259: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3096 grad=0.7457 loss_align=1.3078 attack=0.2562 norm=14.5189
+
+-------------Round number: 258-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0820
+Averaged Test Accurancy: 0.9127
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0509
+Std Test AUC: 0.0083
+ASR: 0.03456516932017132
+attack_auc: 0.725617751134691
+------------------------- time cost ------------------------- 9.186539649963379
+[PFedBA] Round 260: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3129 grad=0.7330 loss_align=1.2392 attack=0.3407 norm=14.5188
+
+-------------Round number: 259-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0781
+Averaged Test Accurancy: 0.9115
+Averaged Test AUC: 0.9883
+Std Test Accurancy: 0.0510
+Std Test AUC: 0.0081
+ASR: 0.032622910225290534
+attack_auc: 0.7206770048902603
+------------------------- time cost ------------------------- 9.67897891998291
+[PFedBA] Round 261: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3408 grad=0.7247 loss_align=1.2477 attack=0.3684 norm=14.5213
+
+-------------Round number: 260-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0816
+Averaged Test Accurancy: 0.9111
+Averaged Test AUC: 0.9884
+Std Test Accurancy: 0.0504
+Std Test AUC: 0.0081
+ASR: 0.031648449312752236
+attack_auc: 0.7194466969407617
+------------------------- time cost ------------------------- 9.089293241500854
+[PFedBA] Round 262: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5012 grad=0.7271 loss_align=1.4246 attack=0.3496 norm=14.5205
+
+-------------Round number: 261-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0819
+Averaged Test Accurancy: 0.9119
+Averaged Test AUC: 0.9885
+Std Test Accurancy: 0.0504
+Std Test AUC: 0.0081
+ASR: 0.03062739784353618
+attack_auc: 0.7172829944843518
+------------------------- time cost ------------------------- 8.807197570800781
+[PFedBA] Round 263: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4244 grad=0.6746 loss_align=1.4127 attack=0.3371 norm=14.5208
+
+-------------Round number: 262-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0797
+Averaged Test Accurancy: 0.9136
+Averaged Test AUC: 0.9885
+Std Test Accurancy: 0.0498
+Std Test AUC: 0.0082
+ASR: 0.03131866984239519
+attack_auc: 0.7189233326922247
+------------------------- time cost ------------------------- 9.14946460723877
+[PFedBA] Round 264: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4354 grad=0.7561 loss_align=1.3452 attack=0.3341 norm=14.5205
+
+-------------Round number: 263-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0846
+Averaged Test Accurancy: 0.9136
+Averaged Test AUC: 0.9879
+Std Test Accurancy: 0.0519
+Std Test AUC: 0.0107
+ASR: 0.03285483796831475
+attack_auc: 0.7206826432181143
+------------------------- time cost ------------------------- 9.318145275115967
+[PFedBA] Round 265: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4328 grad=0.6956 loss_align=1.3263 attack=0.4109 norm=14.5174
+
+-------------Round number: 264-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0838
+Averaged Test Accurancy: 0.9134
+Averaged Test AUC: 0.9880
+Std Test Accurancy: 0.0505
+Std Test AUC: 0.0104
+ASR: 0.03580590206590239
+attack_auc: 0.728633460373387
+------------------------- time cost ------------------------- 9.1482675075531
+[PFedBA] Round 266: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3736 grad=0.6893 loss_align=1.3490 attack=0.3353 norm=14.5173
+
+-------------Round number: 265-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0848
+Averaged Test Accurancy: 0.9134
+Averaged Test AUC: 0.9880
+Std Test Accurancy: 0.0497
+Std Test AUC: 0.0103
+ASR: 0.03457154669715215
+attack_auc: 0.7285928768937648
+------------------------- time cost ------------------------- 9.311147689819336
+[PFedBA] Round 267: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3753 grad=0.6841 loss_align=1.2846 attack=0.4066 norm=14.5129
+
+-------------Round number: 266-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0829
+Averaged Test Accurancy: 0.9133
+Averaged Test AUC: 0.9880
+Std Test Accurancy: 0.0491
+Std Test AUC: 0.0103
+ASR: 0.0343958002543819
+attack_auc: 0.7274498094584289
+------------------------- time cost ------------------------- 9.21618366241455
+[PFedBA] Round 268: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4193 grad=0.7099 loss_align=1.4115 attack=0.2979 norm=14.5099
+
+-------------Round number: 267-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0844
+Averaged Test Accurancy: 0.9143
+Averaged Test AUC: 0.9879
+Std Test Accurancy: 0.0486
+Std Test AUC: 0.0106
+ASR: 0.03472080940615797
+attack_auc: 0.726730315185582
+------------------------- time cost ------------------------- 8.594460010528564
+[PFedBA] Round 269: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4334 grad=0.6919 loss_align=1.4123 attack=0.3291 norm=14.5119
+
+-------------Round number: 268-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0884
+Averaged Test Accurancy: 0.9161
+Averaged Test AUC: 0.9881
+Std Test Accurancy: 0.0432
+Std Test AUC: 0.0099
+ASR: 0.037208386225238144
+attack_auc: 0.7324701272940156
+------------------------- time cost ------------------------- 8.616098165512085
+[PFedBA] Round 270: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5298 grad=0.7364 loss_align=1.4694 attack=0.3239 norm=14.5123
+
+-------------Round number: 269-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0912
+Averaged Test Accurancy: 0.9165
+Averaged Test AUC: 0.9883
+Std Test Accurancy: 0.0447
+Std Test AUC: 0.0099
+ASR: 0.03738551553529964
+attack_auc: 0.7328784101175382
+------------------------- time cost ------------------------- 9.363178491592407
+[PFedBA] Round 271: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5097 grad=0.7059 loss_align=1.3703 attack=0.4334 norm=14.5130
+
+-------------Round number: 270-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0860
+Averaged Test Accurancy: 0.9166
+Averaged Test AUC: 0.9883
+Std Test Accurancy: 0.0442
+Std Test AUC: 0.0098
+ASR: 0.03586500259978409
+attack_auc: 0.7296766512005097
+------------------------- time cost ------------------------- 10.19886565208435
+[PFedBA] Round 272: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4307 grad=0.7024 loss_align=1.3563 attack=0.3720 norm=14.5143
+
+-------------Round number: 271-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0885
+Averaged Test Accurancy: 0.9161
+Averaged Test AUC: 0.9884
+Std Test Accurancy: 0.0447
+Std Test AUC: 0.0097
+ASR: 0.03409870074253538
+attack_auc: 0.7257518515849556
+------------------------- time cost ------------------------- 8.344788789749146
+[PFedBA] Round 273: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4346 grad=0.7169 loss_align=1.3837 attack=0.3340 norm=14.5113
+
+-------------Round number: 272-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0872
+Averaged Test Accurancy: 0.9162
+Averaged Test AUC: 0.9884
+Std Test Accurancy: 0.0447
+Std Test AUC: 0.0097
+ASR: 0.031883454698928566
+attack_auc: 0.723260070000116
+------------------------- time cost ------------------------- 9.171233415603638
+[PFedBA] Round 274: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3700 grad=0.6458 loss_align=1.3578 attack=0.3664 norm=14.5105
+
+-------------Round number: 273-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0898
+Averaged Test Accurancy: 0.9144
+Averaged Test AUC: 0.9883
+Std Test Accurancy: 0.0464
+Std Test AUC: 0.0097
+ASR: 0.03233997119517645
+attack_auc: 0.7236075679094264
+------------------------- time cost ------------------------- 8.774456262588501
+[PFedBA] Round 275: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5835 grad=0.6991 loss_align=1.4407 attack=0.4437 norm=14.5107
+
+-------------Round number: 274-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0957
+Averaged Test Accurancy: 0.9146
+Averaged Test AUC: 0.9883
+Std Test Accurancy: 0.0472
+Std Test AUC: 0.0099
+ASR: 0.03265404164473802
+attack_auc: 0.7217987384071999
+------------------------- time cost ------------------------- 8.814218282699585
+[PFedBA] Round 276: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4442 grad=0.6866 loss_align=1.3415 attack=0.4161 norm=14.5118
+
+-------------Round number: 275-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1064
+Averaged Test Accurancy: 0.9157
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0460
+Std Test AUC: 0.0089
+ASR: 0.03357696321512326
+attack_auc: 0.721563788314971
+------------------------- time cost ------------------------- 9.151863098144531
+[PFedBA] Round 277: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4123 grad=0.7033 loss_align=1.3468 attack=0.3622 norm=14.5124
+
+-------------Round number: 276-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1082
+Averaged Test Accurancy: 0.9149
+Averaged Test AUC: 0.9881
+Std Test Accurancy: 0.0464
+Std Test AUC: 0.0089
+ASR: 0.03349002248479119
+attack_auc: 0.7225666961627761
+------------------------- time cost ------------------------- 9.491862297058105
+[PFedBA] Round 278: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4764 grad=0.6429 loss_align=1.3138 attack=0.5197 norm=14.5108
+
+-------------Round number: 277-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1000
+Averaged Test Accurancy: 0.9170
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0432
+Std Test AUC: 0.0090
+ASR: 0.03377066744877725
+attack_auc: 0.7206194515515926
+------------------------- time cost ------------------------- 8.537147760391235
+[PFedBA] Round 279: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.6080 grad=0.7573 loss_align=1.4615 attack=0.3891 norm=14.5124
+
+-------------Round number: 278-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1033
+Averaged Test Accurancy: 0.9159
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0450
+Std Test AUC: 0.0092
+ASR: 0.034623376543160236
+attack_auc: 0.7262946780003888
+------------------------- time cost ------------------------- 9.7095205783844
+[PFedBA] Round 280: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4961 grad=0.6519 loss_align=1.4010 attack=0.4432 norm=14.5116
+
+-------------Round number: 279-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1081
+Averaged Test Accurancy: 0.9153
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0452
+Std Test AUC: 0.0092
+ASR: 0.0347364464981765
+attack_auc: 0.7246868767583908
+------------------------- time cost ------------------------- 8.319236993789673
+[PFedBA] Round 281: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3900 grad=0.6830 loss_align=1.3598 attack=0.3472 norm=14.5105
+
+-------------Round number: 280-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0925
+Averaged Test Accurancy: 0.9151
+Averaged Test AUC: 0.9883
+Std Test Accurancy: 0.0435
+Std Test AUC: 0.0072
+ASR: 0.03617819786000829
+attack_auc: 0.7263919688136207
+------------------------- time cost ------------------------- 9.791579008102417
+[PFedBA] Round 282: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3107 grad=0.6894 loss_align=1.3018 attack=0.3195 norm=14.5118
+
+-------------Round number: 281-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1510
+Averaged Test Accurancy: 0.9134
+Averaged Test AUC: 0.9867
+Std Test Accurancy: 0.0492
+Std Test AUC: 0.0152
+ASR: 0.03588058239141516
+attack_auc: 0.7255948436162947
+------------------------- time cost ------------------------- 9.618819952011108
+[PFedBA] Round 283: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4289 grad=0.7764 loss_align=1.4172 attack=0.2353 norm=14.5117
+
+-------------Round number: 282-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1455
+Averaged Test Accurancy: 0.9140
+Averaged Test AUC: 0.9868
+Std Test Accurancy: 0.0477
+Std Test AUC: 0.0152
+ASR: 0.03636701337138572
+attack_auc: 0.7254889827996517
+------------------------- time cost ------------------------- 7.93058443069458
+[PFedBA] Round 284: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4058 grad=0.7248 loss_align=1.3542 attack=0.3269 norm=14.5185
+
+-------------Round number: 283-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1353
+Averaged Test Accurancy: 0.9146
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0474
+Std Test AUC: 0.0153
+ASR: 0.035657117454760155
+attack_auc: 0.7242237916430916
+------------------------- time cost ------------------------- 8.19502305984497
+[PFedBA] Round 285: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4713 grad=0.7926 loss_align=1.4132 attack=0.2655 norm=14.5156
+
+-------------Round number: 284-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1389
+Averaged Test Accurancy: 0.9150
+Averaged Test AUC: 0.9869
+Std Test Accurancy: 0.0482
+Std Test AUC: 0.0156
+ASR: 0.034479915843990634
+attack_auc: 0.7244219037672565
+------------------------- time cost ------------------------- 9.345213890075684
+[PFedBA] Round 286: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4560 grad=0.7312 loss_align=1.4300 attack=0.2948 norm=14.5185
+
+-------------Round number: 285-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0750
+Averaged Test Accurancy: 0.9173
+Averaged Test AUC: 0.9888
+Std Test Accurancy: 0.0432
+Std Test AUC: 0.0068
+ASR: 0.03343485921491742
+attack_auc: 0.7222118437329464
+------------------------- time cost ------------------------- 9.47568392753601
+[PFedBA] Round 287: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4289 grad=0.7139 loss_align=1.3632 attack=0.3517 norm=14.5152
+
+-------------Round number: 286-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0787
+Averaged Test Accurancy: 0.9175
+Averaged Test AUC: 0.9888
+Std Test Accurancy: 0.0427
+Std Test AUC: 0.0069
+ASR: 0.03184658118471683
+attack_auc: 0.7203390886869724
+------------------------- time cost ------------------------- 8.014265775680542
+[PFedBA] Round 288: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5613 grad=0.7790 loss_align=1.4136 attack=0.3687 norm=14.5174
+
+-------------Round number: 287-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0951
+Averaged Test Accurancy: 0.9156
+Averaged Test AUC: 0.9887
+Std Test Accurancy: 0.0447
+Std Test AUC: 0.0070
+ASR: 0.03210791381159689
+attack_auc: 0.717201819974938
+------------------------- time cost ------------------------- 8.728260517120361
+[PFedBA] Round 289: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2931 grad=0.6875 loss_align=1.2707 attack=0.3348 norm=14.5147
+
+-------------Round number: 288-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1240
+Averaged Test Accurancy: 0.9147
+Averaged Test AUC: 0.9875
+Std Test Accurancy: 0.0497
+Std Test AUC: 0.0094
+ASR: 0.038301406025786126
+attack_auc: 0.7242813477059704
+------------------------- time cost ------------------------- 9.681022882461548
+[PFedBA] Round 290: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3904 grad=0.7451 loss_align=1.3005 attack=0.3449 norm=14.5130
+
+-------------Round number: 289-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1181
+Averaged Test Accurancy: 0.9155
+Averaged Test AUC: 0.9878
+Std Test Accurancy: 0.0492
+Std Test AUC: 0.0096
+ASR: 0.03473786148400918
+attack_auc: 0.7208877734153256
+------------------------- time cost ------------------------- 8.837506532669067
+[PFedBA] Round 291: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3510 grad=0.7614 loss_align=1.3149 attack=0.2747 norm=14.5113
+
+-------------Round number: 290-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0550
+Averaged Test Accurancy: 0.9190
+Averaged Test AUC: 0.9886
+Std Test Accurancy: 0.0413
+Std Test AUC: 0.0069
+ASR: 0.03532737229685541
+attack_auc: 0.726010303440424
+------------------------- time cost ------------------------- 8.522867918014526
+[PFedBA] Round 292: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2303 grad=0.7268 loss_align=1.2141 attack=0.2895 norm=14.5115
+
+-------------Round number: 291-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0572
+Averaged Test Accurancy: 0.9186
+Averaged Test AUC: 0.9885
+Std Test Accurancy: 0.0425
+Std Test AUC: 0.0070
+ASR: 0.03532513155398255
+attack_auc: 0.7305780667976671
+------------------------- time cost ------------------------- 8.26941442489624
+[PFedBA] Round 293: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3455 grad=0.7298 loss_align=1.3314 attack=0.2843 norm=14.5102
+
+-------------Round number: 292-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0551
+Averaged Test Accurancy: 0.9179
+Averaged Test AUC: 0.9886
+Std Test Accurancy: 0.0426
+Std Test AUC: 0.0071
+ASR: 0.03683772461761454
+attack_auc: 0.7310099600414347
+------------------------- time cost ------------------------- 8.619957447052002
+[PFedBA] Round 294: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4209 grad=0.7693 loss_align=1.3145 attack=0.3371 norm=14.5094
+
+-------------Round number: 293-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0575
+Averaged Test Accurancy: 0.9177
+Averaged Test AUC: 0.9888
+Std Test Accurancy: 0.0421
+Std Test AUC: 0.0071
+ASR: 0.035079669607601165
+attack_auc: 0.7304254983416205
+------------------------- time cost ------------------------- 9.254507064819336
+[PFedBA] Round 295: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3640 grad=0.7232 loss_align=1.3532 attack=0.2876 norm=14.5078
+
+-------------Round number: 294-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0512
+Averaged Test Accurancy: 0.9171
+Averaged Test AUC: 0.9887
+Std Test Accurancy: 0.0425
+Std Test AUC: 0.0068
+ASR: 0.035265288337732334
+attack_auc: 0.7298817023857072
+------------------------- time cost ------------------------- 8.615889549255371
+[PFedBA] Round 296: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4008 grad=0.7880 loss_align=1.3412 attack=0.2717 norm=14.5082
+
+-------------Round number: 295-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0511
+Averaged Test Accurancy: 0.9156
+Averaged Test AUC: 0.9889
+Std Test Accurancy: 0.0435
+Std Test AUC: 0.0068
+ASR: 0.03457934328065664
+attack_auc: 0.7286863441779753
+------------------------- time cost ------------------------- 8.637484788894653
+[PFedBA] Round 297: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4282 grad=0.7215 loss_align=1.4077 attack=0.2990 norm=14.5069
+
+-------------Round number: 296-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0513
+Averaged Test Accurancy: 0.9164
+Averaged Test AUC: 0.9888
+Std Test Accurancy: 0.0430
+Std Test AUC: 0.0067
+ASR: 0.034504630211954074
+attack_auc: 0.7265845910110976
+------------------------- time cost ------------------------- 8.537122964859009
+[PFedBA] Round 298: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5905 grad=0.7627 loss_align=1.4647 attack=0.3631 norm=14.5044
+
+-------------Round number: 297-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0512
+Averaged Test Accurancy: 0.9161
+Averaged Test AUC: 0.9888
+Std Test Accurancy: 0.0430
+Std Test AUC: 0.0068
+ASR: 0.0327790274094945
+attack_auc: 0.7242707710252227
+------------------------- time cost ------------------------- 10.005389928817749
+[PFedBA] Round 299: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3685 grad=0.7231 loss_align=1.3921 attack=0.2533 norm=14.5033
+
+-------------Round number: 298-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0520
+Averaged Test Accurancy: 0.9164
+Averaged Test AUC: 0.9883
+Std Test Accurancy: 0.0444
+Std Test AUC: 0.0070
+ASR: 0.03529967716607826
+attack_auc: 0.7287520281819477
+------------------------- time cost ------------------------- 9.369874238967896
+[PFedBA] Round 300: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3275 grad=0.7107 loss_align=1.3022 attack=0.3146 norm=14.4825
+
+-------------Round number: 299-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0524
+Averaged Test Accurancy: 0.9170
+Averaged Test AUC: 0.9886
+Std Test Accurancy: 0.0436
+Std Test AUC: 0.0069
+ASR: 0.03391572633117564
+attack_auc: 0.7270219734023107
+------------------------- time cost ------------------------- 8.817708015441895
+[PFedBA] Round 301: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2490 grad=0.6737 loss_align=1.1952 attack=0.3801 norm=14.4826
+
+-------------Round number: 300-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0519
+Averaged Test Accurancy: 0.9168
+Averaged Test AUC: 0.9887
+Std Test Accurancy: 0.0440
+Std Test AUC: 0.0070
+ASR: 0.03279037697382868
+attack_auc: 0.7251989702335837
+------------------------- time cost ------------------------- 9.013897895812988
+[PFedBA] Round 302: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3652 grad=0.7089 loss_align=1.2982 attack=0.3581 norm=14.4888
+
+-------------Round number: 301-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0560
+Averaged Test Accurancy: 0.9157
+Averaged Test AUC: 0.9887
+Std Test Accurancy: 0.0449
+Std Test AUC: 0.0070
+ASR: 0.03202330967711005
+attack_auc: 0.7244446343349841
+------------------------- time cost ------------------------- 7.256601572036743
+[PFedBA] Round 303: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4602 grad=0.6784 loss_align=1.3586 attack=0.4231 norm=14.4869
+
+-------------Round number: 302-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0586
+Averaged Test Accurancy: 0.9151
+Averaged Test AUC: 0.9887
+Std Test Accurancy: 0.0452
+Std Test AUC: 0.0070
+ASR: 0.03269243122794937
+attack_auc: 0.7248677417825876
+------------------------- time cost ------------------------- 9.608029127120972
+[PFedBA] Round 304: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4735 grad=0.6997 loss_align=1.4072 attack=0.3666 norm=14.4909
+
+-------------Round number: 303-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0570
+Averaged Test Accurancy: 0.9157
+Averaged Test AUC: 0.9887
+Std Test Accurancy: 0.0460
+Std Test AUC: 0.0070
+ASR: 0.032715194486897164
+attack_auc: 0.7225886468860174
+------------------------- time cost ------------------------- 8.642335176467896
+[PFedBA] Round 305: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5345 grad=0.6759 loss_align=1.4432 attack=0.4154 norm=14.4936
+
+-------------Round number: 304-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0576
+Averaged Test Accurancy: 0.9156
+Averaged Test AUC: 0.9887
+Std Test Accurancy: 0.0457
+Std Test AUC: 0.0071
+ASR: 0.030992797851513623
+attack_auc: 0.7203242385326247
+------------------------- time cost ------------------------- 8.023760557174683
+[PFedBA] Round 306: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4772 grad=0.7808 loss_align=1.3767 attack=0.3197 norm=14.4953
+
+-------------Round number: 305-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0594
+Averaged Test Accurancy: 0.9154
+Averaged Test AUC: 0.9887
+Std Test Accurancy: 0.0457
+Std Test AUC: 0.0071
+ASR: 0.03177236842564345
+attack_auc: 0.7197165219927019
+------------------------- time cost ------------------------- 7.58806848526001
+[PFedBA] Round 307: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3368 grad=0.6943 loss_align=1.2885 attack=0.3540 norm=14.4935
+
+-------------Round number: 306-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0766
+Averaged Test Accurancy: 0.9155
+Averaged Test AUC: 0.9888
+Std Test Accurancy: 0.0456
+Std Test AUC: 0.0070
+ASR: 0.03135825231902999
+attack_auc: 0.7199744772927491
+------------------------- time cost ------------------------- 8.306081056594849
+[PFedBA] Round 308: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3611 grad=0.7072 loss_align=1.3154 attack=0.3384 norm=14.5109
+
+-------------Round number: 307-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0815
+Averaged Test Accurancy: 0.9149
+Averaged Test AUC: 0.9885
+Std Test Accurancy: 0.0468
+Std Test AUC: 0.0074
+ASR: 0.03200233232453822
+attack_auc: 0.7225063586467763
+------------------------- time cost ------------------------- 8.926944494247437
+[PFedBA] Round 309: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2753 grad=0.7490 loss_align=1.2606 attack=0.2656 norm=14.5080
+
+-------------Round number: 308-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0817
+Averaged Test Accurancy: 0.9143
+Averaged Test AUC: 0.9884
+Std Test Accurancy: 0.0474
+Std Test AUC: 0.0074
+ASR: 0.0345554882582174
+attack_auc: 0.723499195463048
+------------------------- time cost ------------------------- 9.380005121231079
+[PFedBA] Round 310: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5228 grad=0.7470 loss_align=1.4465 attack=0.3293 norm=14.5101
+
+-------------Round number: 309-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0853
+Averaged Test Accurancy: 0.9135
+Averaged Test AUC: 0.9882
+Std Test Accurancy: 0.0491
+Std Test AUC: 0.0077
+ASR: 0.03333067743507341
+attack_auc: 0.7226725028074947
+------------------------- time cost ------------------------- 8.616613864898682
+[PFedBA] Round 311: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4114 grad=0.7657 loss_align=1.3515 attack=0.2943 norm=14.5049
+
+-------------Round number: 310-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0861
+Averaged Test Accurancy: 0.9136
+Averaged Test AUC: 0.9884
+Std Test Accurancy: 0.0489
+Std Test AUC: 0.0076
+ASR: 0.03257526996701607
+attack_auc: 0.7199311734983094
+------------------------- time cost ------------------------- 9.702274084091187
+[PFedBA] Round 312: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4129 grad=0.7645 loss_align=1.2662 attack=0.3822 norm=14.5053
+
+-------------Round number: 311-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1181
+Averaged Test Accurancy: 0.9116
+Averaged Test AUC: 0.9879
+Std Test Accurancy: 0.0531
+Std Test AUC: 0.0085
+ASR: 0.03241724322774007
+attack_auc: 0.7206568466059057
+------------------------- time cost ------------------------- 9.578546047210693
+[PFedBA] Round 313: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3242 grad=0.7641 loss_align=1.2317 attack=0.3284 norm=14.5026
+
+-------------Round number: 312-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.2016
+Averaged Test Accurancy: 0.9092
+Averaged Test AUC: 0.9862
+Std Test Accurancy: 0.0610
+Std Test AUC: 0.0211
+ASR: 0.033624519702753396
+attack_auc: 0.726669480918062
+------------------------- time cost ------------------------- 8.56486988067627
+[PFedBA] Round 314: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5496 grad=0.7965 loss_align=1.4673 attack=0.2857 norm=14.5016
+
+-------------Round number: 313-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1884
+Averaged Test Accurancy: 0.9085
+Averaged Test AUC: 0.9860
+Std Test Accurancy: 0.0622
+Std Test AUC: 0.0209
+ASR: 0.03532306725362766
+attack_auc: 0.730626049352156
+------------------------- time cost ------------------------- 8.411455631256104
+[PFedBA] Round 315: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5027 grad=0.7169 loss_align=1.4451 attack=0.3406 norm=14.5016
+
+-------------Round number: 314-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.1982
+Averaged Test Accurancy: 0.9085
+Averaged Test AUC: 0.9859
+Std Test Accurancy: 0.0621
+Std Test AUC: 0.0210
+ASR: 0.034789591478405
+attack_auc: 0.7260512416288368
+------------------------- time cost ------------------------- 8.935765027999878
+[PFedBA] Round 316: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.2318 grad=0.7105 loss_align=1.2173 attack=0.3040 norm=14.4989
+
+-------------Round number: 315-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0822
+Averaged Test Accurancy: 0.9128
+Averaged Test AUC: 0.9879
+Std Test Accurancy: 0.0500
+Std Test AUC: 0.0076
+ASR: 0.03777681720216131
+attack_auc: 0.7354068075473944
+------------------------- time cost ------------------------- 8.679712295532227
+[PFedBA] Round 317: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3259 grad=0.7353 loss_align=1.2847 attack=0.3060 norm=14.5007
+
+-------------Round number: 316-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0835
+Averaged Test Accurancy: 0.9113
+Averaged Test AUC: 0.9879
+Std Test Accurancy: 0.0507
+Std Test AUC: 0.0077
+ASR: 0.03866007368192855
+attack_auc: 0.7340720448056252
+------------------------- time cost ------------------------- 9.300086259841919
+[PFedBA] Round 318: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.3514 grad=0.7163 loss_align=1.3452 attack=0.2899 norm=14.4994
+
+-------------Round number: 317-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0710
+Averaged Test Accurancy: 0.9137
+Averaged Test AUC: 0.9884
+Std Test Accurancy: 0.0475
+Std Test AUC: 0.0071
+ASR: 0.03835551401293105
+attack_auc: 0.7352920021082024
+------------------------- time cost ------------------------- 9.238581895828247
+[PFedBA] Round 319: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4044 grad=0.7128 loss_align=1.3666 attack=0.3249 norm=14.5007
+
+-------------Round number: 318-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0712
+Averaged Test Accurancy: 0.9142
+Averaged Test AUC: 0.9885
+Std Test Accurancy: 0.0477
+Std Test AUC: 0.0071
+ASR: 0.03616343155613326
+attack_auc: 0.7336915872242945
+------------------------- time cost ------------------------- 8.635498523712158
+[PFedBA] Round 320: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.4628 grad=0.7395 loss_align=1.4412 attack=0.2821 norm=14.5033
+
+-------------Round number: 319-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0752
+Averaged Test Accurancy: 0.9131
+Averaged Test AUC: 0.9886
+Std Test Accurancy: 0.0471
+Std Test AUC: 0.0070
+ASR: 0.03594106801229305
+attack_auc: 0.7333558433223236
+------------------------- time cost ------------------------- 8.575676918029785
+[PFedBA] Round 321: optimizing class-conditional trigger bank...
+[PFedBA] trigger_opt total=2.5059 grad=0.7119 loss_align=1.4254 attack=0.3686 norm=14.5025
+
+-------------Round number: 320-------------
+
+Evaluate personalized models
+Averaged Train Loss: 0.0731
+Averaged Test Accurancy: 0.9141
+Averaged Test AUC: 0.9885
+Std Test Accurancy: 0.0461
+Std Test AUC: 0.0068
+ASR: 0.03848650818669792
+attack_auc: 0.7356577648699727
+------------------------- time cost ------------------------- 9.043394804000854
+
+Best accuracy.
+0.9189862604114758
+
+Average time cost per round.
+9.072390474379063
+File path: ./results/FashionMNIST_dir0.5_bdoor0.0_nclient_100_badnet_adv0_FedCLCM_F3_no_mask_fm_0.h5
+
+Average time cost: 2913.04s.
+Length:  321
+std for best accurancy: 0.0
+mean for best accurancy: 0.9189862604114758
+All done!
