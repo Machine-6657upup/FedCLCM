@@ -37,6 +37,7 @@ Read these files in order:
 8. `08_REMOTE_OPERATING_RULES.md`
 9. `12_SYSTEM_MAP_AND_PLATFORM_DECISION.md`
 10. `13_PFEDBA_DEFENSE_ROUTE_AND_HEAD_EPOCH.md`
+11. `14_STATIC_FEDCLCM_RESCUE_ANALYSIS.md`
 
 ## Current High-Confidence Conclusions
 - The old claim "FedRep was clearly broken by static backdoors before" is real and backed by historical logs.
@@ -45,6 +46,7 @@ Read these files in order:
 - Stronger BadNet and corrected SIG are definitely not "too weak to matter".
 - FedRep under the unified common regime is no longer stuck in the low-0.7x region. It recovered to a credible baseline.
 - FedCLCM currently has a major interpretation problem: low ASR often comes together with collapsed clean accuracy, so it cannot be counted as a clean defense win.
+- Old FedCLCM/CLCM CIFAR-10 low-ASR results are real, but they were obtained mainly under `nclient=40`, `adv5`, `ResNetP`, and old optimizer/PGD settings. No old CIFAR-10 `nclient=100` FedCLCM success log has been found yet.
 
 ## Key Locations
 Remote clean workspace:
