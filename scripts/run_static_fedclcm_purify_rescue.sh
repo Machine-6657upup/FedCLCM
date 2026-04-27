@@ -73,35 +73,35 @@ add_config() {
 }
 
 add_smoke_configs() {
-  add_config "SMK_B04_PUR_L4_B500" "FedCLCMPurify" "badnet" 100 10 0.2 0.1 "ResNet18" 0.1 0.1 1 1 "${SMOKE_ROUNDS}" 0.20 0.20 0.10 6.0 0.30 true 0.00 0 500.0 0.0 0.0 1 "layer4" 0.90 "smoke_current_best_plus_l4_purify"
-  add_config "SMK_OLD_PUR_L4_B500" "FedCLCMPurify" "badnet" 40 5 0.2 0.25 "ResNetP" 0.003 0.005 1 1 "${SMOKE_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 500.0 0.0 0.0 1 "layer4" 0.90 "smoke_old_success_recipe_plus_l4_purify"
+  add_config "SMK_B04_PUR_L4_B50_S10" "FedCLCMPurify" "badnet" 100 10 0.2 0.1 "ResNet18" 0.1 0.1 1 1 "${SMOKE_ROUNDS}" 0.20 0.20 0.10 6.0 0.30 true 0.00 0 50.0 0.0 0.0 10 "layer4" 0.90 "smoke_current_best_plus_delayed_l4_purify"
+  add_config "SMK_OLD_PUR_L4_B100_S5" "FedCLCMPurify" "badnet" 40 5 0.2 0.25 "ResNetP" 0.003 0.005 1 1 "${SMOKE_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 100.0 0.0 0.0 5 "layer4" 0.90 "smoke_old_success_recipe_plus_l4_purify"
 }
 
 add_badnet_focus_configs() {
   # Paired controls: current best 100-client formal recipe vs the same recipe
   # with lightweight client-side purification.
   add_config "BN100_B04_BASE" "FedCLCM" "badnet" 100 10 0.2 0.1 "ResNet18" 0.1 0.1 1 1 "${FINAL_ROUNDS}" 0.20 0.20 0.10 6.0 0.30 true 0.00 0 0.0 0.0 0.0 1 "layer4" 0.90 "current_best_static_baseline"
-  add_config "BN100_B04_PUR_L4_B500" "FedCLCMPurify" "badnet" 100 10 0.2 0.1 "ResNet18" 0.1 0.1 1 1 "${FINAL_ROUNDS}" 0.20 0.20 0.10 6.0 0.30 true 0.00 0 500.0 0.0 0.0 1 "layer4" 0.90 "current_best_plus_paper_scale_attention_purify"
-  add_config "BN100_B04_PUR_L4_B1500" "FedCLCMPurify" "badnet" 100 10 0.2 0.1 "ResNet18" 0.1 0.1 1 1 "${FINAL_ROUNDS}" 0.20 0.20 0.10 6.0 0.30 true 0.00 0 1500.0 0.0 0.0 1 "layer4" 0.90 "current_best_plus_pflalp_beta_attention_purify"
+  add_config "BN100_B04_PUR_L4_B10_S10" "FedCLCMPurify" "badnet" 100 10 0.2 0.1 "ResNet18" 0.1 0.1 1 1 "${FINAL_ROUNDS}" 0.20 0.20 0.10 6.0 0.30 true 0.00 0 10.0 0.0 0.0 10 "layer4" 0.90 "current_best_plus_small_delayed_attention_purify"
+  add_config "BN100_B04_PUR_L4_B50_S10" "FedCLCMPurify" "badnet" 100 10 0.2 0.1 "ResNet18" 0.1 0.1 1 1 "${FINAL_ROUNDS}" 0.20 0.20 0.10 6.0 0.30 true 0.00 0 50.0 0.0 0.0 10 "layer4" 0.90 "current_best_plus_moderate_delayed_attention_purify"
 
   # Old-success transfer: preserve the validated CLCM ingredients instead of
   # stacking more server-side filtering.
   add_config "BN100_OLD_BASE" "FedCLCM" "badnet" 100 10 0.2 0.1 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 0.0 0.0 0.0 1 "layer4" 0.90 "old_success_transfer_baseline"
-  add_config "BN100_OLD_PUR_L4_B500" "FedCLCMPurify" "badnet" 100 10 0.2 0.1 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 500.0 0.0 0.0 1 "layer4" 0.90 "old_success_transfer_plus_paper_scale_purify"
-  add_config "BN100_OLD_PUR_L4_B1500" "FedCLCMPurify" "badnet" 100 10 0.2 0.1 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 1500.0 0.0 0.0 1 "layer4" 0.90 "old_success_transfer_plus_pflalp_beta_purify"
-  add_config "BN100_OLD_PUR_NOMASK_L4_B500" "FedCLCMPurify" "badnet" 100 10 0.2 0.1 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 1000000000.0 1.00 false 0.00 0 500.0 0.0 0.0 1 "layer4" 0.90 "old_logs_no_mask_check_plus_purify"
+  add_config "BN100_OLD_PUR_L4_B100_S5" "FedCLCMPurify" "badnet" 100 10 0.2 0.1 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 100.0 0.0 0.0 5 "layer4" 0.90 "old_success_transfer_plus_safe_purify"
+  add_config "BN100_OLD_PUR_L4_B500_S5" "FedCLCMPurify" "badnet" 100 10 0.2 0.1 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 500.0 0.0 0.0 5 "layer4" 0.90 "old_success_transfer_plus_paper_scale_purify"
+  add_config "BN100_OLD_PUR_NOMASK_L4_B100_S5" "FedCLCMPurify" "badnet" 100 10 0.2 0.1 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 1000000000.0 1.00 false 0.00 0 100.0 0.0 0.0 5 "layer4" 0.90 "old_logs_no_mask_check_plus_safe_purify"
 
   # Positive control from the historical successful regime. This is not the
   # thesis setting, but it tells us whether the cleaned repo still reproduces
   # the old CLCM behavior.
   add_config "BN40_PC_BASE" "FedCLCM" "badnet" 40 5 0.2 0.25 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 0.0 0.0 0.0 1 "layer4" 0.90 "positive_control_old_success_recipe"
-  add_config "BN40_PC_PUR_L4_B500" "FedCLCMPurify" "badnet" 40 5 0.2 0.25 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 500.0 0.0 0.0 1 "layer4" 0.90 "positive_control_old_success_plus_purify"
+  add_config "BN40_PC_PUR_L4_B100_S5" "FedCLCMPurify" "badnet" 40 5 0.2 0.25 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 100.0 0.0 0.0 5 "layer4" 0.90 "positive_control_old_success_plus_safe_purify"
 }
 
 add_static_extension_configs() {
   # Run only after badnet_focus shows a positive ACC/ASR tradeoff.
-  add_config "BL100_OLD_PUR_L4_B500" "FedCLCMPurify" "blend" 100 10 0.2 0.1 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 500.0 0.0 0.0 1 "layer4" 0.90 "blend_transfer_after_badnet"
-  add_config "SG100_OLD_PUR_L4_B500" "FedCLCMPurify" "sig" 100 10 0.2 0.1 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 500.0 0.0 0.0 1 "layer4" 0.90 "sig_transfer_after_badnet"
+  add_config "BL100_OLD_PUR_L4_B100_S5" "FedCLCMPurify" "blend" 100 10 0.2 0.1 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 100.0 0.0 0.0 5 "layer4" 0.90 "blend_transfer_after_badnet"
+  add_config "SG100_OLD_PUR_L4_B100_S5" "FedCLCMPurify" "sig" 100 10 0.2 0.1 "ResNetP" 0.003 0.005 1 1 "${FINAL_ROUNDS}" 0.05 0.20 0.10 12.0 0.70 true 0.00 0 100.0 0.0 0.0 5 "layer4" 0.90 "sig_transfer_after_badnet"
 }
 
 case "${PROFILE}" in

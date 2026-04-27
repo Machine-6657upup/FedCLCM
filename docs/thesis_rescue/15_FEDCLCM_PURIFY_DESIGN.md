@@ -86,17 +86,25 @@ The script writes:
 The purification beta values are not arbitrary:
 
 - PFL-ALP identifies `beta=1500` as the effective NAD value.
-- `beta=500` is included as a safer paper-scale value because FedCLCM already has CE + CL and old logs show ACC is sensitive.
+- A first direct transfer of `beta=500/1500` into the high-lr `ResNet18, lr=0.1` FedCLCM setting was not stable.
+- On 2026-04-27, the first Badnet focus run was stopped early because `BN100_B04_PUR_L4_B500/B1500` had `ACC≈0.295` and train loss up to `8.6e7/4.9e9` by round 30.
+- Therefore high-lr ResNet18 purification must use smaller delayed weights first: `beta=10/50`, `purify_start_round=10`.
+- The old-success low-lr ResNetP path can still test larger values because `lr=0.003`; the safer grid is `beta=100/500`, `purify_start_round=5`.
 - `layer4` is the default purification layer because higher layers carry more backdoor semantics and over-constraining lower/mid layers risks ACC.
 
 The Badnet focus matrix includes:
 
 - `BN100_B04_BASE`: current best formal-style FedCLCM baseline.
-- `BN100_B04_PUR_L4_B500/B1500`: same setting plus layer4 purification.
+- `BN100_B04_PUR_L4_B10_S10/B50_S10`: same setting plus small delayed layer4 purification.
 - `BN100_OLD_BASE`: old-success recipe transferred to `nclient=100`.
-- `BN100_OLD_PUR_L4_B500/B1500`: old-success recipe plus layer4 purification.
-- `BN100_OLD_PUR_NOMASK_L4_B500`: tests the old no-mask signal under the 100-client scale.
-- `BN40_PC_BASE` and `BN40_PC_PUR_L4_B500`: positive controls for reproducing the historical good regime.
+- `BN100_OLD_PUR_L4_B100_S5/B500_S5`: old-success recipe plus safer delayed layer4 purification.
+- `BN100_OLD_PUR_NOMASK_L4_B100_S5`: tests the old no-mask signal under the 100-client scale.
+- `BN40_PC_BASE` and `BN40_PC_PUR_L4_B100_S5`: positive controls for reproducing the historical good regime.
+
+Early signal from the stopped first run:
+
+- `BN100_OLD_BASE` had ASR around `0.04-0.05` by round 60 before being stopped with the bad high-beta batch.
+- This makes the old-success transfer path the current highest-priority rescue path.
 
 ## Decision Rule
 
