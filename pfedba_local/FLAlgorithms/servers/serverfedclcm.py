@@ -15,6 +15,7 @@ from utils.model_utils import read_data, read_user_data
 
 class ServerFedCLCM(FedRep):
     """FedRep 训练循环 + FedCLCM 聚合；继承 FedRep 以获得 FedAvg.train()。"""
+    user_class = UserCLCM
 
     def __init__(
         self,
@@ -88,9 +89,11 @@ class ServerFedCLCM(FedRep):
         data = read_data(dataset)
         total_users = len(data[0])
         mal_set = set(malclient) if malclient is not None else set()
+        user_class = getattr(self, "user_class", UserCLCM)
+        extra_user_kwargs = getattr(self, "extra_user_kwargs", {})
         for i in range(total_users):
             uid, train, test = read_user_data(i, data, dataset)
-            user = UserCLCM(
+            user = user_class(
                 device,
                 uid,
                 train,
@@ -109,6 +112,7 @@ class ServerFedCLCM(FedRep):
                 aug_strength=aug_strength,
                 adv_eps=adv_eps,
                 adv_num_iter=adv_num_iter,
+                **extra_user_kwargs,
             )
             self.users.append(user)
             self.total_train_samples += user.train_samples

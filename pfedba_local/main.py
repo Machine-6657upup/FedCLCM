@@ -6,6 +6,7 @@ from FLAlgorithms.servers.serverprox import FedProx
 from FLAlgorithms.servers.serverrep import FedRep
 from FLAlgorithms.servers.serverfedrt import ServerFedRT
 from FLAlgorithms.servers.serverfedclcm import ServerFedCLCM
+from FLAlgorithms.servers.serverfedclcmpurify import ServerFedCLCMPurify
 from FLAlgorithms.servers.serverfedrpd import ServerFedRPD
 from FLAlgorithms.servers.serverpflalp import ServerPFLALP
 from FLAlgorithms.servers.serverbdpfl import ServerBDPFL
@@ -110,6 +111,13 @@ def main(
     adv_num_iter=0,
     purify_beta=1500.0,
     purify_rounds=1,
+    purify_feature_beta=0.0,
+    purify_logit_beta=0.0,
+    purify_temperature=2.0,
+    purify_start_round=1,
+    purify_layers="layer4",
+    purify_teacher_momentum=0.9,
+    purify_teacher_cpu_half=1,
     cluster_max_k=4,
     alp_use_cluster=1,
     alp_use_purify=1,
@@ -202,7 +210,7 @@ def main(
         else:
             raise ValueError("dataset name wrong!")
 
-        if algorithm in ("FedRep", "FedRT", "FedCLCM", "FedRPD", "FedRepPFLALP", "FedRepBDPFL"):
+        if algorithm in ("FedRep", "FedRT", "FedCLCM", "FedCLCMPurify", "FedRPD", "FedRepPFLALP", "FedRepBDPFL"):
             model = to_fedrep_model(model)
 
         # select algorithm
@@ -461,6 +469,55 @@ def main(
                 trim_beta_high=trim_beta_high,
                 trim_beta_low=trim_beta_low,
             )
+        elif algorithm == "FedCLCMPurify":
+            server = ServerFedCLCMPurify(
+                device,
+                dataset,
+                algorithm,
+                model,
+                batch_size,
+                learning_rate,
+                beta,
+                lamda,
+                num_glob_iters,
+                local_epochs,
+                optimizer,
+                numusers,
+                i,
+                False,
+                current_time=current_time,
+                malnum=malnum,
+                malclient=malclient,
+                poisonratio=poisonratio,
+                poison_label=poison_label,
+                attack_method=attack_method,
+                per_epoch=per_epoch,
+                defense=defense,
+                lr_head=lr_head,
+                plocal_epochs=plocal_epochs,
+                rt_beta=rt_beta,
+                mask_tau=mask_tau,
+                mask_alpha=mask_alpha,
+                enable_channel_mask=bool(enable_channel_mask),
+                lambda_cl=lambda_cl,
+                aug_strength=aug_strength,
+                adv_eps=adv_eps,
+                adv_num_iter=int(adv_num_iter),
+                cosine_gate=bool(cosine_gate),
+                cosine_gate_threshold=cosine_gate_threshold,
+                cosine_gate_alpha=cosine_gate_alpha,
+                trim_high_layers=trim_high_layers or None,
+                trim_beta_high=trim_beta_high,
+                trim_beta_low=trim_beta_low,
+                purify_beta=purify_beta,
+                purify_feature_beta=purify_feature_beta,
+                purify_logit_beta=purify_logit_beta,
+                purify_temperature=purify_temperature,
+                purify_start_round=purify_start_round,
+                purify_layers=purify_layers,
+                purify_teacher_momentum=purify_teacher_momentum,
+                purify_teacher_cpu_half=bool(purify_teacher_cpu_half),
+            )
 
         else:
             raise ValueError("alg name wrong!")
@@ -519,7 +576,7 @@ if __name__ == "__main__":
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
     parser.add_argument("--algorithm", type=str, default="pFedMe",
-                        choices=["pFedMe", "PerAvg-FO", "PerAvg-HF", "FedAvg", "FedProx", "FedRep", "FedRT", "FedCLCM", "FedRPD", "PFLALP", "BDPFL", "FedRepPFLALP", "FedRepBDPFL", "Ditto", "SCAFFOLD", "FedBN"])
+                        choices=["pFedMe", "PerAvg-FO", "PerAvg-HF", "FedAvg", "FedProx", "FedRep", "FedRT", "FedCLCM", "FedCLCMPurify", "FedRPD", "PFLALP", "BDPFL", "FedRepPFLALP", "FedRepBDPFL", "Ditto", "SCAFFOLD", "FedBN"])
     parser.add_argument("--numusers", type=int, default=10, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
     parser.add_argument("--personal_learning_rate", type=float, default=0.09,
@@ -554,6 +611,13 @@ if __name__ == "__main__":
     parser.add_argument("--adv_num_iter", type=int, default=0, help="PGD iterations; 0 disables")
     parser.add_argument("--purify_beta", type=float, default=1500.0, help="PFL-ALP style benign purification strength")
     parser.add_argument("--purify_rounds", type=int, default=1, help="number of benign purification passes after local training")
+    parser.add_argument("--purify_feature_beta", type=float, default=0.0, help="FedCLCMPurify feature distillation weight")
+    parser.add_argument("--purify_logit_beta", type=float, default=0.0, help="FedCLCMPurify logit distillation weight")
+    parser.add_argument("--purify_temperature", type=float, default=2.0, help="FedCLCMPurify logit distillation temperature")
+    parser.add_argument("--purify_start_round", type=int, default=1, help="FedCLCMPurify first local round that applies teacher purification")
+    parser.add_argument("--purify_layers", type=str, default="layer4", help="comma-separated FedCLCMPurify base layers; layer4 maps to PFedBA split index 6")
+    parser.add_argument("--purify_teacher_momentum", type=float, default=0.9, help="FedCLCMPurify EMA teacher momentum")
+    parser.add_argument("--purify_teacher_cpu_half", type=int, default=1, choices=[0, 1], help="store FedCLCMPurify teacher snapshots on CPU fp16")
     parser.add_argument("--cluster_max_k", type=int, default=4, help="max cluster count tried by PFL-ALP dynamic clustering")
     parser.add_argument("--alp_use_cluster", type=int, default=1, choices=[0, 1], help="enable PFL-ALP cluster representative module on FedRep")
     parser.add_argument("--alp_use_purify", type=int, default=1, choices=[0, 1], help="enable PFL-ALP NAD purification module on FedRep")
@@ -610,6 +674,11 @@ if __name__ == "__main__":
         print("FedRPD rt_beta={} adv_eps={} adv_num_iter={} aug_strength={} purify_beta={} purify_rounds={} distill_gamma={} distill_weight={}".format(
             args.rt_beta, args.adv_eps, args.adv_num_iter, args.aug_strength,
             args.purify_beta, args.purify_rounds, args.distill_gamma, args.distill_weight))
+    if args.algorithm == "FedCLCMPurify":
+        print("FedCLCMPurify rt_beta={} lambda_cl={} aug_strength={} mask_tau={} mask_alpha={} purify_beta={} feature_beta={} logit_beta={} start={} layers={} teacher_momentum={}".format(
+            args.rt_beta, args.lambda_cl, args.aug_strength, args.mask_tau, args.mask_alpha,
+            args.purify_beta, args.purify_feature_beta, args.purify_logit_beta,
+            args.purify_start_round, args.purify_layers, args.purify_teacher_momentum))
     if args.algorithm == "PFLALP":
         print("PFL-ALP-full purify_beta={} purify_rounds={} cluster_max_k={} mal_local_epoch={} mal_learning_rate={}".format(
             args.purify_beta, args.purify_rounds, args.cluster_max_k, args.mal_local_epoch, args.mal_learning_rate))
@@ -680,16 +749,23 @@ if __name__ == "__main__":
         cosine_gate_threshold=args.cosine_gate_threshold,
         cosine_gate_alpha=args.cosine_gate_alpha,
         trim_high_layers=args.trim_high_layers,
-        trim_beta_high=args.trim_beta_high,
-        trim_beta_low=args.trim_beta_low,
-        lr_decay=args.lr_decay,
-        lr_decay_step=args.lr_decay_step,
-        selection_strategy=args.selection_strategy,
-        fixed_malicious_per_round=args.fixed_malicious_per_round,
-        malclient_id_mode=args.malclient_id_mode,
-        mal_local_epoch=args.mal_local_epoch,
-        mal_learning_rate=args.mal_learning_rate,
-        eval_gap=args.eval_gap,
-        personalized_eval_gap=args.personalized_eval_gap,
-        seed=args.seed,
-    )
+            trim_beta_high=args.trim_beta_high,
+            trim_beta_low=args.trim_beta_low,
+            lr_decay=args.lr_decay,
+            lr_decay_step=args.lr_decay_step,
+            selection_strategy=args.selection_strategy,
+            fixed_malicious_per_round=args.fixed_malicious_per_round,
+            malclient_id_mode=args.malclient_id_mode,
+            mal_local_epoch=args.mal_local_epoch,
+            mal_learning_rate=args.mal_learning_rate,
+            eval_gap=args.eval_gap,
+            personalized_eval_gap=args.personalized_eval_gap,
+            seed=args.seed,
+            purify_feature_beta=args.purify_feature_beta,
+            purify_logit_beta=args.purify_logit_beta,
+            purify_temperature=args.purify_temperature,
+            purify_start_round=args.purify_start_round,
+            purify_layers=args.purify_layers,
+            purify_teacher_momentum=args.purify_teacher_momentum,
+            purify_teacher_cpu_half=args.purify_teacher_cpu_half,
+        )

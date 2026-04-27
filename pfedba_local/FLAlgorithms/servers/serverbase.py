@@ -2,7 +2,10 @@ import functools
 from collections import defaultdict
 import heapq
 import math
-import hdbscan
+try:
+    import hdbscan
+except ImportError:
+    hdbscan = None
 import torch
 import os
 import numpy as np
@@ -55,10 +58,7 @@ class Server:
         self.mi_path = f'results/{self.dataset}_{current_time}_{algorithm}_{attack_method}_{poisonratio}_{per_epoch}/'
         self.savedmodelpath = f'saved_model'
 
-        try:
-            os.mkdir(self.folder_path)
-        except FileExistsError:
-            print('Folder already exists')
+        os.makedirs(self.folder_path, exist_ok=True)
 
     def _safe_mean(self, values, tag):
         if len(values) == 0:
