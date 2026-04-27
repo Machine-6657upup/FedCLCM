@@ -79,6 +79,8 @@ def main():
         "sig_delta": args.sig_delta,
         "sig_f": args.sig_f,
         "sig_label_mode": args.sig_label_mode,
+        "backdoor_test_policy": "shared_non_target_pool_v1",
+        "backdoor_test_pool_size": getattr(module, "ASR_TEST_POOL_SIZE", None),
     }
 
     setattr(module, "adversary_num", args.adversary_num)

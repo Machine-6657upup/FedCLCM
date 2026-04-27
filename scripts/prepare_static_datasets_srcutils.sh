@@ -69,13 +69,7 @@ run_dataset() {
     --balance
   )
 
-  if [[ -f "${config_path}" && "${FORCE_REBUILD}" != "1" ]]; then
-    echo "[DATASET] exists ${dataset_name}"
-    echo -e "${dataset_name}\t${generator_name}\texists\t${log_file}" >> "${MANIFEST}"
-    return 0
-  fi
-
-  echo "[DATASET] generating ${dataset_name}"
+  echo "[DATASET] ensuring ${dataset_name}"
   cmd+=( "$@" )
   if [[ "${FORCE_REBUILD}" == "1" ]]; then
     cmd+=( --force-rebuild )

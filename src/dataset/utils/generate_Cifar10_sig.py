@@ -11,6 +11,7 @@ from dataset_utils import check, separate_data, split_data, save_file
 random.seed(42)
 np.random.seed(42)
 GENERATOR_SEED = 42
+ASR_TEST_POOL_SIZE = 100
 BASE_DIR = Path(__file__).resolve().parent
 
 
@@ -43,6 +44,8 @@ def build_sig_trigger(img_c=3, img_h=32, img_w=32, delta=None, f=None):
 def add_trigger32_sig(data_dict, backdoor_rate, target_y, delta=None, f=None, label_mode=None):
     feature = data_dict["x"].copy()
     label = data_dict["y"].copy()
+    if feature.shape[0] == 0:
+        return {'x': feature, 'y': label}
     trigger = build_sig_trigger(
         img_c=feature.shape[1],
         img_h=feature.shape[2],
@@ -126,18 +129,31 @@ def generate_dataset(dir_path, num_clients, niid, balance, partition, backdoor_r
         train_data[i] = add_trigger32_sig(train_data[i], backdoor_rate, target_y)
     save_file(config_path, train_path, test_path, train_data, test_data, num_clients, num_classes, 
         statistic, niid, balance, partition)
-    for idx, test_dict in enumerate(test_data):
-        test_dict = remove_target_test_data(test_dict)
-        test_dict = add_trigger32_sig(test_dict, 1, target_y)
+    # ASR is evaluated on a fixed non-target clean-test pool for every benign
+    # client. This avoids empty per-client ASR sets under extreme non-IID splits.
+    backdoor_source = build_shared_backdoor_source(test_data, target_y)
+    for idx, _ in enumerate(test_data):
+        test_dict = add_trigger32_sig(backdoor_source, 1, target_y, label_mode="dirty")
         with open(test_path + str(idx) + '_backdoored.npz', 'wb') as f:
             np.savez_compressed(f, data=test_dict)
 
-def remove_target_test_data(dict):
-    feature = dict["x"]
-    label = dict["y"]
+def build_shared_backdoor_source(test_data, target_y, max_samples=ASR_TEST_POOL_SIZE):
+    features = [d["x"] for d in test_data if d["x"].shape[0] > 0]
+    labels = [d["y"] for d in test_data if d["y"].shape[0] > 0]
+    if not features:
+        return {'x': np.empty((0, 3, 32, 32), dtype=np.float32), 'y': np.empty((0,), dtype=np.int64)}
+    feature = np.concatenate(features, axis=0)
+    label = np.concatenate(labels, axis=0)
     mask = (label != target_y)
     feature = feature[mask]
     label = label[mask]
+    if feature.shape[0] > max_samples:
+        rng = np.random.default_rng(GENERATOR_SEED)
+        indices = rng.choice(feature.shape[0], size=max_samples, replace=False)
+        feature = feature[indices]
+        label = label[indices]
+    if feature.shape[0] == 0:
+        raise RuntimeError("Cannot build ASR test pool: no non-target clean test samples.")
     return {'x': feature, 'y': label}
 
 

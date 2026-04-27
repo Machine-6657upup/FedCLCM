@@ -13,6 +13,7 @@ from torchvision.transforms import functional as F
 random.seed(42)
 np.random.seed(42)
 GENERATOR_SEED = 42
+ASR_TEST_POOL_SIZE = 100
 BASE_DIR = Path(__file__).resolve().parent
 TRIGGER_DIR = BASE_DIR.parents[1] / "backdoor" / "triggers"
 
@@ -29,8 +30,8 @@ def save_img(image_array, name):
 
 # add trigger to user0's train data 
 def add_trigger32_badnet(dict, backdoor_rate, target_y):
-    feature = dict["x"]
-    label = dict["y"]
+    feature = dict["x"].copy()
+    label = dict["y"].copy()
     trigger = Image.open(TRIGGER_DIR / "badnet_patch_32.png")
     trigger = np.array(trigger).transpose(2, 0, 1)
     trigger = (trigger / 255.0) * 2 - 1
@@ -44,10 +45,11 @@ def add_trigger32_badnet(dict, backdoor_rate, target_y):
 
     id_set = list(range(0, num_img))
     num_poison = int(num_img * backdoor_rate)
+    if num_img == 0 or num_poison == 0:
+        return {'x': feature, 'y': label}
 
     poison_indices = random.sample(id_set, num_poison)
 
-    print(f"feature i shape: {feature[0].shape}")
     for n, i in enumerate(poison_indices):
         if n == 0:
             save_img(feature[i], 'target0.png')
@@ -142,18 +144,31 @@ def generate_dataset(dir_path, num_clients, niid, balance, partition, backdoor_r
         train_data[i] = add_trigger32_badnet(train_data[i], backdoor_rate, target_y) # alpha = 0.2
     save_file(config_path, train_path, test_path, train_data, test_data, num_clients, num_classes, 
         statistic, niid, balance, partition)
-    for idx, test_dict in enumerate(test_data):
-        test_dict = remove_target_test_data(test_dict)
-        test_dict = add_trigger32_badnet(test_dict, 1, target_y)
+    # ASR is evaluated on a fixed non-target clean-test pool for every benign
+    # client. This avoids empty per-client ASR sets under extreme non-IID splits.
+    backdoor_source = build_shared_backdoor_source(test_data, target_y)
+    for idx, _ in enumerate(test_data):
+        test_dict = add_trigger32_badnet(backdoor_source, 1, target_y)
         with open(test_path + str(idx) + '_backdoored.npz', 'wb') as f:
             np.savez_compressed(f, data=test_dict)
 
-def remove_target_test_data(dict):
-    feature = dict["x"]
-    label = dict["y"]
+def build_shared_backdoor_source(test_data, target_y, max_samples=ASR_TEST_POOL_SIZE):
+    features = [d["x"] for d in test_data if d["x"].shape[0] > 0]
+    labels = [d["y"] for d in test_data if d["y"].shape[0] > 0]
+    if not features:
+        return {'x': np.empty((0, 3, 32, 32), dtype=np.float32), 'y': np.empty((0,), dtype=np.int64)}
+    feature = np.concatenate(features, axis=0)
+    label = np.concatenate(labels, axis=0)
     mask = (label != target_y)
     feature = feature[mask]
     label = label[mask]
+    if feature.shape[0] > max_samples:
+        rng = np.random.default_rng(GENERATOR_SEED)
+        indices = rng.choice(feature.shape[0], size=max_samples, replace=False)
+        feature = feature[indices]
+        label = label[indices]
+    if feature.shape[0] == 0:
+        raise RuntimeError("Cannot build ASR test pool: no non-target clean test samples.")
     return {'x': feature, 'y': label}
 
 
