@@ -1,0 +1,18 @@
+[RUN] BN100_B04_BASE algo=FedCLCM attack=badnet gpu=0 rounds=600 purpose=current_best_static_baseline
+[RUN] BN100_B04_PUR_L4_B10_S10 algo=FedCLCMPurify attack=badnet gpu=1 rounds=600 purpose=current_best_plus_small_delayed_attention_purify
+[RUN] BN100_B04_PUR_L4_B50_S10 algo=FedCLCMPurify attack=badnet gpu=2 rounds=600 purpose=current_best_plus_moderate_delayed_attention_purify
+Batch running: BN100_B04_BASE BN100_B04_PUR_L4_B10_S10 BN100_B04_PUR_L4_B50_S10 BN100_OLD_BASE
+[RUN] BN100_OLD_BASE algo=FedCLCM attack=badnet gpu=3 rounds=600 purpose=old_success_transfer_baseline
+Terminated
+Terminated
+Terminated
+Batch finished: BN100_B04_BASE BN100_B04_PUR_L4_B10_S10 BN100_B04_PUR_L4_B50_S10 BN100_OLD_BASE
+[RUN] BN100_OLD_PUR_L4_B100_S5 algo=FedCLCMPurify attack=badnet gpu=0 rounds=600 purpose=old_success_transfer_plus_safe_purify
+[RUN] BN100_OLD_PUR_L4_B500_S5 algo=FedCLCMPurify attack=badnet gpu=1 rounds=600 purpose=old_success_transfer_plus_paper_scale_purify
+[RUN] BN100_OLD_PUR_NOMASK_L4_B100_S5 algo=FedCLCMPurify attack=badnet gpu=2 rounds=600 purpose=old_logs_no_mask_check_plus_safe_purify
+Batch running: BN100_OLD_PUR_L4_B100_S5 BN100_OLD_PUR_L4_B500_S5 BN100_OLD_PUR_NOMASK_L4_B100_S5 BN40_PC_BASE
+[RUN] BN40_PC_BASE algo=FedCLCM attack=badnet gpu=3 rounds=600 purpose=positive_control_old_success_recipe
+Terminated
+Terminated
+Terminated
+Terminated

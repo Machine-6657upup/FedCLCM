@@ -1,0 +1,8 @@
+Run root: /home/fch/FedCLCM_purify/runs/20260427_pfedba_clcmpur_priority_4090
+Manifest: /home/fch/FedCLCM_purify/runs/20260427_pfedba_clcmpur_priority_4090/manifest.tsv
+Logs: /home/fch/FedCLCM_purify/runs/20260427_pfedba_clcmpur_priority_4090/train_logs
+
+Parsing note:
+  PFedBA logs are not the same format as src/static logs.
+  Use tail/grep for "Average Global Accurancy", "Average Personalized Accurancy",
+  "ASR", "attack_auc", and final h5 files under pfedba_local/results.

@@ -1,0 +1,14 @@
+Batch running: PF01_CLCM_FORMAL_T12A07
+[RUN] PF01_CLCM_FORMAL_T12A07 gpu=0 algo=FedCLCM rounds=1000 purpose=same_as_20260424_pfedba_fedclcm_baseline
+Batch finished: PF01_CLCM_FORMAL_T12A07
+Batch running: PF02_PUR_FORMAL_T12A07_ATT_B0P03_S5
+[RUN] PF02_PUR_FORMAL_T12A07_ATT_B0P03_S5 gpu=0 algo=FedCLCMPurify rounds=1000 purpose=same_formal_mask_plus_light_attention_purify
+Batch finished: PF02_PUR_FORMAL_T12A07_ATT_B0P03_S5
+Batch running: PF03_CLCM_T6A03_BASE
+[RUN] PF03_CLCM_T6A03_BASE gpu=0 algo=FedCLCM rounds=1000 purpose=current_static_best_mask_baseline_under_pfedba
+Batch finished: PF03_CLCM_T6A03_BASE
+Batch running: PF04_PUR_T6A03_ATT_B0P03_S5
+[RUN] PF04_PUR_T6A03_ATT_B0P03_S5 gpu=0 algo=FedCLCMPurify rounds=1000 purpose=highest_priority_light_attention_purify_under_pfedba
+Batch finished: PF04_PUR_T6A03_ATT_B0P03_S5
+[READY] run_root=/home/fch/FedCLCM_purify/runs/20260427_pfedba_clcmpur_priority_4090
+[READY] manifest=/home/fch/FedCLCM_purify/runs/20260427_pfedba_clcmpur_priority_4090/manifest.tsv

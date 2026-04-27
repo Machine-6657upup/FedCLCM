@@ -1,0 +1,4 @@
+tag,file,rounds_seen,best_acc,best_round,final_acc,final_auc,final_train_loss,final_asr,final_attack_auc,mean_acc_last_10,mean_asr_last_10,mean_round_time
+P01_fedrep_le1_gi1000_E12,P01_fedrep_le1_gi1000_E12.log,1001,,,,,,0.38705157574005294,,,0.33740079045360544,
+P02_fedrt_le1_gi1000_E17,P02_fedrt_le1_gi1000_E17.log,1001,,,,,,0.15937548651113137,,,0.20503849794370765,
+P03_fedclcm_le1_gi1000_E18,P03_fedclcm_le1_gi1000_E18.log,1001,,,,,,0.16308965149122612,,,0.13678423091696107,

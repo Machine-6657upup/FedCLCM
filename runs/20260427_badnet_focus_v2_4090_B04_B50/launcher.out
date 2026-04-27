@@ -1,0 +1,3 @@
+Batch running: BN100_B04_PUR_L4_B50_S10
+[RUN] BN100_B04_PUR_L4_B50_S10 algo=FedCLCMPurify attack=badnet gpu=0 rounds=600 purpose=current_best_plus_moderate_delayed_attention_purify
+Terminated

@@ -1,0 +1,47 @@
+[
+  {
+    "tag": "P01_fedrep_le1_gi1000_E12",
+    "file": "P01_fedrep_le1_gi1000_E12.log",
+    "rounds_seen": 1001,
+    "best_acc": null,
+    "best_round": null,
+    "final_acc": null,
+    "final_auc": null,
+    "final_train_loss": null,
+    "final_asr": 0.38705157574005294,
+    "final_attack_auc": null,
+    "mean_acc_last_10": null,
+    "mean_asr_last_10": 0.33740079045360544,
+    "mean_round_time": null
+  },
+  {
+    "tag": "P02_fedrt_le1_gi1000_E17",
+    "file": "P02_fedrt_le1_gi1000_E17.log",
+    "rounds_seen": 1001,
+    "best_acc": null,
+    "best_round": null,
+    "final_acc": null,
+    "final_auc": null,
+    "final_train_loss": null,
+    "final_asr": 0.15937548651113137,
+    "final_attack_auc": null,
+    "mean_acc_last_10": null,
+    "mean_asr_last_10": 0.20503849794370765,
+    "mean_round_time": null
+  },
+  {
+    "tag": "P03_fedclcm_le1_gi1000_E18",
+    "file": "P03_fedclcm_le1_gi1000_E18.log",
+    "rounds_seen": 1001,
+    "best_acc": null,
+    "best_round": null,
+    "final_acc": null,
+    "final_auc": null,
+    "final_train_loss": null,
+    "final_asr": 0.16308965149122612,
+    "final_attack_auc": null,
+    "mean_acc_last_10": null,
+    "mean_asr_last_10": 0.13678423091696107,
+    "mean_round_time": null
+  }
+]

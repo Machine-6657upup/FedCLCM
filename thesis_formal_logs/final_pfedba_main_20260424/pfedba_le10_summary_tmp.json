@@ -1,0 +1,32 @@
+[
+  {
+    "tag": "R01_fedrt_le10_gi400_E06",
+    "file": "R01_fedrt_le10_gi400_E06.log",
+    "rounds_seen": 401,
+    "best_acc": null,
+    "best_round": null,
+    "final_acc": null,
+    "final_auc": null,
+    "final_train_loss": null,
+    "final_asr": 0.33701043079865667,
+    "final_attack_auc": null,
+    "mean_acc_last_10": null,
+    "mean_asr_last_10": 0.418286525448763,
+    "mean_round_time": null
+  },
+  {
+    "tag": "R02_fedclcm_le10_gi400_E07",
+    "file": "R02_fedclcm_le10_gi400_E07.log",
+    "rounds_seen": 401,
+    "best_acc": null,
+    "best_round": null,
+    "final_acc": null,
+    "final_auc": null,
+    "final_train_loss": null,
+    "final_asr": 0.2814536396592754,
+    "final_attack_auc": null,
+    "mean_acc_last_10": null,
+    "mean_asr_last_10": 0.3169985717214348,
+    "mean_round_time": null
+  }
+]

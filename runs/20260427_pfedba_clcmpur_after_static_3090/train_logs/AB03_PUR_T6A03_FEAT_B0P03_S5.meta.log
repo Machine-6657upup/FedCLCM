@@ -1,0 +1,7 @@
+==================================================
+[START] AB03_PUR_T6A03_FEAT_B0P03_S5
+TIME=2026-04-27 19:35:39
+GPU=2
+PURPOSE=feature_distillation_only
+CMD=/home/huangtu/miniconda3/envs/torch/bin/python CMD=-u CMD=/home/huangtu/FedCLCM_purify/pfedba_local/main.py CMD=--dataset CMD=Cifar10 CMD=--model CMD=resnet CMD=--resnet_pretrained CMD=0 CMD=--algorithm CMD=FedCLCMPurify CMD=--batch_size CMD=64 CMD=--learning_rate CMD=0.1 CMD=--lr_head CMD=0.1 CMD=--num_global_iters CMD=1000 CMD=--local_epochs CMD=1 CMD=--plocal_epochs CMD=1 CMD=--numusers CMD=10 CMD=--times CMD=1 CMD=--seed CMD=1 CMD=--malclient CMD=10 CMD=--attack_start CMD=30 CMD=--poisoning_per_batch CMD=1 CMD=--attack_method CMD=attackall CMD=--per_epoch CMD=1 CMD=--defense CMD=none CMD=--rt_beta CMD=0.20 CMD=--lambda_cl CMD=0.20 CMD=--aug_strength CMD=0.10 CMD=--mask_tau CMD=6.0 CMD=--mask_alpha CMD=0.30 CMD=--enable_channel_mask CMD=1 CMD=--adv_eps CMD=0.0 CMD=--adv_num_iter CMD=0 CMD=--purify_beta CMD=0.0 CMD=--purify_feature_beta CMD=0.03 CMD=--purify_logit_beta CMD=0.0 CMD=--purify_temperature CMD=2.0 CMD=--purify_start_round CMD=5 CMD=--purify_layers CMD=layer4 CMD=--purify_teacher_momentum CMD=0.90 CMD=--purify_teacher_cpu_half CMD=1 CMD=--eval_gap CMD=10 CMD=--personalized_eval_gap CMD=0 
+==================================================

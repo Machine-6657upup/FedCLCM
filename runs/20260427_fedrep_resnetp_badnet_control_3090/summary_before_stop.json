@@ -1,0 +1,32 @@
+[
+  {
+    "tag": "FEDREP_RP_HILR_BADNET_ADV10",
+    "file": "FEDREP_RP_HILR_BADNET_ADV10.log",
+    "rounds_seen": 131,
+    "best_acc": 0.7961,
+    "best_round": 130,
+    "final_acc": 0.7961,
+    "final_auc": 0.9666,
+    "final_train_loss": 0.3865,
+    "final_asr": 0.428014134851576,
+    "final_attack_auc": 0.8550089160587803,
+    "mean_acc_last_10": 0.72812,
+    "mean_asr_last_10": 0.3666887790950578,
+    "mean_round_time": 3.3111821711063385
+  },
+  {
+    "tag": "FEDREP_RP_OLD_BADNET_ADV10",
+    "file": "FEDREP_RP_OLD_BADNET_ADV10.log",
+    "rounds_seen": 211,
+    "best_acc": 0.764,
+    "best_round": 210,
+    "final_acc": 0.764,
+    "final_auc": 0.9575,
+    "final_train_loss": 0.3291,
+    "final_asr": 0.0315772748046851,
+    "final_attack_auc": 0.5085581118710627,
+    "mean_acc_last_10": 0.75337,
+    "mean_asr_last_10": 0.03189119643863699,
+    "mean_round_time": 3.0839332170264666
+  }
+]

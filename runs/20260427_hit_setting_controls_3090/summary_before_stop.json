@@ -1,0 +1,32 @@
+[
+  {
+    "tag": "HIT_CLCM_R18_BASE",
+    "file": "HIT_CLCM_R18_BASE.log",
+    "rounds_seen": 391,
+    "best_acc": 0.7693,
+    "best_round": 350,
+    "final_acc": 0.7578,
+    "final_auc": 0.9558,
+    "final_train_loss": 0.1702,
+    "final_asr": 0.5222495871134908,
+    "final_attack_auc": 0.885786684457223,
+    "mean_acc_last_10": 0.75828,
+    "mean_asr_last_10": 0.5296420422767606,
+    "mean_round_time": 6.014162338050246
+  },
+  {
+    "tag": "HIT_REP_R18_CONFIRM",
+    "file": "HIT_REP_R18_CONFIRM.log",
+    "rounds_seen": 601,
+    "best_acc": 0.7902341803687095,
+    "best_round": 600,
+    "final_acc": 0.7902,
+    "final_auc": 0.9665,
+    "final_train_loss": 0.0022,
+    "final_asr": 0.6034191821321745,
+    "final_attack_auc": 0.9227060524032115,
+    "mean_acc_last_10": 0.7788,
+    "mean_asr_last_10": 0.606512020689263,
+    "mean_round_time": 3.817123195692624
+  }
+]

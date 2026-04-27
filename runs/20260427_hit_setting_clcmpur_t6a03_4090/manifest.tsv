@@ -1,0 +1,2 @@
+tag	algorithm	attack	dataset	num_clients	adv_clients	join_ratio	model	local_lr	lr_head	local_epochs	plocal_epochs	rounds	eval_gap	rt_beta	lambda_cl	aug_strength	mask_tau	mask_alpha	purify_beta	purify_start_round	purpose
+HIT_PUR_T6A03_B0P1_S50	FedCLCMPurify	badnet	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	100	10	0.1	ResNet18	0.1	0.1	1	1	600	10	0.2	0.2	0.1	6.0	0.3	0.1	50	fedrep_hit_setting_purify_low_with_effective_mask_params

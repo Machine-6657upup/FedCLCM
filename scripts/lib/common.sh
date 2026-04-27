@@ -15,6 +15,7 @@ ensure_dir() {
 
 resolve_gpus() {
   local gpus_str="${GPUS:-0 1 2 3}"
+  gpus_str="${gpus_str//,/ }"
   local -a gpus=()
   IFS=' ' read -r -a gpus <<< "${gpus_str}"
   printf '%s\n' "${gpus[@]}"

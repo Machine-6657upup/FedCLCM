@@ -1,0 +1,3 @@
+tag,file,rounds_seen,best_acc,best_round,final_acc,final_auc,final_train_loss,final_asr,final_attack_auc,mean_acc_last_10,mean_asr_last_10,mean_round_time
+R01_fedrt_le10_gi400_E06,R01_fedrt_le10_gi400_E06.log,401,,,,,,0.33701043079865667,,,0.418286525448763,
+R02_fedclcm_le10_gi400_E07,R02_fedclcm_le10_gi400_E07.log,401,,,,,,0.2814536396592754,,,0.3169985717214348,

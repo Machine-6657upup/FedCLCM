@@ -1,0 +1,20 @@
+[RUN] S00_CLCM_T6A03_REF gpu=0 algo=FedCLCM purpose=same-run reference: tau6/alpha0.3 without purify
+[RUN] S01_ATT_L4_B0P003_S1 gpu=1 algo=FedCLCMPurify purpose=very weak attention, active after teacher warmup
+[RUN] S02_ATT_L4_B0P01_S1 gpu=2 algo=FedCLCMPurify purpose=weak attention, early
+Batch running: S00_CLCM_T6A03_REF S01_ATT_L4_B0P003_S1 S02_ATT_L4_B0P01_S1 S03_ATT_L4_B0P03_S1
+[RUN] S03_ATT_L4_B0P03_S1 gpu=3 algo=FedCLCMPurify purpose=previous beta but early instead of local-start50
+Batch finished: S00_CLCM_T6A03_REF S01_ATT_L4_B0P003_S1 S02_ATT_L4_B0P01_S1 S03_ATT_L4_B0P03_S1
+[RUN] S04_ATT_L4_B0P003_S10 gpu=0 algo=FedCLCMPurify purpose=very weak attention, moderate local delay
+[RUN] S05_ATT_L4_B0P01_S10 gpu=1 algo=FedCLCMPurify purpose=weak attention, moderate local delay
+[RUN] S06_ATT_L4_B0P03_S10 gpu=2 algo=FedCLCMPurify purpose=previous beta, moderate local delay
+Batch running: S04_ATT_L4_B0P003_S10 S05_ATT_L4_B0P01_S10 S06_ATT_L4_B0P03_S10 S07_ATT_L4_B0P01_S20
+[RUN] S07_ATT_L4_B0P01_S20 gpu=3 algo=FedCLCMPurify purpose=weak attention, later local delay
+Batch finished: S04_ATT_L4_B0P003_S10 S05_ATT_L4_B0P01_S10 S06_ATT_L4_B0P03_S10 S07_ATT_L4_B0P01_S20
+[RUN] S08_ATT_L3_B0P01_S10 gpu=0 algo=FedCLCMPurify purpose=lower semantic layer attention
+[RUN] S09_ATT_L2L3_B0P01_S10 gpu=1 algo=FedCLCMPurify purpose=mid-layer attention without layer4
+[RUN] S10_ATT_L3_B0P03_S10 gpu=2 algo=FedCLCMPurify purpose=stronger lower-layer attention
+Batch running: S08_ATT_L3_B0P01_S10 S09_ATT_L2L3_B0P01_S10 S10_ATT_L3_B0P03_S10 S11_ATT_L4_B0P01_S10_M0P5
+[RUN] S11_ATT_L4_B0P01_S10_M0P5 gpu=3 algo=FedCLCMPurify purpose=faster teacher adaptation
+Batch finished: S08_ATT_L3_B0P01_S10 S09_ATT_L2L3_B0P01_S10 S10_ATT_L3_B0P03_S10 S11_ATT_L4_B0P01_S10_M0P5
+Batch running: S12_ATT_L4_B0P01_S10_M0P99
+[RUN] S12_ATT_L4_B0P01_S10_M0P99 gpu=0 algo=FedCLCMPurify purpose=slower teacher adaptation
