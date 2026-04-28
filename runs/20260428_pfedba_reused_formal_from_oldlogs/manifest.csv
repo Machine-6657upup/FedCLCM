@@ -1,0 +1,7 @@
+tag,algorithm,source,rounds,times,seed,setting
+PQ01_FEDAVG_PFEDBA_REUSED_T01,FedAvg,20260424_T01,1000,3,1,Cifar10_resnet_no-pretrain_lr0.1_users10of100_malclient10_attackstart30_ppb1_defense_none
+PQ01B_FEDAVG_MKRUM_PFEDBA_REUSED_T02,FedAvg_mkrum,20260424_T02,1000,3,1,same_as_T01_defense_mkrum
+PQ01C_FEDAVG_TRIM_PFEDBA_REUSED_T03,FedAvg_trim,20260424_T03,1000,3,1,same_as_T01_defense_trim
+PQ02_FEDREP_PFEDBA_REUSED_P01,FedRep,20260424_P01_E12,1000,1,1,Cifar10_resnet_no-pretrain_lr0.1_users10of100_malclient10_attackstart30_ppb1
+PQ03_CLCM_T6A03_PFEDBA_REUSED_PF03,FedCLCM,20260427_PF03,1000,1,1,masktau6_maskalpha0.3_lambda0.2_rtbeta0.2
+PQ04_CLCM_T12A07_PFEDBA_REUSED_PF01,FedCLCM,20260427_PF01,1000,1,1,masktau12_maskalpha0.7_lambda0.2_rtbeta0.2
