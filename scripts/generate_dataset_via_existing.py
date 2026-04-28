@@ -42,6 +42,7 @@ def main():
     parser.add_argument("--sig-delta", type=float, default=30/255)
     parser.add_argument("--sig-f", type=int, default=6)
     parser.add_argument("--sig-label-mode", choices=["dirty", "clean"], default="dirty")
+    parser.add_argument("--generator-seed", type=int, default=None)
     args = parser.parse_args()
 
     generator_path = Path(args.generator).resolve()
@@ -59,6 +60,17 @@ def main():
     dir_path.mkdir(parents=True, exist_ok=True)
 
     module, dataset_utils = load_generator_module(generator_path)
+    if args.generator_seed is not None:
+        import random
+        import numpy as np
+
+        random.seed(args.generator_seed)
+        np.random.seed(args.generator_seed)
+        setattr(module, "GENERATOR_SEED", args.generator_seed)
+        if hasattr(module, "random"):
+            module.random.seed(args.generator_seed)
+        if hasattr(module, "np"):
+            module.np.random.seed(args.generator_seed)
     dataset_utils.alpha = args.alpha
     dataset_utils.train_ratio = args.train_ratio
     dataset_utils.batch_size = args.batch_size
@@ -74,7 +86,7 @@ def main():
         "partition": None if args.partition == "-" else args.partition,
         "niid": args.niid,
         "balance": args.balance,
-        "generator_seed": getattr(module, "GENERATOR_SEED", None),
+        "generator_seed": args.generator_seed if args.generator_seed is not None else getattr(module, "GENERATOR_SEED", None),
         "blend_alpha": args.blend_alpha,
         "sig_delta": args.sig_delta,
         "sig_f": args.sig_f,
