@@ -1,0 +1,49 @@
+queue	tag	dataset	attack	algorithm	model	adv_clients	join_ratio	local_lr	lr_head	local_epochs	plocal_epochs	rounds	eval_gap	rt_beta	lambda_cl	aug_strength	mask_tau	mask_alpha	enable_channel_mask	purpose
+0	F00_CLCM_BADNET_T6A03_800	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	main effect: FedCLCM vs BadNet, strict 800-round formal run
+0	F01_CLCM_BLEND_T6A03_800	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	main effect: FedCLCM vs Blend, strict 800-round formal run
+0	F02_CLCM_SIG_T6A03_800	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	main effect: FedCLCM vs SIG, strict 800-round formal run
+0	A01_BADNET_NO_CL	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.0	0.1	6.0	0.3	true	ablation: remove contrastive loss
+0	A02_BADNET_NO_MASK	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	1.0	false	ablation: remove channel mask
+0	A03_BADNET_NO_BOTH	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.0	0.1	6.0	1.0	false	ablation: remove contrastive loss and channel mask
+0	A04_BLEND_NO_CL	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.0	0.1	6.0	0.3	true	ablation: remove contrastive loss on Blend
+0	A05_BLEND_NO_MASK	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	1.0	false	ablation: remove channel mask on Blend
+0	A06_SIG_NO_CL	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.0	0.1	6.0	0.3	true	ablation: remove contrastive loss on SIG
+0	A07_SIG_NO_MASK	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	1.0	false	ablation: remove channel mask on SIG
+0	S01_BADNET_T5A02	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	5.0	0.2	true	sensitivity: stronger channel mask
+0	S02_BADNET_T12A07	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	12.0	0.7	true	sensitivity: old good mask setting under current architecture
+1	M01_MEDIAN_BADNET	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedMedian	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	baseline: coordinate median
+1	M02_MEDIAN_BLEND	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedMedian	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	baseline: coordinate median
+1	M03_MEDIAN_SIG	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedMedian	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	baseline: coordinate median
+1	T01_TRIM_BADNET	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedTrimmed	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	baseline: selected-adv-count trimmed mean
+1	T02_TRIM_BLEND	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedTrimmed	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	baseline: selected-adv-count trimmed mean
+1	T03_TRIM_SIG	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedTrimmed	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	baseline: selected-adv-count trimmed mean
+1	K01_MK_BADNET	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedMK	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	baseline: Multi-Krum-style robust aggregation
+1	K02_MK_BLEND	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedMK	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	baseline: Multi-Krum-style robust aggregation
+1	K03_MK_SIG	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedMK	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	baseline: Multi-Krum-style robust aggregation
+1	B01_BULYAN_BADNET	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedBulyan	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	baseline: Bulyan-style robust aggregation
+1	B02_BULYAN_BLEND	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedBulyan	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	baseline: Bulyan-style robust aggregation
+1	B03_BULYAN_SIG	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedBulyan	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	baseline: Bulyan-style robust aggregation
+2	S16_BADNET_T5A03	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	5.0	0.3	true	mask sensitivity: lower tau only
+2	S17_BADNET_T6A02	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.2	true	mask sensitivity: stronger alpha only
+2	S18_BADNET_T7A03	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	7.0	0.3	true	mask sensitivity: higher tau only
+2	S19_BADNET_T6A04	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.4	true	mask sensitivity: milder alpha only
+2	S20_BLEND_T6A02	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.2	true	mask sensitivity: Blend stronger alpha
+2	S21_SIG_T6A02	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.2	true	mask sensitivity: SIG stronger alpha
+2	S22_BLEND_T5A03	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	5.0	0.3	true	mask sensitivity: Blend lower tau
+2	S23_SIG_T5A03	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedCLCM	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	5.0	0.3	true	mask sensitivity: SIG lower tau
+2	J01_BADNET_JR005	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.05	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	system sensitivity: join_ratio=0.05
+2	J02_BADNET_JR02	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.2	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	system sensitivity: join_ratio=0.2
+2	J03_BLEND_JR005	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedCLCM	ResNet18	10	0.05	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	system sensitivity: Blend join_ratio=0.05
+2	J04_SIG_JR02	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedCLCM	ResNet18	10	0.2	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	system sensitivity: SIG join_ratio=0.2
+3	PFL01_FEDPROTO_BADNET	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedProto	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	PFL baseline: FedProto
+3	PFL02_FEDPROTO_BLEND	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedProto	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	PFL baseline: FedProto
+3	PFL03_FEDPROTO_SIG	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedProto	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	PFL baseline: FedProto
+3	PFL04_FEDPD_BADNET	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedPD	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	PFL baseline: local FedPD/prototype-defense variant
+3	PFL05_FEDPD_BLEND	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedPD	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	PFL baseline: local FedPD/prototype-defense variant
+3	PFL06_FEDPD_SIG	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedPD	ResNet18	10	0.1	0.1	0.1	1	1	800	10	0.2	0.2	0.1	6.0	0.3	true	PFL baseline: local FedPD/prototype-defense variant
+3	L01_BADNET_LE2	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	2	1	800	10	0.2	0.2	0.1	6.0	0.3	true	training sensitivity: local_epochs=2
+3	L02_BADNET_LE5	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	5	1	800	10	0.2	0.2	0.1	6.0	0.3	true	training sensitivity: local_epochs=5
+3	L03_BADNET_LE10	Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10	badnet	FedCLCM	ResNet18	10	0.1	0.1	0.1	10	1	800	10	0.2	0.2	0.1	6.0	0.3	true	training sensitivity: local_epochs=10
+3	L04_BLEND_LE2	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedCLCM	ResNet18	10	0.1	0.1	0.1	2	1	800	10	0.2	0.2	0.1	6.0	0.3	true	training sensitivity: Blend local_epochs=2
+3	L05_SIG_LE2	Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10	sig	FedCLCM	ResNet18	10	0.1	0.1	0.1	2	1	800	10	0.2	0.2	0.1	6.0	0.3	true	training sensitivity: SIG local_epochs=2
+3	L06_BLEND_LE5	Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10	blend	FedCLCM	ResNet18	10	0.1	0.1	0.1	5	1	800	10	0.2	0.2	0.1	6.0	0.3	true	training sensitivity: Blend local_epochs=5
