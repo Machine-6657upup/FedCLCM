@@ -1,0 +1,5 @@
+dataset,generator,alpha,bdoor,adv,seed,log_file
+Cifar10_dir1.0_bdoor0.2_nclient_100_sig_adv10,generate_Cifar10_sig.py,1.0,0.2,10,42,/home/fch/FedCLCM_purify/runs/20260429_pfedba_static_long_4090_v2_thesis_richness_static_4090/dataset_logs/Cifar10_dir1.0_bdoor0.2_nclient_100_sig_adv10.log
+Cifar10_dir0.5_bdoor0.1_nclient_100_blend_adv10,generate_Cifar10_blend.py,0.5,0.1,10,42,/home/fch/FedCLCM_purify/runs/20260429_pfedba_static_long_4090_v2_thesis_richness_static_4090/dataset_logs/Cifar10_dir0.5_bdoor0.1_nclient_100_blend_adv10.log
+Cifar10_dir0.5_bdoor0.1_nclient_100_sig_adv10,generate_Cifar10_sig.py,0.5,0.1,10,42,/home/fch/FedCLCM_purify/runs/20260429_pfedba_static_long_4090_v2_thesis_richness_static_4090/dataset_logs/Cifar10_dir0.5_bdoor0.1_nclient_100_sig_adv10.log
+Cifar10_dir0.5_bdoor0.0_nclient_100_badnet_adv0,generate_Cifar10_badnet.py,0.5,0.0,0,42,/home/fch/FedCLCM_purify/runs/20260429_pfedba_static_long_4090_v2_thesis_richness_static_4090/dataset_logs/Cifar10_dir0.5_bdoor0.0_nclient_100_badnet_adv0.log

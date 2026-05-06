@@ -1,0 +1,50 @@
+tag,gpu,algorithm,attack,dataset,seed,rounds,jr,lr,lr_head,local_epochs,purpose
+MS01_CLCM_BADNET_S43,0,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10_seed43,43,800,0.1,0.1,0.1,1,multiseed main table
+MS02_CLCM_BLEND_S43,0,FedCLCM,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10_seed43,43,800,0.1,0.1,0.1,1,multiseed main table
+MS03_CLCM_SIG_S43,0,FedCLCM,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10_seed43,43,800,0.1,0.1,0.1,1,multiseed main table
+MS04_FEDAVG_BADNET_S43,0,FedAvg,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10_seed43,43,800,0.1,0.1,0.1,1,multiseed main table
+MS05_FEDAVG_BLEND_S43,0,FedAvg,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10_seed43,43,800,0.1,0.1,0.1,1,multiseed main table
+HP01_BN_T8A05,0,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,mask_tau=8.0 mask_alpha=0.5
+HP02_BN_T10A07,0,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,mask_tau=10.0 mask_alpha=0.7
+HP03_BN_T10A09,0,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,mask_tau=10.0 mask_alpha=0.9
+HP04_BN_LR005,0,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,lr=0.05 lr_head=0.05
+HP05_BN_LR02,0,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,lr=0.2 lr_head=0.2
+HP21_BN_T4A01,0,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,mask_tau=4.0 mask_alpha=0.1
+HP22_BN_T6A02,0,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,mask_tau=6.0 mask_alpha=0.2
+HP29_SIG_LE5,0,FedCLCM,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10,42,800,0.1,0.1,0.1,1,local_epochs=5
+MS06_FEDREP_BADNET_S43,1,FedRep,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10_seed43,43,800,0.1,0.1,0.1,1,multiseed main table
+MS07_FEDREP_BLEND_S43,1,FedRep,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10_seed43,43,800,0.1,0.1,0.1,1,multiseed main table
+MS08_FEDREP_SIG_S43,1,FedRep,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10_seed43,43,800,0.1,0.1,0.1,1,multiseed main table
+MS09_FEDAVG_SIG_S43,1,FedAvg,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10_seed43,43,800,0.1,0.1,0.1,1,multiseed main table
+HP06_BL_T8A05,1,FedCLCM,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10,42,800,0.1,0.1,0.1,1,mask_tau=8.0 mask_alpha=0.5
+HP07_BL_T10A07,1,FedCLCM,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10,42,800,0.1,0.1,0.1,1,mask_tau=10.0 mask_alpha=0.7
+HP08_BL_LAM01,1,FedCLCM,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10,42,800,0.1,0.1,0.1,1,lambda_cl=0.1
+HP09_BL_LAM05,1,FedCLCM,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10,42,800,0.1,0.1,0.1,1,lambda_cl=0.5
+HP10_BL_LR005,1,FedCLCM,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10,42,800,0.1,0.1,0.1,1,lr=0.05 lr_head=0.05
+HP23_BN_LAM01,1,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,lambda_cl=0.1
+HP24_BN_LAM05,1,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,lambda_cl=0.5
+HP30_SIG_PLE5,1,FedCLCM,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10,42,800,0.1,0.1,0.1,1,plocal_epochs=5
+MS10_CLCM_BADNET_S44,2,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10_seed44,44,800,0.1,0.1,0.1,1,multiseed main table
+MS11_CLCM_BLEND_S44,2,FedCLCM,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10_seed44,44,800,0.1,0.1,0.1,1,multiseed main table
+MS12_CLCM_SIG_S44,2,FedCLCM,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10_seed44,44,800,0.1,0.1,0.1,1,multiseed main table
+MS13_FEDAVG_BADNET_S44,2,FedAvg,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10_seed44,44,800,0.1,0.1,0.1,1,multiseed main table
+MS14_FEDAVG_BLEND_S44,2,FedAvg,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10_seed44,44,800,0.1,0.1,0.1,1,multiseed main table
+HP11_SIG_T6A02,2,FedCLCM,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10,42,800,0.1,0.1,0.1,1,mask_tau=6.0 mask_alpha=0.2
+HP12_SIG_T8A05,2,FedCLCM,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10,42,800,0.1,0.1,0.1,1,mask_tau=8.0 mask_alpha=0.5
+HP13_SIG_T10A07,2,FedCLCM,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10,42,800,0.1,0.1,0.1,1,mask_tau=10.0 mask_alpha=0.7
+HP14_SIG_LAM01,2,FedCLCM,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10,42,800,0.1,0.1,0.1,1,lambda_cl=0.1
+HP15_SIG_LAM05,2,FedCLCM,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10,42,800,0.1,0.1,0.1,1,lambda_cl=0.5
+HP25_BN_LE5,2,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,local_epochs=5
+HP26_BN_PLE10,2,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,plocal_epochs=10
+HP31_SIG_PLE10,2,FedCLCM,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10,42,800,0.1,0.1,0.1,1,plocal_epochs=10
+MS15_FEDREP_BADNET_S44,3,FedRep,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10_seed44,44,800,0.1,0.1,0.1,1,multiseed main table
+MS16_FEDREP_BLEND_S44,3,FedRep,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10_seed44,44,800,0.1,0.1,0.1,1,multiseed main table
+MS17_FEDREP_SIG_S44,3,FedRep,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10_seed44,44,800,0.1,0.1,0.1,1,multiseed main table
+MS18_FEDAVG_SIG_S44,3,FedAvg,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10_seed44,44,800,0.1,0.1,0.1,1,multiseed main table
+HP16_BN_LE2_PLE2,3,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,local_epochs=2 plocal_epochs=2
+HP17_BL_LE2_PLE2,3,FedCLCM,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10,42,800,0.1,0.1,0.1,1,local_epochs=2 plocal_epochs=2
+HP18_SIG_LE2_PLE2,3,FedCLCM,sig,Cifar10_dir0.5_bdoor0.2_nclient_100_sig_adv10,42,800,0.1,0.1,0.1,1,local_epochs=2 plocal_epochs=2
+HP19_BN_PLE5,3,FedCLCM,badnet,Cifar10_dir0.5_bdoor0.2_nclient_100_badnet_adv10,42,800,0.1,0.1,0.1,1,plocal_epochs=5
+HP20_BL_PLE5,3,FedCLCM,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10,42,800,0.1,0.1,0.1,1,plocal_epochs=5
+HP27_BL_LE5,3,FedCLCM,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10,42,800,0.1,0.1,0.1,1,local_epochs=5
+HP28_BL_PLE10,3,FedCLCM,blend,Cifar10_dir0.5_bdoor0.2_nclient_100_blend_adv10,42,800,0.1,0.1,0.1,1,plocal_epochs=10
