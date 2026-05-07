@@ -470,6 +470,8 @@ if __name__ == "__main__":
                         help='EMA momentum for each benign client clean teacher')
     parser.add_argument('--purify_teacher_cpu_half', type=str2bool, default=True,
                         help='store teacher checkpoints on CPU in fp16 to reduce memory')
+    parser.add_argument('--clcm_schedule', type=str, default='',
+                        help='semicolon-separated FedCLCM dynamic stages, e.g. round=0,mask_tau=3;round=80,mask_tau=6')
 
     # Attack type (orthogonal to defense algorithm)
     parser.add_argument('--attack', type=str, default="none",

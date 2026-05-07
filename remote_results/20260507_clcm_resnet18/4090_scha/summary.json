@@ -1,0 +1,17 @@
+[
+  {
+    "tag": "R18_S42_SCH_A_STRONG_TO_MILD",
+    "file": "R18_S42_SCH_A_STRONG_TO_MILD.log",
+    "rounds_seen": 601,
+    "best_acc": 0.7796877595083873,
+    "best_round": 600,
+    "final_acc": 0.7797,
+    "final_auc": 0.9638,
+    "final_train_loss": 0.1717,
+    "final_asr": 0.48233333333333356,
+    "final_attack_auc": 0.8626261728395068,
+    "mean_acc_last_10": 0.7694,
+    "mean_asr_last_10": 0.4777111111111112,
+    "mean_round_time": 4.484796541899493
+  }
+]

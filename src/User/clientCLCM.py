@@ -57,6 +57,33 @@ class clientCLCM(Client):
         self.purify_layers = [s.strip() for s in str(layers).split(",") if s.strip()]
         self.purify_teacher_state = None
 
+    def set_dynamic_hparams(self, params):
+        if "lambda_cl" in params:
+            self.lambda_cl = float(params["lambda_cl"])
+        if "aug_strength" in params:
+            self.aug_strength = float(params["aug_strength"])
+        if "adv_eps" in params:
+            self.adv_eps = float(params["adv_eps"])
+        if "adv_num_iter" in params:
+            self.adv_num_iter = int(float(params["adv_num_iter"]))
+        if "purify_beta" in params:
+            self.purify_beta = float(params["purify_beta"])
+        if "purify_feature_beta" in params:
+            self.purify_feature_beta = float(params["purify_feature_beta"])
+        if "purify_logit_beta" in params:
+            self.purify_logit_beta = float(params["purify_logit_beta"])
+        if "purify_start_round" in params:
+            self.purify_start_round = int(float(params["purify_start_round"]))
+        if "purify_teacher_momentum" in params:
+            self.purify_teacher_momentum = float(params["purify_teacher_momentum"])
+        if "lr" in params:
+            for group in self.optimizer_base.param_groups:
+                group["lr"] = float(params["lr"])
+        if "lr_head" in params:
+            for group in self.optimizer_head.param_groups:
+                group["lr"] = float(params["lr_head"])
+        self.adv_step = (2 * self.adv_eps / self.adv_num_iter) if (self.adv_num_iter and self.adv_eps > 0) else 0.0
+
     def _pack_teacher_state(self, model):
         state = {}
         for name, value in model.state_dict().items():

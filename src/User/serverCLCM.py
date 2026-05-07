@@ -61,10 +61,67 @@ class FedCLCM(Server):
         
         # 存储上一轮的全局模型（用于计算更新）
         self.prev_global_model = None
+        self.schedule = self._parse_schedule(getattr(args, "clcm_schedule", ""))
+        self._last_schedule_params = None
+
+    def _parse_schedule(self, raw):
+        schedule = []
+        if not raw:
+            return schedule
+        for stage in str(raw).split(";"):
+            stage = stage.strip()
+            if not stage:
+                continue
+            parts = [p.strip() for p in stage.split(",") if p.strip()]
+            stage_params = {}
+            start_round = None
+            for part in parts:
+                if "=" not in part:
+                    raise ValueError(f"Invalid clcm_schedule token: {part}")
+                key, value = [x.strip() for x in part.split("=", 1)]
+                if key == "round":
+                    start_round = int(float(value))
+                else:
+                    stage_params[key] = value
+            if start_round is None:
+                raise ValueError(f"Missing round=... in clcm_schedule stage: {stage}")
+            schedule.append((start_round, stage_params))
+        schedule.sort(key=lambda item: item[0])
+        print(f"FedCLCM dynamic schedule: {schedule}")
+        return schedule
+
+    def _current_schedule_params(self, round_idx):
+        active = {}
+        for start_round, params in self.schedule:
+            if round_idx >= start_round:
+                active.update(params)
+            else:
+                break
+        return active
+
+    def apply_dynamic_hparams(self, round_idx):
+        params = self._current_schedule_params(round_idx)
+        if not params:
+            return
+        if "mask_tau" in params:
+            self.mask_tau = float(params["mask_tau"])
+        if "mask_alpha" in params:
+            self.mask_alpha = float(params["mask_alpha"])
+        if "rt_beta" in params:
+            self.beta = float(params["rt_beta"])
+        if "enable_channel_mask" in params:
+            self.enable_channel_mask = str(params["enable_channel_mask"]).lower() in {"1", "true", "yes", "y"}
+        for client in self.clients:
+            if hasattr(client, "set_dynamic_hparams"):
+                client.set_dynamic_hparams(params)
+        if params != self._last_schedule_params:
+            print(f"FedCLCM schedule round {round_idx}: {params}")
+            self._last_schedule_params = params.copy()
 
     def train(self):
         for i in range(self.global_rounds + 1):
             s_t = time.time()
+            self.apply_dynamic_hparams(i)
             self.selected_clients = self.select_clients()
             self.send_models()
             

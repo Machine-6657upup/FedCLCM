@@ -1,0 +1,2 @@
+tag,file,rounds_seen,best_acc,best_round,final_acc,final_auc,final_train_loss,final_asr,final_attack_auc,mean_acc_last_10,mean_asr_last_10,mean_round_time
+R18_S42_SCH_A_STRONG_TO_MILD,R18_S42_SCH_A_STRONG_TO_MILD.log,601,0.7796877595083873,600,0.7797,0.9638,0.1717,0.48233333333333356,0.8626261728395068,0.7694,0.4777111111111112,4.484796541899493
