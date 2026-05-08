@@ -1,0 +1,13 @@
+tag	lr	lr_head	lambda_cl	mask_tau	mask_alpha	rounds	entry	purpose
+PF_LR003_T50A03_LC005	0.03	0.03	0.05	5.0	0.3	1000	pfedba_local/main.py	pfedba_lowcl_lr0.03_tau5_alpha03
+PF_LR003_T80A05_LC005	0.03	0.03	0.05	8.0	0.5	1000	pfedba_local/main.py	pfedba_lowcl_lr0.03_tau8_alpha05
+PF_LR003_T100A07_LC005	0.03	0.03	0.05	10.0	0.7	1000	pfedba_local/main.py	pfedba_lowcl_lr0.03_tau10_alpha07
+PF_LR003_T120A07_LC005	0.03	0.03	0.05	12.0	0.7	1000	pfedba_local/main.py	pfedba_lowcl_lr0.03_tau12_alpha07
+PF_LR005_T50A03_LC005	0.05	0.05	0.05	5.0	0.3	1000	pfedba_local/main.py	pfedba_lowcl_lr0.05_tau5_alpha03
+PF_LR005_T80A05_LC005	0.05	0.05	0.05	8.0	0.5	1000	pfedba_local/main.py	pfedba_lowcl_lr0.05_tau8_alpha05
+PF_LR005_T100A07_LC005	0.05	0.05	0.05	10.0	0.7	1000	pfedba_local/main.py	pfedba_lowcl_lr0.05_tau10_alpha07
+PF_LR005_T120A07_LC005	0.05	0.05	0.05	12.0	0.7	1000	pfedba_local/main.py	pfedba_lowcl_lr0.05_tau12_alpha07
+PF_LR008_T50A03_LC005	0.08	0.08	0.05	5.0	0.3	1000	pfedba_local/main.py	pfedba_lowcl_lr0.08_tau5_alpha03
+PF_LR008_T80A05_LC005	0.08	0.08	0.05	8.0	0.5	1000	pfedba_local/main.py	pfedba_lowcl_lr0.08_tau8_alpha05
+PF_LR008_T100A07_LC005	0.08	0.08	0.05	10.0	0.7	1000	pfedba_local/main.py	pfedba_lowcl_lr0.08_tau10_alpha07
+PF_LR008_T120A07_LC005	0.08	0.08	0.05	12.0	0.7	1000	pfedba_local/main.py	pfedba_lowcl_lr0.08_tau12_alpha07
